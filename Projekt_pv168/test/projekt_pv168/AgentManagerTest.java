@@ -4,6 +4,7 @@
  */
 package projekt_pv168;
 
+import java.util.Collection;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,16 +42,16 @@ public class AgentManagerTest {
         System.out.println("createAgent");
         Agent agent = null;
         AgentManager instance = new AgentManagerImpl();
-        //instance.createAgent(agent);
+        instance.createAgent(agent);
         fail("The test case is a prototype.");
     }
 
     @Test
-    public void testEditAgent() {
-        System.out.println("editAgent");
+    public void testUpdateAgent() {
+        System.out.println("updateAgent");
         Agent agent = null;
         AgentManager instance = new AgentManagerImpl();
-        //instance.editAgent(agent);
+        instance.updateAgent(agent);
         fail("The test case is a prototype.");
     }
 
@@ -59,18 +60,51 @@ public class AgentManagerTest {
         System.out.println("removeAgent");
         Agent agent = null;
         AgentManager instance = new AgentManagerImpl();
-        //instance.removeAgent(agent);
+        instance.removeAgent(agent);
         fail("The test case is a prototype.");
     }
 
     @Test
     public void testGetAgent() {
         System.out.println("getAgent");
-        Long id = null;
+        long id = 0L;
         AgentManager instance = new AgentManagerImpl();
         Agent expResult = null;
-        //Agent result = instance.getAgent(id);
-        //assertEquals(expResult, result);
+        Agent result = instance.getAgent(id);
+        assertEquals(expResult, result);
+        fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetAgentWithRank_int() {
+        System.out.println("getAgentWithRank");
+        int minRank = 0;
+        AgentManager instance = new AgentManagerImpl();
+        Collection expResult = null;
+        Collection result = instance.getAgentWithRank(minRank);
+        assertEquals(expResult, result);
+        fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetAgentWithRank_int_int() {
+        System.out.println("getAgentWithRank");
+        int minRank = 0;
+        int maxRank = 0;
+        AgentManager instance = new AgentManagerImpl();
+        Collection expResult = null;
+        Collection result = instance.getAgentWithRank(minRank, maxRank);
+        assertEquals(expResult, result);
+        fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetAllAgents() {
+        System.out.println("getAllAgents");
+        AgentManager instance = new AgentManagerImpl();
+        Collection expResult = null;
+        Collection result = instance.getAllAgents();
+        assertEquals(expResult, result);
         fail("The test case is a prototype.");
     }
 
@@ -79,13 +113,25 @@ public class AgentManagerTest {
         public void createAgent(Agent agent) {
         }
 
-        public void editAgent(Agent agent) {
+        public void updateAgent(Agent agent) {
         }
 
         public void removeAgent(Agent agent) {
         }
 
-        public Agent getAgent(Long id) {
+        public Agent getAgent(long id) {
+            return null;
+        }
+
+        public Collection<Agent> getAgentWithRank(int minRank) {
+            return null;
+        }
+
+        public Collection<Agent> getAgentWithRank(int minRank, int maxRank) {
+            return null;
+        }
+
+        public Collection<Agent> getAllAgents() {
             return null;
         }
     }
