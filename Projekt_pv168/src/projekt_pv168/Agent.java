@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Lenovo
  */
-class Agent {
+public class Agent {
     private Long id;
     private String name;
     private Calendar born;
