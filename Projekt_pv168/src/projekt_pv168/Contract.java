@@ -13,14 +13,10 @@ import java.util.Objects;
  */
 public class Contract {
     
-    private Mission mission;
-    
-    private Agent agent;
-    
-    private long budget;
-    
-    private Calendar startTime;
-    
+    private Mission mission;    
+    private Agent agent;    
+    private long budget;    
+    private Calendar startTime;    
     private Calendar endTime;
 
     public Contract() {
