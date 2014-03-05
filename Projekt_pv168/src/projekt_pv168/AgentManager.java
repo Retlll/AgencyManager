@@ -4,6 +4,8 @@
  */
 package projekt_pv168;
 
+import java.util.Collection;
+
 /**
  *
  * @author Lenovo
@@ -11,10 +13,16 @@ package projekt_pv168;
 public interface AgentManager {
     public void createAgent(Agent agent);
     
-    public void editAgent(Agent agent);
+    public void updateAgent(Agent agent);
     
     public void removeAgent(Agent agent);
     
     //aj ine parametre
-    public Agent getAgent(Long id);
+    public Agent getAgent(long id);
+    
+    public Collection<Agent> getAgentWithRank(int minRank);
+    
+    public Collection<Agent> getAgentWithRank(int minRank, int maxRank);
+    
+    public Collection<Agent> getAllAgents();
 }
