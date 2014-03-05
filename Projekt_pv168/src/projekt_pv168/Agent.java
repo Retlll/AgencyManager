@@ -12,6 +12,7 @@ import java.util.Objects;
  * @author Lenovo
  */
 public class Agent {
+
     private Long id;
     private String name;
     private Calendar born;
@@ -30,7 +31,7 @@ public class Agent {
 
     //builder moze pomoct
     public Agent() {
-    }   
+    }
 
     public Long getId() {
         return id;
@@ -47,14 +48,14 @@ public class Agent {
     public boolean isActive() {
         return active;
     }
-    
+
     public int getRank() {
         return rank;
     }
 
     public String getNotes() {
         return notes;
-    } 
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -78,7 +79,7 @@ public class Agent {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }   
+    }
 
     @Override
     public int hashCode() {
@@ -100,8 +101,8 @@ public class Agent {
             return false;
         }
         return true;
-    }   
-    
+    }
+
     @Override
     public String toString() {
         return "Agent{" + "id=" + id + ", name=" + name + ", born=" + born + ", active=" + active + ", rank=" + rank + ", notes=" + notes + '}';
