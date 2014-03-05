@@ -20,6 +20,7 @@ public interface AgentManager {
     //aj ine parametre
     public Agent getAgent(long id);
     
+    //dajme radsej bestRank
     public Collection<Agent> getAgentWithRank(int minRank);
     
     public Collection<Agent> getAgentWithRank(int minRank, int maxRank);
