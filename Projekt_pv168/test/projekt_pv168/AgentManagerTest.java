@@ -4,13 +4,13 @@
  */
 package projekt_pv168;
 
+import java.util.Calendar;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -18,64 +18,133 @@ import static org.junit.Assert.*;
  */
 public class AgentManagerTest {
     
-    public AgentManagerTest() {
-    }
+    private AgentManagerImpl manager;
     
     @BeforeClass
     public static void setUpClass() {
     }
     
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
     @Before
     public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+        manager = new AgentManagerImpl();
     }
 
     @Test
     public void testCreateAgent() {
-        System.out.println("createAgent");
-        Agent agent = null;
-        AgentManager instance = new AgentManagerImpl();
-        instance.createAgent(agent);
-        fail("The test case is a prototype.");
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(1994, 3, 9);
+        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        manager.createAgent(agent);
+        
+        Long id = agent.getId();
+        assertNotNull(id);
+        assertEquals(agent, manager.getAgent(id));
+        assertDeepEquals(agent, manager.getAgent(id));
     }
 
     @Test
     public void testUpdateAgent() {
-        System.out.println("updateAgent");
-        Agent agent = null;
-        AgentManager instance = new AgentManagerImpl();
-        instance.updateAgent(agent);
-        fail("The test case is a prototype.");
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(1994, 3, 9);
+        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");  
+        Calendar birthday2 = Calendar.getInstance();
+        birthday2.set(1991, 5, 10);
+        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes");        
+        manager.createAgent(agent);
+        manager.createAgent(agent2);
+        
+        assertDeepEquals(agent, manager.getAgent(1));
+        
+        agent.setName("Lukas Novotny");
+        manager.updateAgent(agent);
+        assertEquals("Lukas Novotny", agent.getName());
+        assertEquals(birthday, agent.getBorn());
+        assertEquals(true, agent.isActive());
+        assertEquals(1, agent.getRank());
+        assertEquals("", agent.getNotes());
+        
+        birthday.set(1995, 7, 16);
+        agent.setBorn(birthday);
+        manager.updateAgent(agent);
+        assertEquals("Lukas Novotny", agent.getName());
+        assertEquals(birthday, agent.getBorn());
+        assertEquals(true, agent.isActive());
+        assertEquals(1, agent.getRank());
+        assertEquals("", agent.getNotes());
+        
+        agent.setActive(false);
+        manager.updateAgent(agent);
+        assertEquals("Lukas Novotny", agent.getName());
+        assertEquals(birthday, agent.getBorn());
+        assertEquals(false, agent.isActive());
+        assertEquals(1, agent.getRank());
+        assertEquals("", agent.getNotes());
+        
+        agent.setRank(2);
+        manager.updateAgent(agent);
+        assertEquals("Lukas Novotny", agent.getName());
+        assertEquals(birthday, agent.getBorn());
+        assertEquals(false, agent.isActive());
+        assertEquals(2, agent.getRank());
+        assertEquals("", agent.getNotes());
+        
+        agent.setNotes(null);
+        manager.updateAgent(agent);
+        assertEquals("Lukas Novotny", agent.getName());
+        assertEquals(birthday, agent.getBorn());
+        assertEquals(false, agent.isActive());
+        assertEquals(2, agent.getRank());
+        assertNull(agent.getNotes());        
+        
+        assertEquals(agent2, manager.getAgent(2));
+        
+        //update absent agent
+        Calendar birthday3 = Calendar.getInstance();
+        birthday3.set(1990, 2, 7);
+        Agent agent3 = new Agent(Long.valueOf(3), "Karol Ignac", birthday3, true, 10, "123");
+        manager.updateAgent(agent3);
+        assertNull(manager.getAgent(3));
+        assertEquals(agent, manager.getAgent(1));
+        assertEquals(agent2, manager.getAgent(2));
+        
+        //update with wrong informations, but maybe in create agent
     }
 
     @Test
     public void testRemoveAgent() {
-        System.out.println("removeAgent");
-        Agent agent = null;
-        AgentManager instance = new AgentManagerImpl();
-        instance.removeAgent(agent);
-        fail("The test case is a prototype.");
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(1994, 3, 9);
+        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");  
+        Calendar birthday2 = Calendar.getInstance();
+        birthday2.set(1991, 5, 10);
+        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes");        
+        manager.createAgent(agent);
+        manager.createAgent(agent2);
+        
+        assertNotNull(manager.getAgent(1));
+        assertNotNull(manager.getAgent(2));
+        
+        manager.removeAgent(agent);
+        
+        assertNull(manager.getAgent(1));
+        assertNotNull(manager.getAgent(2));
     }
 
     @Test
     public void testGetAgent() {
-        System.out.println("getAgent");
-        long id = 0L;
-        AgentManager instance = new AgentManagerImpl();
-        Agent expResult = null;
-        Agent result = instance.getAgent(id);
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
+        assertNull(manager.getAgent(1));
+        
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(1994, 3, 9);
+        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        manager.createAgent(agent);
+        
+        assertNotNull(manager.getAgent(1));
+        assertEquals(agent, manager.getAgent(1));
+        assertDeepEquals(agent, manager.getAgent(1));
     }
 
-    @Test
+    @Ignore("not ready yet") @Test
     public void testGetAgentWithRank_int() {
         System.out.println("getAgentWithRank");
         int minRank = 0;
@@ -86,7 +155,7 @@ public class AgentManagerTest {
         fail("The test case is a prototype.");
     }
 
-    @Test
+    @Ignore("not ready yet") @Test
     public void testGetAgentWithRank_int_int() {
         System.out.println("getAgentWithRank");
         int minRank = 0;
@@ -98,7 +167,7 @@ public class AgentManagerTest {
         fail("The test case is a prototype.");
     }
 
-    @Test
+    @Ignore("not ready yet") @Test
     public void testGetAllAgents() {
         System.out.println("getAllAgents");
         AgentManager instance = new AgentManagerImpl();
@@ -107,32 +176,15 @@ public class AgentManagerTest {
         assertEquals(expResult, result);
         fail("The test case is a prototype.");
     }
-
-    public class AgentManagerImpl implements AgentManager {
-
-        public void createAgent(Agent agent) {
-        }
-
-        public void updateAgent(Agent agent) {
-        }
-
-        public void removeAgent(Agent agent) {
-        }
-
-        public Agent getAgent(long id) {
-            return null;
-        }
-
-        public Collection<Agent> getAgentWithRank(int minRank) {
-            return null;
-        }
-
-        public Collection<Agent> getAgentWithRank(int minRank, int maxRank) {
-            return null;
-        }
-
-        public Collection<Agent> getAllAgents() {
-            return null;
-        }
+    
+    public void assertDeepEquals(Agent agent, Agent agent2)
+    {
+        assertEquals(agent.getId(), agent2.getId());
+        assertEquals(agent.getName(), agent2.getName());
+        assertEquals(agent.getBorn(), agent2.getBorn());
+        assertEquals(agent.getRank(), agent2.getRank());
+        assertEquals(agent.isActive(), agent2.isActive());
+        
+        assertEquals(agent.getNotes(), agent2.getNotes());
     }
 }
