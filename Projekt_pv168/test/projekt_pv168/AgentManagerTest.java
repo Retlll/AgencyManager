@@ -20,10 +20,6 @@ public class AgentManagerTest {
     
     private AgentManagerImpl manager;
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
     @Before
     public void setUp() {
         manager = new AgentManagerImpl();
