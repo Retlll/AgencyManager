@@ -26,6 +26,11 @@ public class ContractManagerImpl implements ContractManager{
     public void removeContract(Contract contract) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public Contract getContract(Mission mission, Agent agent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Collection<Contract> findAllContracts() {

@@ -18,6 +18,8 @@ public interface ContractManager {
     
     public void removeContract(Contract contract);
     
+    public Contract getContract(Mission mission, Agent agent);
+    
     public Collection<Contract> findAllContracts();
     
     public Collection<Mission> findAllMissionsForAgent(Agent agent);
