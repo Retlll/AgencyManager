@@ -18,23 +18,11 @@ import static org.junit.Assert.*;
  */
 public class ContractManagerTest {
     
-    public ContractManagerTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    private ContractManagerImpl manager;
     
     @Before
     public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+        manager = new ContractManagerImpl();
     }
 
     @Test
@@ -94,29 +82,5 @@ public class ContractManagerTest {
         Collection result = instance.findAllAgentsForMission(mission);
         assertEquals(expResult, result);
         fail("The test case is a prototype.");
-    }
-
-    public class ContractManagerImpl implements ContractManager {
-
-        public void createContract(Contract contract) {
-        }
-
-        public void updateContract(Contract contract) {
-        }
-
-        public void removeContract(Contract contract) {
-        }
-
-        public Collection<Contract> findAllContracts() {
-            return null;
-        }
-
-        public Collection<Mission> findAllMissionsForAgent(Agent agent) {
-            return null;
-        }
-
-        public Collection<Agent> findAllAgentsForMission(Mission mission) {
-            return null;
-        }
     }
 }
