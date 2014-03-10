@@ -4,7 +4,7 @@
  */
 package projekt_pv168;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -20,10 +20,10 @@ public interface ContractManager {
     
     public Contract getContract(Mission mission, Agent agent);
     
-    public Collection<Contract> findAllContracts();
+    public List<Contract> findAllContracts();
     
-    public Collection<Mission> findAllMissionsForAgent(Agent agent);
+    public List<Mission> findAllMissionsForAgent(Agent agent);
     
-    public Collection<Agent> findAllAgentsForMission(Mission mission);
+    public List<Agent> findAllAgentsForMission(Mission mission);
     
 }

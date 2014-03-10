@@ -4,7 +4,7 @@
  */
 package projekt_pv168;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,17 +33,17 @@ public class ContractManagerImpl implements ContractManager{
     }
 
     @Override
-    public Collection<Contract> findAllContracts() {
+    public List<Contract> findAllContracts() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Mission> findAllMissionsForAgent(Agent agent) {
+    public List<Mission> findAllMissionsForAgent(Agent agent) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Agent> findAllAgentsForMission(Mission mission) {
+    public List<Agent> findAllAgentsForMission(Mission mission) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
