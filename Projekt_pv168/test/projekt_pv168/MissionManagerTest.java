@@ -31,6 +31,7 @@ public class MissionManagerTest {
     
     @Before
     public void setUp() {
+        MissionManagerImpl manager = new MissionManagerImpl();
     }
     
     @After
@@ -39,11 +40,7 @@ public class MissionManagerTest {
 
     @Test
     public void testCreateMission() {
-        System.out.println("createMission");
-        Mission mission = null;
-        MissionManager instance = new MissionManagerImpl();
-        instance.createMission(mission);
-        fail("The test case is a prototype.");
+
     }
 
     @Test
