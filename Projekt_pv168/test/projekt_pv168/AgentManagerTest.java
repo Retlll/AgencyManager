@@ -7,7 +7,6 @@ package projekt_pv168;
 import java.util.Calendar;
 import java.util.Collection;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -37,6 +36,55 @@ public class AgentManagerTest {
         assertEquals(agent, manager.getAgent(id));
         assertDeepEquals(agent, manager.getAgent(id));
     }
+    
+    @Test
+    public void testCreateWrongAgent() {
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(1994, 3, 9);
+        Agent agent = new Agent(Long.valueOf(-1), "James Bond", birthday, true, 1, "");
+        
+        //negativ id
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //null name
+        agent = new Agent(Long.valueOf(1), null, birthday, true, 1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //short name
+        agent = new Agent(Long.valueOf(1), "", birthday, true, 1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //negativ rank
+        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, -1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //create first agent
+        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        manager.createAgent(agent);
+        
+        //create same agent twice
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (Exception ex) {}
+        
+        Long id = agent.getId();
+        assertNotNull(id);
+        assertEquals(agent, manager.getAgent(id));
+        assertDeepEquals(agent, manager.getAgent(id));
+    }
 
     @Test
     public void testUpdateAgent() {
@@ -45,7 +93,14 @@ public class AgentManagerTest {
         Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");  
         Calendar birthday2 = Calendar.getInstance();
         birthday2.set(1991, 5, 10);
-        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes");        
+        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes"); 
+        
+        //update unexist agent
+        try {
+            manager.updateAgent(agent);
+            fail();
+        } catch (Exception ex) {}
+        
         manager.createAgent(agent);
         manager.createAgent(agent2);
         
@@ -103,7 +158,33 @@ public class AgentManagerTest {
         assertEquals(agent, manager.getAgent(1));
         assertEquals(agent2, manager.getAgent(2));
         
-        //update with wrong informations, but maybe in create agent
+        //negativ id
+        agent = new Agent(Long.valueOf(-1), "James Bond", birthday, true, 1, "");  
+        try {
+            manager.updateAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //null name
+        agent = new Agent(Long.valueOf(1), null, birthday, true, 1, "");
+        try {
+            manager.updateAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //short name
+        agent = new Agent(Long.valueOf(1), "", birthday, true, 1, "");
+        try {
+            manager.updateAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
+        
+        //negativ rank
+        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, -1, "");
+        try {
+            manager.updateAgent(agent);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {}
     }
 
     @Test
@@ -172,7 +253,7 @@ public class AgentManagerTest {
         assertEquals(expResult, result);
         fail("The test case is a prototype.");
     }
-    
+        
     public void assertDeepEquals(Agent agent, Agent agent2)
     {
         assertEquals(agent.getId(), agent2.getId());
