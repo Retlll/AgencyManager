@@ -28,12 +28,15 @@ public class AgentManagerTest {
     public void testCreateAgent() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent();
+        buildAgent(agent, "James Bond", birthday, true, 1, "");
+        
         manager.createAgent(agent);
         
         Long id = agent.getId();
         assertNotNull(id);
         assertEquals(agent, manager.getAgent(id));
+        assertNotSame(agent, manager.getAgent(id));
         assertDeepEquals(agent, manager.getAgent(id));
     }
     
@@ -41,59 +44,55 @@ public class AgentManagerTest {
     public void testCreateWrongAgent() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(-1), "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent();
+        buildAgent(agent, "James Bond", birthday, true, 1, "");
         
-        //negativ id
-        try {
-            manager.createAgent(agent);
-            fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
-        
-        //null name
-        agent = new Agent(Long.valueOf(1), null, birthday, true, 1, "");
-        try {
-            manager.createAgent(agent);
-            fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
-        
-        //short name
-        agent = new Agent(Long.valueOf(1), "", birthday, true, 1, "");
-        try {
-            manager.createAgent(agent);
-            fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
-        
-        //negativ rank
-        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, -1, "");
-        try {
-            manager.createAgent(agent);
-            fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
-        
-        //create first agent
-        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
-        manager.createAgent(agent);
-        
-        //create same agent twice
+        //give id
+        agent.setId(1l);
         try {
             manager.createAgent(agent);
             fail();
         } catch (Exception ex) {}
         
-        Long id = agent.getId();
-        assertNotNull(id);
-        assertEquals(agent, manager.getAgent(id));
-        assertDeepEquals(agent, manager.getAgent(id));
+        //null name
+        buildAgent(agent, null, birthday, true, 1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (Exception  ex) {}
+        
+        //short name
+        buildAgent(agent, "", birthday, true, 1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (Exception  ex) {}
+        
+        //negativ rank
+        buildAgent(agent, "James Bond", birthday, true, -1, "");
+        try {
+            manager.createAgent(agent);
+            fail();
+        } catch (Exception  ex) {}
+        
+        //should be OK
+        buildAgent(agent, "James Bond", birthday, true, 1, null);
+        manager.createAgent(agent);
+        assertEquals(agent, manager.getAgent(agent.getId()));
+        assertNull(manager.getAgent(agent.getId()).getNotes());
     }
 
     @Test
     public void testUpdateAgent() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");  
+        Agent agent = new Agent();
+        buildAgent(agent, "James Bond", birthday, true, 1, "");
+        
         Calendar birthday2 = Calendar.getInstance();
         birthday2.set(1991, 5, 10);
-        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes"); 
+        Agent agent2 = new Agent();
+        buildAgent(agent2, "Peter Novak", birthday2, false, 5, "Some notes");
         
         //update unexist agent
         try {
@@ -104,7 +103,7 @@ public class AgentManagerTest {
         manager.createAgent(agent);
         manager.createAgent(agent2);
         
-        assertDeepEquals(agent, manager.getAgent(1));
+        assertDeepEquals(agent, manager.getAgent(agent.getId()));
         
         agent.setName("Lukas Novotny");
         manager.updateAgent(agent);
@@ -152,73 +151,92 @@ public class AgentManagerTest {
         //update absent agent
         Calendar birthday3 = Calendar.getInstance();
         birthday3.set(1990, 2, 7);
-        Agent agent3 = new Agent(Long.valueOf(3), "Karol Ignac", birthday3, true, 10, "123");
+        Agent agent3 = new Agent();
+        buildAgent(agent3, "Karol Ignac", birthday3, true, 10, "123");
         manager.updateAgent(agent3);
         assertNull(manager.getAgent(3));
-        assertEquals(agent, manager.getAgent(1));
-        assertEquals(agent2, manager.getAgent(2));
+        assertEquals(agent, manager.getAgent(agent.getId()));
+        assertEquals(agent2, manager.getAgent(agent2.getId()));
         
-        //negativ id
-        agent = new Agent(Long.valueOf(-1), "James Bond", birthday, true, 1, "");  
+        //give id
+        agent.setId(1l);
         try {
             manager.updateAgent(agent);
             fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
+        } catch (Exception ex) {}
         
         //null name
-        agent = new Agent(Long.valueOf(1), null, birthday, true, 1, "");
+        buildAgent(agent, null, birthday, true, 1, "");
         try {
             manager.updateAgent(agent);
             fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
+        } catch (Exception  ex) {}
         
         //short name
-        agent = new Agent(Long.valueOf(1), "", birthday, true, 1, "");
+        buildAgent(agent, "", birthday, true, 1, "");
         try {
             manager.updateAgent(agent);
             fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
+        } catch (Exception  ex) {}
         
         //negativ rank
-        agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, -1, "");
+        buildAgent(agent, "James Bond", birthday, true, -1, "");
         try {
             manager.updateAgent(agent);
             fail();
-        } catch (IllegalArgumentException | NullPointerException ex) {}
+        } catch (Exception  ex) {}
+        
+        //should be OK
+        buildAgent(agent, "James Bond", birthday, true, 1, null);
+        manager.updateAgent(agent);
+        assertEquals(agent, manager.getAgent(agent.getId()));
+        assertNull(manager.getAgent(agent.getId()).getNotes());
     }
 
     @Test
     public void testRemoveAgent() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");  
+        Agent agent = new Agent();
+        buildAgent(agent, "James Bond", birthday, true, 1, "");
+        
         Calendar birthday2 = Calendar.getInstance();
         birthday2.set(1991, 5, 10);
-        Agent agent2 = new Agent(Long.valueOf(2), "Peter Novak", birthday2, false, 5, "Some notes");        
+        Agent agent2 = new Agent();
+        buildAgent(agent, "Peter Novak", birthday2, false, 5, "Some notes");
+        
         manager.createAgent(agent);
         manager.createAgent(agent2);
         
-        assertNotNull(manager.getAgent(1));
-        assertNotNull(manager.getAgent(2));
+        assertNotNull(manager.getAgent(agent.getId()));
+        assertNotNull(manager.getAgent(agent2.getId()));
         
         manager.removeAgent(agent);
         
-        assertNull(manager.getAgent(1));
-        assertNotNull(manager.getAgent(2));
+        assertNull(manager.getAgent(agent.getId()));
+        assertNotNull(manager.getAgent(agent2.getId()));
+        
+        manager.createAgent(agent);
+        
+        assertNotNull(manager.getAgent(agent.getId()));
+        assertNotNull(manager.getAgent(agent2.getId()));
+        
+        manager.removeAgent(agent2);
+        
+        assertNotNull(manager.getAgent(agent.getId()));
+        assertNull(manager.getAgent(agent2.getId()));
     }
 
     @Test
-    public void testGetAgent() {
-        assertNull(manager.getAgent(1));
-        
+    public void testGetAgent() {        
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
         manager.createAgent(agent);
         
-        assertNotNull(manager.getAgent(1));
-        assertEquals(agent, manager.getAgent(1));
-        assertDeepEquals(agent, manager.getAgent(1));
+        assertNotNull(manager.getAgent(agent.getId()));
+        assertEquals(agent, manager.getAgent(agent.getId()));
+        assertDeepEquals(agent, manager.getAgent(agent.getId()));
     }
 
     @Ignore("not ready yet") @Test
@@ -252,6 +270,14 @@ public class AgentManagerTest {
         Collection result = instance.getAllAgents();
         assertEquals(expResult, result);
         fail("The test case is a prototype.");
+    }
+    
+    public void buildAgent(Agent agent, String name, Calendar birthday, boolean active, int rank, String notes){
+        agent.setName(name);
+        agent.setBorn(birthday);
+        agent.setActive(active);
+        agent.setRank(rank);
+        agent.setNotes(notes);
     }
         
     public void assertDeepEquals(Agent agent, Agent agent2)
