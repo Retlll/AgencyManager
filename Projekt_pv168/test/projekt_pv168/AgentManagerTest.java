@@ -231,7 +231,8 @@ public class AgentManagerTest {
     public void testGetAgent() {        
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent();
+        buildAgent(agent, "James Bond", birthday, true, 1, "");
         manager.createAgent(agent);
         
         assertNotNull(manager.getAgent(agent.getId()));
