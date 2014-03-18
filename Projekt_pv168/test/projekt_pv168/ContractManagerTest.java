@@ -27,7 +27,7 @@ public class ContractManagerTest {
 
     @Test
     public void testCreateContract() {
-        Mission mission = newMission();
+        Mission mission = newMission1();
         Agent agent = newAgent1();
         Contract contract = newContract1(mission,agent);
         
@@ -93,14 +93,49 @@ public class ContractManagerTest {
         }
         
         c2.setBudget(10l);
+        mission.setId(null);
+        
+        try {
+            manager.createContract(c2);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        a2.setId(null);
+        
+        try {
+            manager.createContract(c2);
+            fail("Mission and Agent have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        mission.setId(Long.valueOf(1));
+        
+        try {
+            manager.createContract(c2);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        a2.setId(Long.valueOf(2l));
         c2.setStartTime(null);
         manager.createContract(c2);
+        try {
+            manager.createContract(c2);
+            fail("Multiple instances for same mission allowed");
+        }
+        catch (IllegalArgumentException  ex) {
+        }
+        
     }
 
     @Test
     public void testUpdateContract() {
-        Contract contract = newContract2(newMission(),newAgent2());
-        Contract c2 = newContract1(newMission(), newAgent1());
+        Contract contract = newContract2(newMission1(),newAgent2());
+        Contract c2 = newContract1(newMission2(), newAgent1());
         
         manager.createContract(contract);
         manager.createContract(c2);
@@ -140,11 +175,8 @@ public class ContractManagerTest {
         contract = manager.getContract(mission, agent);
         contract.setStartTime(null);
         assertDeepEquals(contract, mission, agent, 5054, calStr, null);
-        try {
-            manager.updateContract(contract);
-        }
-        catch (IllegalArgumentException | NullPointerException ex) {
-        }    
+        manager.updateContract(contract);
+        assertDeepEquals(contract, mission, agent, 5054, null, null);
         
         mission = c2.getMission();
         agent = c2.getAgent();
@@ -169,6 +201,34 @@ public class ContractManagerTest {
         }
         
         c2.setBudget(10l);
+        mission.setId(null);
+        
+        try {
+            manager.updateContract(c2);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        agent.setId(null);
+        
+        try {
+            manager.updateContract(c2);
+            fail("Mission and Agent have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        mission.setId(Long.valueOf(2));
+        
+        try {
+            manager.updateContract(c2);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        agent.setId(Long.valueOf(1l));
         c2.setStartTime(null);
         manager.updateContract(c2);
         assertEquals(c2, manager.getContract(c2.getMission(), c2.getAgent()));
@@ -176,8 +236,8 @@ public class ContractManagerTest {
 
     @Test
     public void testRemoveContract() {
-        Mission m1 = newMission();
-        Mission m2 = newMission();
+        Mission m1 = newMission1();
+        Mission m2 = newMission2();
         Agent a1 = newAgent1();
         Agent a2 = newAgent2();
         Contract c1 = newContract1(m1, a1);
@@ -186,23 +246,21 @@ public class ContractManagerTest {
         manager.createContract(c1);
         manager.createContract(c2);
         
-        assertNotNull(c1);
-        assertNotNull(c2);
+        assertNotNull(manager.getContract(m1, a1));
+        assertNotNull(manager.getContract(m2, a2));
         
         manager.removeContract(c2);
         
-        assertNotNull(c1);
-        assertNull(c2);
+        assertNotNull(manager.getContract(m1, a1));
+        assertNull(manager.getContract(m2, a2));
         
         manager.removeContract(c1);
         
-        assertNull(c1);
-        assertNull(c2);
-        
-        manager.removeContract(c1);
+        assertNull(manager.getContract(m1, a1));
+        assertNull(manager.getContract(m2, a2));    
         
         try {
-            manager.createContract(null);
+            manager.removeContract(null);
             fail();
         }
         catch (IllegalArgumentException | NullPointerException ex) {
@@ -252,14 +310,46 @@ public class ContractManagerTest {
         }
         catch (IllegalArgumentException | NullPointerException ex) {
         }
+        
+        manager.createContract(c1);
+        
+        m1.setId(null);
+        
+        try {
+            manager.removeContract(c1);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        a1.setId(null);
+        
+        try {
+            manager.removeContract(c1);
+            fail("Mission and Agent have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        m1.setId(Long.valueOf(1l));
+        
+        try {
+            manager.removeContract(c1);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        
     }
     
     @Test
     public void testGetContract() {
-        Mission mission = newMission();
+        Mission mission = newMission1();
         Agent agent = newAgent1();
         
         assertNull(manager.getContract(mission, agent));
+        assertNull(manager.getContract(mission.getId().longValue(), agent.getId().longValue()));
         
         try {
             manager.getContract(null, agent);
@@ -282,6 +372,35 @@ public class ContractManagerTest {
         catch (IllegalArgumentException | NullPointerException ex) {
         }
         
+        mission.setId(null);
+        
+        try {
+            manager.getContract(mission, agent);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        agent.setId(null);
+        
+        try {
+            manager.getContract(mission, agent);
+            fail("Mission and Agent have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        mission.setId(Long.valueOf(1l));
+        
+        try {
+            manager.getContract(mission, agent);
+            fail("Mission have ID null, yet still accepted");
+        }
+        catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        agent.setId(Long.valueOf(1l));
+        
         Contract contract = newContract1(mission,agent);
         manager.createContract(contract);
         agent = contract.getAgent();
@@ -290,13 +409,16 @@ public class ContractManagerTest {
         assertEquals(contract, manager.getContract(mission, agent));
         assertNotSame(contract, manager.getContract(mission, agent));
         assertDeepEquals(contract, manager.getContract(mission, agent));
+        assertEquals(contract, manager.getContract(mission.getId(), agent.getId()));
+        assertNotSame(contract, manager.getContract(mission.getId(), agent.getId()));
+        assertDeepEquals(contract, manager.getContract(mission.getId(), agent.getId()));
     }
 
     @Test
     public void testFindAllContracts() {
         
-        Contract c1 = newContract1(newMission(), newAgent1());
-        Contract c2 = newContract2(newMission(), newAgent2());
+        Contract c1 = newContract1(newMission1(), newAgent1());
+        Contract c2 = newContract2(newMission2(), newAgent2());
         
         assertEquals(0, manager.findAllContracts().size());
         
@@ -320,9 +442,9 @@ public class ContractManagerTest {
 
     @Test
     public void testFindAllMissionsForAgent() {
-        Contract c1 = newContract1(newMission(), newAgent1());
-        Contract c2 = newContract2(newMission(), newAgent2());
-        Contract c3 = newContract1(newMission(), c1.getAgent());
+        Contract c1 = newContract1(newMission1(), newAgent1());
+        Contract c2 = newContract2(newMission2(), newAgent2());
+        Contract c3 = newContract1(newMission3(), c1.getAgent());
         Contract c4 = newContract2(c2.getMission(), c1.getAgent());
         Contract c5 = newContract1(c1.getMission(), c2.getAgent());
         
@@ -371,9 +493,9 @@ public class ContractManagerTest {
 
     @Test
     public void testFindAllAgentsForMission() {
-        Contract c1 = newContract1(newMission(), newAgent1());
-        Contract c2 = newContract2(newMission(), newAgent2());
-        Contract c3 = newContract1(newMission(), c1.getAgent());
+        Contract c1 = newContract1(newMission1(), newAgent1());
+        Contract c2 = newContract2(newMission2(), newAgent2());
+        Contract c3 = newContract1(newMission3(), c1.getAgent());
         Contract c4 = newContract2(c2.getMission(), c1.getAgent());
         Contract c5 = newContract1(c1.getMission(), c2.getAgent());
         
@@ -451,19 +573,32 @@ public class ContractManagerTest {
     private Agent newAgent1() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent(Long.valueOf(1l), "James Bond", birthday, true, 1, "");
         return agent;
     }
     
     private Agent newAgent2() {
         Calendar birthday = Calendar.getInstance();
         birthday.set(1998, 5, 5);
-        Agent agent = new Agent(Long.valueOf(2), "me", birthday, false, 1, "");
+        Agent agent = new Agent(Long.valueOf(2l), "me", birthday, false, 1, "");
         return agent;
     }
     
-    private Mission newMission() {
+    private Mission newMission1() {
         Mission mission = new Mission();
+        mission.setId(Long.valueOf(1l));
+        return mission;
+    }
+    
+    private Mission newMission2() {
+        Mission mission = new Mission();
+        mission.setId(Long.valueOf(2l));
+        return mission;
+    }
+    
+    private Mission newMission3() {
+        Mission mission = new Mission();
+        mission.setId(Long.valueOf(3l));
         return mission;
     }
     
