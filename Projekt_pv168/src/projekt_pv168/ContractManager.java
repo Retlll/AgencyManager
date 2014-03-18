@@ -20,6 +20,8 @@ public interface ContractManager {
     
     public Contract getContract(Mission mission, Agent agent);
     
+    public Contract getContract(long missionID, long agentID);
+    
     public List<Contract> findAllContracts();
     
     public List<Mission> findAllMissionsForAgent(Agent agent);
