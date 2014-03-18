@@ -25,6 +25,40 @@ public class Mission {
         return hash;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+    
+    
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
