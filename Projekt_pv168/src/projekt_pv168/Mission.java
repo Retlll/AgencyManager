@@ -15,9 +15,9 @@ public class Mission {
     private String name;
     private int difficulty;
     private String details;
-
+    private String Location;
     //private int capacity;
-    //private String Location;
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -41,6 +41,10 @@ public class Mission {
         this.details = details;
     }
 
+    public void setLocation(String Location) {
+        this.Location = Location;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,8 +60,10 @@ public class Mission {
     public String getDetails() {
         return details;
     }
-    
-    
+
+    public String getLocation() {
+        return Location;
+    }
     
     @Override
     public boolean equals(Object obj) {

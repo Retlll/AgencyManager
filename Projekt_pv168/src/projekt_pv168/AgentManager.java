@@ -4,7 +4,7 @@
  */
 package projekt_pv168;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -23,9 +23,9 @@ public interface AgentManager {
     public Agent getAgent(long id);
     
     //dajme radsej bestRank
-    public Collection<Agent> getAgentWithRank(int minRank);
+    public List<Agent> getAgentWithRank(int minRank);
     
-    public Collection<Agent> getAgentWithRank(int minRank, int maxRank);
+    public List<Agent> getAgentWithRank(int minRank, int maxRank);
     
-    public Collection<Agent> getAllAgents();
+    public List<Agent> getAllAgents();
 }

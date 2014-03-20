@@ -4,7 +4,7 @@
  */
 package projekt_pv168;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -20,5 +20,5 @@ public interface MissionManager {
     
     public Mission getMission(long id);
     
-    public Collection<Mission> findAllMissions();
+    public List<Mission> getAllMissions();
 }
