@@ -4,7 +4,7 @@
  */
 package projekt_pv168;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,17 +33,17 @@ public class AgentManagerImpl implements AgentManager{
     }
 
     @Override
-    public Collection<Agent> getAgentWithRank(int minRank) {
+    public List<Agent> getAgentWithRank(int minRank) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Agent> getAgentWithRank(int minRank, int maxRank) {
+    public List<Agent> getAgentWithRank(int minRank, int maxRank) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Collection<Agent> getAllAgents() {
+    public List<Agent> getAllAgents() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
