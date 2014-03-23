@@ -93,7 +93,6 @@ public class AgentManagerTest {
         assertNull(manager.getAgent(agent.getId()).getNotes());
     }
 
-    @Ignore
     @Test
     public void testUpdateAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
@@ -112,7 +111,6 @@ public class AgentManagerTest {
             fail();
         } catch (Exception ex) {
         }
-        assertNull(manager.getAgent(agent.getId()));
 
         manager.createAgent(agent);
         manager.createAgent(agent2);
@@ -165,7 +163,6 @@ public class AgentManagerTest {
         assertDeepEquals(agent2, manager.getAgent(agent2.getId()));
     }
 
-    @Ignore
     @Test
     public void testUpdateWrongAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
@@ -180,11 +177,6 @@ public class AgentManagerTest {
 
         manager.createAgent(agent);
         manager.createAgent(agent2);
-
-        //give id
-        agent.setId(1l);
-        tryUpdateAgent(agent);
-        agent.setId(null);
 
         //null name
         buildAgent(agent, null, birthday, true, 1, "");

@@ -93,19 +93,70 @@ public class AgentManagerImpl implements AgentManager {
 
     @Override
     public void updateAgent(Agent agent) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    //mám vymazať agenta aj podľa ID???
-    @Override
-    public void removeAgent(Agent agent) {
+        if (agent == null) {
+            throw new IllegalArgumentException("agent is null");
+        }
+        if (agent.getId() == null) {
+            throw new IllegalArgumentException("Agents id is null");
+        }
+        if (agent.getName() == null) {
+            throw new IllegalArgumentException("Name is null");
+        }
+        if (agent.getName().length() == 0) {
+            throw new IllegalArgumentException("No name");
+        }
+        if (agent.getBorn() == null) {
+            throw new IllegalArgumentException("Born date is null");
+        }
+        if (agent.getRank() < 0) {
+            throw new IllegalArgumentException("Negative rank");
+        }
+        
         try (PreparedStatement st = connection.prepareStatement(
-                "delete from AGENT where NAME = ? and BORN = ? and ACTIVE = ? and RANK = ? and NOTES = ?");) {
+                "update AGENT set NAME = ?, BORN = ?, ACTIVE = ?, RANK = ?, NOTES = ? where id = ?");) {
             st.setString(1, agent.getName());
             st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
             st.setBoolean(3, agent.isActive());
             st.setInt(4, agent.getRank());
             st.setString(5, agent.getNotes());
+            st.setLong(6, agent.getId());
+            st.execute();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AgentManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+    }
+
+    //zistovat aj vek??
+    @Override
+    public void removeAgent(Agent agent) {
+        if (agent == null) {
+            throw new IllegalArgumentException("agent is null");
+        }
+        if (agent.getId() == null) {
+            throw new IllegalArgumentException("Agents id is null");
+        }/*
+        if (agent.getName() == null) {
+            throw new IllegalArgumentException("Name is null");
+        }
+        if (agent.getName().length() == 0) {
+            throw new IllegalArgumentException("No name");
+        }
+        if (agent.getBorn() == null) {
+            throw new IllegalArgumentException("Born date is null");
+        }
+        if (agent.getRank() < 0) {
+            throw new IllegalArgumentException("Negative rank");
+        }*/
+
+        try (PreparedStatement st = connection.prepareStatement(
+                "delete from AGENT where ID = ?");) {
+            /*st.setString(1, agent.getName());
+            st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
+            st.setBoolean(3, agent.isActive());
+            st.setInt(4, agent.getRank());
+            st.setString(5, agent.getNotes());*/
+            st.setLong(1, agent.getId());
             st.execute();
 
         } catch (SQLException ex) {
