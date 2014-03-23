@@ -4,6 +4,7 @@
  */
 package projekt_pv168;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface AgentManager {
     public boolean checkAgent(Agent agent);
     
     //aj ine parametre
-    public Agent getAgent(long id);
+    public Agent getAgent(long id) throws SQLException;
     
     //dajme radsej bestRank
     public List<Agent> getAgentWithRank(int minRank);
