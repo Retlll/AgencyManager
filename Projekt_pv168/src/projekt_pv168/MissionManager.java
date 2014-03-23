@@ -4,6 +4,7 @@
  */
 package projekt_pv168;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public interface MissionManager {
     
     public void removeMission(Mission mission);
     
-    public Mission getMission(long id);
+    public Mission getMission(long id) throws SQLException ;
     
     public List<Mission> getAllMissions();
 }

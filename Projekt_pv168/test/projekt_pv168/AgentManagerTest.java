@@ -193,9 +193,9 @@ public class AgentManagerTest {
         //should be OK
         buildAgent(agent, "James Bond", birthday, true, 1, null);
         manager.updateAgent(agent);
+        
         assertEquals(agent, manager.getAgent(agent.getId()));
-        assertNull(manager.getAgent(agent.getId()).getNotes());
-
+        assertNull(manager.getAgent(agent.getId()).getNotes());        
     }
     
     @Test
