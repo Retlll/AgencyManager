@@ -182,7 +182,6 @@ public class MissionManagerTest {
         assertNull(manager.getMission(mission.getId()).getDetails());
     }
 
-    @Ignore
     @Test
     public void testRemoveMission() throws SQLException {
         Mission mission = new Mission();
@@ -202,6 +201,7 @@ public class MissionManagerTest {
         assertNull(manager.getMission(mission.getId()));
         assertNotNull(manager.getMission(mission2.getId()));
         
+        mission.setId(null);
         manager.createMission(mission);
         
         assertNotNull(manager.getMission(mission.getId()));

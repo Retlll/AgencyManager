@@ -115,7 +115,21 @@ public class MissionManagerImpl implements MissionManager {
 
     @Override
     public void removeMission(Mission mission){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (mission.getId() == null) {
+            throw new IllegalArgumentException("Id is null");
+        }
+        if (mission.getName() == null) {
+            throw new IllegalArgumentException("Name is null");
+        }
+        
+        try (PreparedStatement st = connection.prepareStatement(
+                "delete from MISSION where ID = ?");) {
+            st.setLong(1, mission.getId());
+            st.execute();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AgentManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
