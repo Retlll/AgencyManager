@@ -108,7 +108,7 @@ public class AgentManagerTest {
         birthday2.set(1991, 5, 10);
         Agent agent2 = new Agent();
         buildAgent(agent2, "Peter Novak", birthday2, false, 5, "Some notes");
-
+        
         //update unexist agent
         try {
             manager.updateAgent(agent);

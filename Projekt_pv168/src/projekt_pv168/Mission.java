@@ -74,6 +74,8 @@ public class Mission {
             return false;
         }
         final Mission other = (Mission) obj;
+        if (this.id == null || other.id == null)
+            return false;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
