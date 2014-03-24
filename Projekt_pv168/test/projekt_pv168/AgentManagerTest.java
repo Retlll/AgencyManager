@@ -49,6 +49,7 @@ public class AgentManagerTest {
     @Test
     public void testCreateAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -65,6 +66,7 @@ public class AgentManagerTest {
     @Test
     public void testCreateWrongAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -96,11 +98,13 @@ public class AgentManagerTest {
     @Test
     public void testUpdateAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
 
         Calendar birthday2 = Calendar.getInstance();
+        birthday2.clear();
         birthday2.set(1991, 5, 10);
         Agent agent2 = new Agent();
         buildAgent(agent2, "Peter Novak", birthday2, false, 5, "Some notes");
@@ -166,6 +170,7 @@ public class AgentManagerTest {
     @Test
     public void testUpdateWrongAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -201,6 +206,7 @@ public class AgentManagerTest {
     @Test
     public void testRemoveAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -236,6 +242,7 @@ public class AgentManagerTest {
     @Test
     public void testGetAgent() throws SQLException {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -250,6 +257,7 @@ public class AgentManagerTest {
     @Test
     public void testGetAgentWithRank_int() {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -278,6 +286,7 @@ public class AgentManagerTest {
     @Test
     public void testGetAgentWithRank_int_int() {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");
@@ -315,6 +324,7 @@ public class AgentManagerTest {
         assertTrue(manager.getAllAgents().isEmpty());
 
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
         Agent agent = new Agent();
         buildAgent(agent, "James Bond", birthday, true, 1, "");

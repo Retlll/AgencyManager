@@ -178,7 +178,9 @@ public class AgentManagerImpl implements AgentManager {
                 agent.setActive(agents.getBoolean("ACTIVE"));
                 agent.setRank(agents.getInt("RANK"));
                 agent.setNotes(agents.getString("NOTES"));
+                
                 Calendar born = Calendar.getInstance();
+                //born.clear();
                 born.setTimeInMillis(agents.getDate("BORN").getTime());
                 agent.setBorn(born);
                 if (agents.next()) {
