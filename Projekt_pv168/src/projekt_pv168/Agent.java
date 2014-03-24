@@ -97,6 +97,8 @@ public class Agent {
             return false;
         }
         final Agent other = (Agent) obj;
+        if (this.id == null || other.id == null)
+            return false;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }

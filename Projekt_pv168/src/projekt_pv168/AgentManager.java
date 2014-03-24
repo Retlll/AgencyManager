@@ -18,9 +18,7 @@ public interface AgentManager {
     
     public void removeAgent(Agent agent);
     
-    public boolean checkAgent(Agent agent);
-    
-    //aj ine parametre
+    //aj ine parametre !!!
     public Agent getAgent(long id) throws SQLException;
     
     //dajme radsej bestRank
