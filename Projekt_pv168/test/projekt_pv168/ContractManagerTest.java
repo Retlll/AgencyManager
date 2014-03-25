@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 public class ContractManagerTest {
 
     private ContractManagerImpl manager;
+    private MissionManager missionManager;
+    private AgentManager agentManager;
     private Connection connection;
 
     @Before
@@ -36,7 +38,9 @@ public class ContractManagerTest {
                 + "starTime Date,"
                 + "endTime Date)").executeUpdate();
         
-        manager = new ContractManagerImpl();
+        manager = new ContractManagerImpl(connection);
+        MissionManager missionManager = new MissionManagerImpl(connection);
+        AgentManager agentManager = new AgentManagerImpl(connection);
     }
     
     @After
@@ -49,6 +53,8 @@ public class ContractManagerTest {
     public void testCreateContract() {
         Mission mission = newMission1();
         Agent agent = newAgent1();
+        Long missionID = mission.getId();
+        Long agentID1 = agent.getId();
         Contract contract = newContract1(mission, agent);
 
         manager.createContract(contract);
@@ -90,6 +96,7 @@ public class ContractManagerTest {
         }
 
         Agent a2 = newAgent2();
+        Long agentID2 = a2.getId();
         c2 = newContract2(mission, a2);
         c2.setBudget(-1l);
 
@@ -107,6 +114,21 @@ public class ContractManagerTest {
         }
 
         c2.setBudget(10l);
+        
+        Calendar tmp = c2.getEndTime();
+        c2.setEndTime(c2.getStartTime());
+        c2.setStartTime(tmp);
+        
+        try {
+            manager.createContract(c2);
+            fail("Start time is later then end time, yet still accepted");
+        } catch (IllegalArgumentException ex) {
+        }
+        
+        tmp = c2.getEndTime();
+        c2.setEndTime(c2.getStartTime());
+        c2.setStartTime(tmp);
+        
         mission.setId(null);
 
         try {
@@ -123,15 +145,31 @@ public class ContractManagerTest {
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        mission.setId(Long.valueOf(1));
+        mission.setId(missionID);
 
         try {
             manager.createContract(c2);
-            fail("Mission have ID null, yet still accepted");
+            fail("Agent have ID null, yet still accepted");
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        a2.setId(agentID2 + agentID1 + 1);
+        try {
+            manager.createContract(c2);
+            fail("Agent have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        a2.setId(Long.valueOf(2l));
+        a2.setId(agentID2);
+        mission.setId(missionID+1);
+        
+        try {
+            manager.createContract(c2);
+            fail("Mission have unknown ID, yet still accepted");
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        mission.setId(missionID);
         c2.setStartTime(null);
         manager.createContract(c2);
         try {
@@ -152,6 +190,8 @@ public class ContractManagerTest {
 
         Mission mission = contract.getMission();
         Agent agent = contract.getAgent();
+        Long missionID1 = mission.getId();
+        Long agentID1 = agent.getId();
         Calendar start = contract.getStartTime();
         Calendar end = contract.getEndTime();
         long budget = contract.getBudget();
@@ -165,12 +205,14 @@ public class ContractManagerTest {
         contract = manager.getContract(mission, agent);
         Calendar calStr = Calendar.getInstance();
         contract.setStartTime(calStr);
+        calStr.set(2014, 5, 6);
         assertDeepEquals(contract, mission, agent, 5054, start, end);
         manager.updateContract(contract);
         assertDeepEquals(contract, mission, agent, 5054, calStr, end);
 
         contract = manager.getContract(mission, agent);
         Calendar calEnd = Calendar.getInstance();
+        calEnd.set(2015, 5, 6);
         contract.setEndTime(calEnd);
         assertDeepEquals(contract, mission, agent, 5054, calStr, end);
         manager.updateContract(contract);
@@ -190,6 +232,8 @@ public class ContractManagerTest {
 
         mission = c2.getMission();
         agent = c2.getAgent();
+        Long missionID2 = mission.getId();
+        Long agentID2 = agent.getId();
 
         assertDeepEquals(c2, manager.getContract(mission, agent));
 
@@ -209,6 +253,17 @@ public class ContractManagerTest {
         }
 
         c2.setBudget(10l);
+        c2.setEndTime(calStr);
+        c2.setStartTime(calEnd);
+        
+        try {
+            manager.updateContract(c2);
+            fail("End time is sooner than start time, yet still accepted");
+        } catch (IllegalArgumentException ex) {
+        }
+        
+        c2.setEndTime(calEnd);
+        c2.setStartTime(calStr);
         mission.setId(null);
 
         try {
@@ -225,7 +280,7 @@ public class ContractManagerTest {
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        mission.setId(Long.valueOf(2));
+        mission.setId(missionID2);
 
         try {
             manager.updateContract(c2);
@@ -233,7 +288,23 @@ public class ContractManagerTest {
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        agent.setId(Long.valueOf(1l));
+        
+        agent.setId(agentID2 + agentID1 + 1);
+        try {
+            manager.updateContract(c2);
+            fail("Agent have unknown ID, yet still accepted");
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        agent.setId(agentID2);
+        mission.setId(missionID2 + missionID1 + 1);
+        try {
+            manager.updateContract(c2);
+            fail("Mission have uknown ID, yet still accepted");
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        mission.setId(missionID2);
         c2.setStartTime(null);
         manager.updateContract(c2);
         assertEquals(c2, manager.getContract(c2.getMission(), c2.getAgent()));
@@ -546,6 +617,7 @@ public class ContractManagerTest {
 
     private Contract newContract1(Mission mission, Agent agent) {
         Calendar start = Calendar.getInstance();
+        start.clear();
         start.set(1993, 12, 5, 15, 31);
         Contract contract = new Contract(mission, agent, 1000000000, start, null);
         return contract;
@@ -553,42 +625,48 @@ public class ContractManagerTest {
 
     private Contract newContract2(Mission mission, Agent agent) {
         Calendar start = Calendar.getInstance();
+        start.clear();
         start.set(1998, 11, 5, 12, 31);
         Calendar end = Calendar.getInstance();
-        end.set(1998, 12, 5, 12, 31);
+        end.clear();
+        end.set(1999, 12, 5, 12, 31);
         Contract contract = new Contract(mission, agent, 100008000, start, end);
         return contract;
     }
 
     private Agent newAgent1() {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(Long.valueOf(1l), "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent(null, "James Bond", birthday, true, 1, "");
+        agentManager.createAgent(agent);
         return agent;
     }
 
     private Agent newAgent2() {
         Calendar birthday = Calendar.getInstance();
+        birthday.clear();
         birthday.set(1998, 5, 5);
-        Agent agent = new Agent(Long.valueOf(2l), "me", birthday, false, 1, "");
+        Agent agent = new Agent(null, "me", birthday, false, 1, "");
+        agentManager.createAgent(agent);
         return agent;
     }
 
     private Mission newMission1() {
         Mission mission = new Mission();
-        mission.setId(Long.valueOf(1l));
+        missionManager.createMission(mission);
         return mission;
     }
 
     private Mission newMission2() {
         Mission mission = new Mission();
-        mission.setId(Long.valueOf(2l));
+        missionManager.createMission(mission);
         return mission;
     }
 
     private Mission newMission3() {
         Mission mission = new Mission();
-        mission.setId(Long.valueOf(3l));
+        missionManager.createMission(mission);
         return mission;
     }
 
