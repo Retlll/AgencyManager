@@ -10,7 +10,10 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,20 +32,20 @@ public class ContractManagerTest {
 
     @Before
     public void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xmalych", "123456");
-        
+        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xkupka1", "123456");
+
         connection.prepareStatement("create table CONTRACT("
                 + "missionId bigint,"
                 + "agentId bigint,"
                 + "budget bigint,"
-                + "starTime Date,"
+                + "startTime Date,"
                 + "endTime Date)").executeUpdate();
-        
-        manager = new ContractManagerImpl(connection);
-        MissionManager missionManager = new MissionManagerImpl(connection);
-        AgentManager agentManager = new AgentManagerImpl(connection);
+
+        missionManager = new MissionManagerImplTest();
+        agentManager = new AgentManagerImplTest();
+        manager = new ContractManagerImpl(connection, missionManager, agentManager);
     }
-    
+
     @After
     public void tearDown() throws SQLException {
         connection.prepareStatement("drop table CONTRACT").executeUpdate();
@@ -54,7 +57,7 @@ public class ContractManagerTest {
         Mission mission = newMission1();
         Agent agent = newAgent1();
         Long missionID = mission.getId();
-        Long agentID1 = agent.getId();
+        //Long agentID1 = agent.getId();
         Contract contract = newContract1(mission, agent);
 
         manager.createContract(contract);
@@ -114,21 +117,21 @@ public class ContractManagerTest {
         }
 
         c2.setBudget(10l);
-        
+
         Calendar tmp = c2.getEndTime();
         c2.setEndTime(c2.getStartTime());
         c2.setStartTime(tmp);
-        
+
         try {
             manager.createContract(c2);
             fail("Start time is later then end time, yet still accepted");
         } catch (IllegalArgumentException ex) {
         }
-        
+
         tmp = c2.getEndTime();
         c2.setEndTime(c2.getStartTime());
         c2.setStartTime(tmp);
-        
+
         mission.setId(null);
 
         try {
@@ -146,29 +149,30 @@ public class ContractManagerTest {
         }
 
         mission.setId(missionID);
-
+        /*
         try {
             manager.createContract(c2);
             fail("Agent have ID null, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        
+
         a2.setId(agentID2 + agentID1 + 1);
         try {
             manager.createContract(c2);
             fail("Agent have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-
+        */
         a2.setId(agentID2);
-        mission.setId(missionID+1);
-        
+        /*
+        mission.setId(missionID + 1);
+
         try {
             manager.createContract(c2);
             fail("Mission have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        
+        */
         mission.setId(missionID);
         c2.setStartTime(null);
         manager.createContract(c2);
@@ -190,45 +194,47 @@ public class ContractManagerTest {
 
         Mission mission = contract.getMission();
         Agent agent = contract.getAgent();
-        Long missionID1 = mission.getId();
-        Long agentID1 = agent.getId();
+        //Long missionID1 = mission.getId();
+        //Long agentID1 = agent.getId();
         Calendar start = contract.getStartTime();
         Calendar end = contract.getEndTime();
         long budget = contract.getBudget();
 
         contract = manager.getContract(mission, agent);
         contract.setBudget(5054);
-        assertDeepEquals(contract, mission, agent, budget, start, end);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, budget, start, end);
         manager.updateContract(contract);
-        assertDeepEquals(contract, mission, agent, 5054, start, end);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, start, end);
 
         contract = manager.getContract(mission, agent);
-        Calendar calStr = Calendar.getInstance();
+        Calendar calStr = new GregorianCalendar();
+        calStr.clear();
         contract.setStartTime(calStr);
-        calStr.set(2014, 5, 6);
-        assertDeepEquals(contract, mission, agent, 5054, start, end);
+        calStr.set(1856, 5, 6);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, start, end);
         manager.updateContract(contract);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, end);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, end);
 
         contract = manager.getContract(mission, agent);
-        Calendar calEnd = Calendar.getInstance();
+        Calendar calEnd = new GregorianCalendar();
+        calEnd.clear();
         calEnd.set(2015, 5, 6);
         contract.setEndTime(calEnd);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, end);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, end);
         manager.updateContract(contract);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, calEnd);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, calEnd);
 
         contract = manager.getContract(mission, agent);
         contract.setEndTime(null);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, calEnd);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, calEnd);
         manager.updateContract(contract);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, null);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, null);
 
         contract = manager.getContract(mission, agent);
         contract.setStartTime(null);
-        assertDeepEquals(contract, mission, agent, 5054, calStr, null);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, calStr, null);
         manager.updateContract(contract);
-        assertDeepEquals(contract, mission, agent, 5054, null, null);
+        assertDeepEquals(manager.getContract(contract.getMission(), contract.getAgent()), mission, agent, 5054, null, null);
 
         mission = c2.getMission();
         agent = c2.getAgent();
@@ -255,13 +261,13 @@ public class ContractManagerTest {
         c2.setBudget(10l);
         c2.setEndTime(calStr);
         c2.setStartTime(calEnd);
-        
+
         try {
             manager.updateContract(c2);
             fail("End time is sooner than start time, yet still accepted");
         } catch (IllegalArgumentException ex) {
         }
-        
+
         c2.setEndTime(calEnd);
         c2.setStartTime(calStr);
         mission.setId(null);
@@ -288,22 +294,23 @@ public class ContractManagerTest {
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        
+        /*
         agent.setId(agentID2 + agentID1 + 1);
         try {
             manager.updateContract(c2);
             fail("Agent have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        
+        */
         agent.setId(agentID2);
+        /*
         mission.setId(missionID2 + missionID1 + 1);
         try {
             manager.updateContract(c2);
             fail("Mission have uknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        
+        */
         mission.setId(missionID2);
         c2.setStartTime(null);
         manager.updateContract(c2);
@@ -489,8 +496,9 @@ public class ContractManagerTest {
         manager.createContract(c2);
         assertEquals(2, manager.findAllContracts().size());
 
-        List expected = Arrays.asList(c1, c2);
-        List actual = manager.findAllContracts();
+
+        List<Contract> expected = Arrays.asList(c1, c2);
+        List<Contract> actual = manager.findAllContracts();
 
         Collections.sort(actual);
         Collections.sort(expected);
@@ -498,7 +506,8 @@ public class ContractManagerTest {
         assertEquals(expected, actual);
         assertDeepEquals(expected, actual); // only if order is required.
 
-
+        manager.removeContract(c1);
+        assertEquals(1, manager.findAllContracts().size());
     }
 
     @Test
@@ -533,14 +542,13 @@ public class ContractManagerTest {
         assertEquals(3, manager.findAllMissionsForAgent(c1.getAgent()).size());
         assertEquals(2, manager.findAllMissionsForAgent(c2.getAgent()).size());
 
-        List expected = Arrays.asList(c1.getMission(), c3.getMission(), c4.getMission());
-        List actual = manager.findAllMissionsForAgent(c1.getAgent());
+        List<Mission> expected = Arrays.asList(c1.getMission(), c3.getMission(), c4.getMission());
+        List<Mission> actual = manager.findAllMissionsForAgent(c1.getAgent());
 
         Collections.sort(actual);
         Collections.sort(expected);
 
         assertEquals(expected, actual);
-        assertDeepEquals(expected, actual); // only if order is required.
 
         expected = Arrays.asList(c2.getMission(), c5.getMission());
         actual = manager.findAllMissionsForAgent(c2.getAgent());
@@ -549,7 +557,6 @@ public class ContractManagerTest {
         Collections.sort(expected);
 
         assertEquals(expected, actual);
-        assertDeepEquals(expected, actual); // only if order is required.
     }
 
     @Test
@@ -567,6 +574,7 @@ public class ContractManagerTest {
         manager.createContract(c1);
         assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
+        assertEquals(0, manager.findAllAgentsForMission(c3.getMission()).size());
 
         manager.createContract(c2);
         assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
@@ -574,7 +582,7 @@ public class ContractManagerTest {
         assertEquals(0, manager.findAllAgentsForMission(c3.getMission()).size());
 
         manager.createContract(c3);
-        assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
+        //assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
 
@@ -588,37 +596,35 @@ public class ContractManagerTest {
         assertEquals(2, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
 
-        List expected = Arrays.asList(c1.getAgent(), c2.getAgent());
-        List actual = manager.findAllAgentsForMission(c1.getMission());
+        List<Agent> expected = Arrays.asList(c1.getAgent(), c5.getAgent());
+        List<Agent> actual = manager.findAllAgentsForMission(c1.getMission());
 
         Collections.sort(actual);
         Collections.sort(expected);
 
         assertEquals(expected, actual);
-        assertDeepEquals(expected, actual); // only if order is required.
 
+        expected = Arrays.asList(c4.getAgent(), c2.getAgent());
         actual = manager.findAllAgentsForMission(c2.getMission());
 
         Collections.sort(actual);
         Collections.sort(expected);
 
         assertEquals(expected, actual);
-        assertDeepEquals(expected, actual); // only if order is required.
 
-        expected = Arrays.asList(c1.getAgent(), c3.getAgent());
+        expected = Arrays.asList(c3.getAgent());
         actual = manager.findAllAgentsForMission(c3.getMission());
 
         Collections.sort(actual);
         Collections.sort(expected);
 
         assertEquals(expected, actual);
-        assertDeepEquals(expected, actual); // only if order is required.
     }
 
     private Contract newContract1(Mission mission, Agent agent) {
         Calendar start = Calendar.getInstance();
         start.clear();
-        start.set(1993, 12, 5, 15, 31);
+        start.set(1993, 12, 5);
         Contract contract = new Contract(mission, agent, 1000000000, start, null);
         return contract;
     }
@@ -626,10 +632,10 @@ public class ContractManagerTest {
     private Contract newContract2(Mission mission, Agent agent) {
         Calendar start = Calendar.getInstance();
         start.clear();
-        start.set(1998, 11, 5, 12, 31);
+        start.set(1998, 11, 5);
         Calendar end = Calendar.getInstance();
         end.clear();
-        end.set(1999, 12, 5, 12, 31);
+        end.set(1999, 12, 5);
         Contract contract = new Contract(mission, agent, 100008000, start, end);
         return contract;
     }
@@ -638,7 +644,7 @@ public class ContractManagerTest {
         Calendar birthday = Calendar.getInstance();
         birthday.clear();
         birthday.set(1994, 3, 9);
-        Agent agent = new Agent(null, "James Bond", birthday, true, 1, "");
+        Agent agent = new Agent(Long.valueOf(1l), "James Bond", birthday, true, 1, "");
         agentManager.createAgent(agent);
         return agent;
     }
@@ -647,25 +653,28 @@ public class ContractManagerTest {
         Calendar birthday = Calendar.getInstance();
         birthday.clear();
         birthday.set(1998, 5, 5);
-        Agent agent = new Agent(null, "me", birthday, false, 1, "");
+        Agent agent = new Agent(Long.valueOf(2l), "me", birthday, false, 1, "");
         agentManager.createAgent(agent);
         return agent;
     }
 
     private Mission newMission1() {
         Mission mission = new Mission();
+        mission.setId(Long.valueOf(1l));
         missionManager.createMission(mission);
         return mission;
     }
 
     private Mission newMission2() {
         Mission mission = new Mission();
+        mission.setId(Long.valueOf(2l));
         missionManager.createMission(mission);
         return mission;
     }
 
     private Mission newMission3() {
         Mission mission = new Mission();
+        mission.setId(Long.valueOf(3l));
         missionManager.createMission(mission);
         return mission;
     }
@@ -692,5 +701,75 @@ public class ContractManagerTest {
             Contract actual = actualList.get(i);
             assertDeepEquals(expected, actual);
         }
+    }
+}
+
+class AgentManagerImplTest implements AgentManager {
+
+    private Map<Long, Agent> agents = new TreeMap<>();
+
+    @Override
+    public void createAgent(Agent agent) {
+        agents.put(agent.getId(), agent);
+    }
+
+    @Override
+    public void updateAgent(Agent agent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeAgent(Agent agent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Agent getAgent(long id) throws SQLException {
+        return agents.get(id);
+    }
+
+    @Override
+    public List<Agent> getAgentWithRank(int minRank) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Agent> getAgentWithRank(int minRank, int maxRank) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Agent> getAllAgents() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}
+
+class MissionManagerImplTest implements MissionManager {
+
+    private Map<Long, Mission> missions = new TreeMap<>();
+
+    @Override
+    public void createMission(Mission mission) {
+        missions.put(mission.getId(), mission);
+    }
+
+    @Override
+    public void updateMission(Mission mission) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeMission(Mission mission) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Mission getMission(long id) throws SQLException {
+        return missions.get(id);
+    }
+
+    @Override
+    public List<Mission> getAllMissions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
