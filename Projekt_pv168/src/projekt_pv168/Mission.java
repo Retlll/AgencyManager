@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  * @author Lenovo
  */
-public class Mission {
+public class Mission implements Comparable<Mission> {
     private Long id;
     private String name;
     private int difficulty;
@@ -80,6 +80,35 @@ public class Mission {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public int compareTo(Mission mission) {
+        //int temp;
+        if (mission == null) {
+            return -1;
+        }
+        if (mission.id == null) {
+            if (this.id == null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else {
+            if (this.id == null) {
+                return 1;
+            } else {
+                if (this.id - mission.id == 0) {
+                    return 0;
+                } else {
+                    if (this.id - mission.id > 0) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            }
+        }
     }
     
     
