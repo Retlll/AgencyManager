@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Lenovo
  */
-public class Agent {
+public class Agent implements Comparable<Agent> {
 
     private Long id;
     private String name;
@@ -97,8 +97,9 @@ public class Agent {
             return false;
         }
         final Agent other = (Agent) obj;
-        if (this.id == null || other.id == null)
+        if (this.id == null || other.id == null) {
             return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -108,5 +109,55 @@ public class Agent {
     @Override
     public String toString() {
         return "Agent{" + "id=" + id + ", name=" + name + ", born=" + born + ", active=" + active + ", rank=" + rank + ", notes=" + notes + '}';
+    }
+
+    @Override
+    public int compareTo(Agent agent) {
+        //int temp;
+        if (agent == null) {
+            return -1;
+        }
+        if (agent.id == null) {
+            if (this.id == null) {
+                return 0;
+            } else {
+                return -1;
+            }
+        } else {
+            if (this.id == null) {
+                return 1;
+            } else {
+                if (this.id - agent.id == 0) {
+                    return 0;
+                } else {
+                    if (this.id - agent.id > 0) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                }
+            }
+
+            /*
+             if ((temp = this.name.compareTo(agent.name)) != 0) {
+             return temp;
+             } else {
+             if ((temp = this.born.compareTo(agent.born)) != 0 ) {
+             return temp;
+             } else  {
+             if (this.active != agent.active ) {
+             if (this.active) {
+             return 1;
+             } else {
+             return -1;
+             }
+             }
+             else {(temp = this.rank - agent.rank) = 
+                            
+             }
+             }
+                
+             }*/
+        }
     }
 }

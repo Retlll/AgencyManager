@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Sebastian
  */
-public class Contract {
+public class Contract implements Comparable<Contract> {
     
     private Mission mission;    
     private Agent agent;    
@@ -94,6 +94,34 @@ public class Contract {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Contract contract) {
+        if (contract == null) 
+            return 1;
+        if (contract.mission == null) {
+            if (this.mission == null) {
+                if (contract.agent == null) {
+                    if (this.agent == null) {
+                        return 0;
+                    }
+                    return -1;
+                }
+                if (this.agent == null) {
+                    return 1;
+                }
+            } 
+            return -1;
+        } 
+        if (this.mission == null) {
+            return 1;
+        }
+        int temp;
+        if ((temp = this.mission.compareTo(contract.mission)) != 0) {
+            return temp;
+        }      
+        return this.agent.compareTo(contract.agent);  
     }
     
     
