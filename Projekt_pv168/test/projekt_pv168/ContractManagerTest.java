@@ -57,7 +57,7 @@ public class ContractManagerTest {
         Mission mission = newMission1();
         Agent agent = newAgent1();
         Long missionID = mission.getId();
-        //Long agentID1 = agent.getId();
+        Long agentID1 = agent.getId();
         Contract contract = newContract1(mission, agent);
 
         manager.createContract(contract);
@@ -149,7 +149,6 @@ public class ContractManagerTest {
         }
 
         mission.setId(missionID);
-        /*
         try {
             manager.createContract(c2);
             fail("Agent have ID null, yet still accepted");
@@ -162,9 +161,7 @@ public class ContractManagerTest {
             fail("Agent have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        */
         a2.setId(agentID2);
-        /*
         mission.setId(missionID + 1);
 
         try {
@@ -172,7 +169,6 @@ public class ContractManagerTest {
             fail("Mission have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        */
         mission.setId(missionID);
         c2.setStartTime(null);
         manager.createContract(c2);
@@ -194,8 +190,8 @@ public class ContractManagerTest {
 
         Mission mission = contract.getMission();
         Agent agent = contract.getAgent();
-        //Long missionID1 = mission.getId();
-        //Long agentID1 = agent.getId();
+        Long missionID1 = mission.getId();
+        Long agentID1 = agent.getId();
         Calendar start = contract.getStartTime();
         Calendar end = contract.getEndTime();
         long budget = contract.getBudget();
@@ -294,23 +290,21 @@ public class ContractManagerTest {
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
 
-        /*
         agent.setId(agentID2 + agentID1 + 1);
         try {
             manager.updateContract(c2);
             fail("Agent have unknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        */
+        
         agent.setId(agentID2);
-        /*
         mission.setId(missionID2 + missionID1 + 1);
+        
         try {
             manager.updateContract(c2);
             fail("Mission have uknown ID, yet still accepted");
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
-        */
         mission.setId(missionID2);
         c2.setStartTime(null);
         manager.updateContract(c2);
@@ -487,17 +481,62 @@ public class ContractManagerTest {
 
         Contract c1 = newContract1(newMission1(), newAgent1());
         Contract c2 = newContract2(newMission2(), newAgent2());
+        Contract c3 = newContract2(c1.getMission(), c2.getAgent());
+
+        Long missID = c1.getMission().getId();
+        Long agentID = c1.getAgent().getId();
+
+        try {
+            manager.findAllContracts((Agent) null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        try {
+            manager.findAllContracts((Mission) null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getAgent().setId(null);
+        c1.getMission().setId(null);
+
+        try {
+            manager.findAllContracts(c1.getAgent());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        try {
+            manager.findAllContracts(c1.getMission());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getAgent().setId(agentID);
+        c1.getMission().setId(missID);
 
         assertEquals(0, manager.findAllContracts().size());
+        assertEquals(0, manager.findAllContracts(c1.getMission()));
+        assertEquals(0, manager.findAllContracts(c2.getAgent()));
 
         manager.createContract(c1);
         assertEquals(1, manager.findAllContracts().size());
+        assertEquals(1, manager.findAllContracts(c1.getMission()));
+        assertEquals(0, manager.findAllContracts(c2.getAgent()));
 
         manager.createContract(c2);
         assertEquals(2, manager.findAllContracts().size());
+        assertEquals(1, manager.findAllContracts(c1.getMission()));
+        assertEquals(1, manager.findAllContracts(c2.getAgent()));
+
+        manager.createContract(c3);
+        assertEquals(3, manager.findAllContracts().size());
+        assertEquals(2, manager.findAllContracts(c1.getMission()));
+        assertEquals(2, manager.findAllContracts(c2.getAgent()));
 
 
-        List<Contract> expected = Arrays.asList(c1, c2);
+        List<Contract> expected = Arrays.asList(c1, c2, c3);
         List<Contract> actual = manager.findAllContracts();
 
         Collections.sort(actual);
@@ -506,17 +545,67 @@ public class ContractManagerTest {
         assertEquals(expected, actual);
         assertDeepEquals(expected, actual); // only if order is required.
 
+        expected = Arrays.asList(c2, c3);
+        actual = manager.findAllContracts(c2.getAgent());
+
+        Collections.sort(actual);
+        Collections.sort(expected);
+
+        assertEquals(expected, actual);
+        assertDeepEquals(expected, actual); // only if order is required.
+
+        expected = Arrays.asList(c1, c3);
+        actual = manager.findAllContracts(c1.getMission());
+
+        Collections.sort(actual);
+        Collections.sort(expected);
+
+        assertEquals(expected, actual);
+        assertDeepEquals(expected, actual); // only if order is required.
+
         manager.removeContract(c1);
-        assertEquals(1, manager.findAllContracts().size());
+        assertEquals(2, manager.findAllContracts().size());
+        assertEquals(1, manager.findAllContracts(c1.getMission()));
+        assertEquals(2, manager.findAllContracts(c2.getAgent()));
     }
 
     @Test
-    public void testFindAllMissionsForAgent() {
+    public void testAllMissionsForAgent() {
         Contract c1 = newContract1(newMission1(), newAgent1());
         Contract c2 = newContract2(newMission2(), newAgent2());
         Contract c3 = newContract1(newMission3(), c1.getAgent());
         Contract c4 = newContract2(c2.getMission(), c1.getAgent());
         Contract c5 = newContract1(c1.getMission(), c2.getAgent());
+        
+        Long agentID = c1.getAgent().getId();
+
+        try {
+            manager.findAllMissionsForAgent(null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        try {
+            manager.removeAllMissionsForAgent((Agent)null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getAgent().setId(null);
+
+        try {
+            manager.findAllMissionsForAgent(c1.getAgent());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        try {
+            manager.removeAllMissionsForAgent(c1.getAgent());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getAgent().setId(agentID);
 
         assertEquals(0, manager.findAllMissionsForAgent(c1.getAgent()).size());
         assertEquals(0, manager.findAllMissionsForAgent(c2.getAgent()).size());
@@ -557,15 +646,53 @@ public class ContractManagerTest {
         Collections.sort(expected);
 
         assertEquals(expected, actual);
+        
+        manager.removeAllMissionsForAgent(c1.getAgent());
+        assertEquals(0, manager.findAllMissionsForAgent(c1.getAgent()).size());
+        assertEquals(2, manager.findAllMissionsForAgent(c2.getAgent()).size());
+        
+        manager.removeAllMissionsForAgent(c2.getAgent());
+        assertEquals(0, manager.findAllMissionsForAgent(c1.getAgent()).size());
+        assertEquals(0, manager.findAllMissionsForAgent(c2.getAgent()).size());
     }
 
     @Test
-    public void testFindAllAgentsForMission() {
+    public void testAllAgentsForMission() {
         Contract c1 = newContract1(newMission1(), newAgent1());
         Contract c2 = newContract2(newMission2(), newAgent2());
         Contract c3 = newContract1(newMission3(), c1.getAgent());
         Contract c4 = newContract2(c2.getMission(), c1.getAgent());
         Contract c5 = newContract1(c1.getMission(), c2.getAgent());
+        
+        Long missID = c1.getAgent().getId();
+
+        try {
+            manager.findAllAgentsForMission(null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        try {
+            manager.removeAllAgentsForMission(null);
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getMission().setId(null);
+
+        try {
+            manager.findAllAgentsForMission(c1.getMission());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+        
+        try {
+            manager.removeAllAgentsForMission(c1.getMission());
+            fail();
+        } catch (IllegalArgumentException | NullPointerException ex) {
+        }
+
+        c1.getMission().setId(missID);
 
         assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
@@ -582,7 +709,7 @@ public class ContractManagerTest {
         assertEquals(0, manager.findAllAgentsForMission(c3.getMission()).size());
 
         manager.createContract(c3);
-        //assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
+        assertEquals(1, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
 
@@ -619,6 +746,21 @@ public class ContractManagerTest {
         Collections.sort(expected);
 
         assertEquals(expected, actual);
+        
+        manager.removeAllAgentsForMission(c1.getMission());
+        assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
+        assertEquals(2, manager.findAllAgentsForMission(c2.getMission()).size());
+        assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
+        
+        manager.removeAllAgentsForMission(c2.getMission());
+        assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
+        assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
+        assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
+        
+        manager.removeAllAgentsForMission(c3.getMission());
+        assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
+        assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
+        assertEquals(0, manager.findAllAgentsForMission(c3.getMission()).size());
     }
 
     private Contract newContract1(Mission mission, Agent agent) {
