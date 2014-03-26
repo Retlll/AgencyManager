@@ -14,6 +14,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,13 +30,23 @@ public class ContractManagerTest {
     private ContractManagerImpl manager;
     private MissionManager missionManager;
     private AgentManager agentManager;
-    private Connection connection;
+    private DataSource ds;
+
+    private static DataSource prepareDataSource() throws SQLException {
+        BasicDataSource ds = new BasicDataSource();
+        //we will use in memory database
+        ds.setUrl("jdbc:derby:memory://localhost:1527/AgencyManager;create=true");
+        ds.setUsername("xmalych");
+        ds.setPassword("123456");
+        return ds;
+    }
 
     @Before
     public void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xkupka1", "123456");
-
-        connection.prepareStatement("create table CONTRACT("
+        
+        //connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xmalych", "123456");
+        ds = prepareDataSource();
+        ds.getConnection().prepareStatement("create table CONTRACT("
                 + "missionId bigint,"
                 + "agentId bigint,"
                 + "budget bigint,"
@@ -43,13 +55,12 @@ public class ContractManagerTest {
 
         missionManager = new MissionManagerImplTest();
         agentManager = new AgentManagerImplTest();
-        manager = new ContractManagerImpl(connection, missionManager, agentManager);
+        manager = new ContractManagerImpl(ds, missionManager, agentManager);
     }
 
     @After
     public void tearDown() throws SQLException {
-        connection.prepareStatement("drop table CONTRACT").executeUpdate();
-        connection.close();
+        ds.getConnection().prepareStatement("drop table CONTRACT").executeUpdate();
     }
 
     @Test
@@ -517,23 +528,23 @@ public class ContractManagerTest {
         c1.getMission().setId(missID);
 
         assertEquals(0, manager.findAllContracts().size());
-        assertEquals(0, manager.findAllContracts(c1.getMission()));
-        assertEquals(0, manager.findAllContracts(c2.getAgent()));
+        assertEquals(0, manager.findAllContracts(c1.getMission()).size());
+        assertEquals(0, manager.findAllContracts(c2.getAgent()).size());
 
         manager.createContract(c1);
         assertEquals(1, manager.findAllContracts().size());
-        assertEquals(1, manager.findAllContracts(c1.getMission()));
-        assertEquals(0, manager.findAllContracts(c2.getAgent()));
+        assertEquals(1, manager.findAllContracts(c1.getMission()).size());
+        assertEquals(0, manager.findAllContracts(c2.getAgent()).size());
 
         manager.createContract(c2);
         assertEquals(2, manager.findAllContracts().size());
-        assertEquals(1, manager.findAllContracts(c1.getMission()));
-        assertEquals(1, manager.findAllContracts(c2.getAgent()));
+        assertEquals(1, manager.findAllContracts(c1.getMission()).size());
+        assertEquals(1, manager.findAllContracts(c2.getAgent()).size());
 
         manager.createContract(c3);
         assertEquals(3, manager.findAllContracts().size());
-        assertEquals(2, manager.findAllContracts(c1.getMission()));
-        assertEquals(2, manager.findAllContracts(c2.getAgent()));
+        assertEquals(2, manager.findAllContracts(c1.getMission()).size());
+        assertEquals(2, manager.findAllContracts(c2.getAgent()).size());
 
 
         List<Contract> expected = Arrays.asList(c1, c2, c3);
@@ -565,8 +576,8 @@ public class ContractManagerTest {
 
         manager.removeContract(c1);
         assertEquals(2, manager.findAllContracts().size());
-        assertEquals(1, manager.findAllContracts(c1.getMission()));
-        assertEquals(2, manager.findAllContracts(c2.getAgent()));
+        assertEquals(1, manager.findAllContracts(c1.getMission()).size());
+        assertEquals(2, manager.findAllContracts(c2.getAgent()).size());
     }
 
     @Test
