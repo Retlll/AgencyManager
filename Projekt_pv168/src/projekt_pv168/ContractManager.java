@@ -5,6 +5,7 @@
 package projekt_pv168;
 
 import java.util.List;
+import projekt_pv168.common.ServiceFailureException;
 
 /**
  *
@@ -12,20 +13,28 @@ import java.util.List;
  */
 public interface ContractManager {
     
-    public void createContract(Contract contract);
+    public void createContract(Contract contract) throws ServiceFailureException;
     
-    public void updateContract(Contract contract);
+    public void updateContract(Contract contract) throws ServiceFailureException;
     
-    public void removeContract(Contract contract);
+    public void removeContract(Contract contract) throws ServiceFailureException;
     
-    public Contract getContract(Mission mission, Agent agent);
+    public Contract getContract(Mission mission, Agent agent) throws ServiceFailureException;
     
-    public Contract getContract(long missionID, long agentID);
+    public Contract getContract(long missionID, long agentID) throws ServiceFailureException;
     
-    public List<Contract> findAllContracts();
+    public List<Contract> findAllContracts() throws ServiceFailureException;
     
-    public List<Mission> findAllMissionsForAgent(Agent agent);
+    public List<Contract> findAllContracts(Agent agent) throws ServiceFailureException;
     
-    public List<Agent> findAllAgentsForMission(Mission mission);
+    public List<Contract> findAllContracts(Mission mission) throws ServiceFailureException;
+    
+    public List<Mission> findAllMissionsForAgent(Agent agent) throws ServiceFailureException;
+    
+    public List<Agent> findAllAgentsForMission(Mission mission) throws ServiceFailureException;
+    
+    public void removeAllMissionsForAgent(Agent agent) throws ServiceFailureException;
+    
+    public void removeAllAgentsForMission(Mission mission) throws ServiceFailureException;
     
 }
