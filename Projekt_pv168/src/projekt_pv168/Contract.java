@@ -71,6 +71,13 @@ public class Contract implements Comparable<Contract> {
     }
 
     @Override
+    public String toString() {
+        return "Contract{" + "mission=" + mission + ", agent=" + agent + ", budget=" + budget + ", startTime=" + startTime.getTime() + ", endTime=" + endTime.getTime() + '}';
+    }
+    
+    
+
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 19 * hash + Objects.hashCode(this.mission);
