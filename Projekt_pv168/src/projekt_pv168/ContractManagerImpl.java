@@ -74,32 +74,18 @@ public class ContractManagerImpl implements ContractManager {
         checkDataSource();
         validate(contract);
 
-        try {
-            if (msManager.getMission(contract.getMission().getId()) == null) {
-                throw new IllegalArgumentException("no mission with given id was found by msManager");
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            throw new ServiceFailureException("Internal error of msManager", ex);
-        }
-
-        try {
-            if (agManager.getAgent(contract.getAgent().getId()) == null) {
-                throw new IllegalArgumentException("no mission with given id was found by agManager");
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            throw new ServiceFailureException("Internal error of agManager", ex);
-        }
-
-        if (getContract(contract.getMission(), contract.getAgent()) != null) {
-            throw new IllegalArgumentException("contract with this agent and mission is already in database");
-        }
-
+        /*
+         if (getContract(contract.getMission(), contract.getAgent()) != null) {
+         throw new IllegalArgumentException("contract with this agent and mission is already in database");
+         }
+         */
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "insert into CONTRACT ( MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME ) values (?, ?, ?, ?, ?)");) {
                 connection.setAutoCommit(false);
+                if (getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection) != null) {
+                    throw new IllegalArgumentException("contract with this agent and mission is already in database");
+                }
                 st.setLong(3, contract.getBudget());
                 if (contract.getStartTime() != null) {
                     st.setDate(4, new java.sql.Date(contract.getStartTime().getTimeInMillis()));
@@ -137,42 +123,24 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public void updateContract(Contract contract) throws ServiceFailureException {
+        checkDataSource();
         validate(contract);
 
-        if (getContract(contract.getMission(), contract.getAgent()) == null) {
-            throw new IllegalArgumentException("contract with this agent and mission is not in database");
-        }
-
-        try {
-            if (msManager.getMission(contract.getMission().getId()) == null) {
-                throw new IllegalArgumentException("no mission with given id was found by msManager");
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            throw new ServiceFailureException("Internal error of msManager", ex);
-        }
-
-        try {
-            if (agManager.getAgent(contract.getAgent().getId()) == null) {
-                throw new IllegalArgumentException("no mission with given id was found by agManager");
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            throw new ServiceFailureException("Internal error of agManager", ex);
-        }
-
-        Contract tmp = null;
-        if (logger.isLoggable(Level.FINE)) {
-            tmp = getContract(contract.getMission(), contract.getAgent());
-            if (tmp == null) {
-                return;
-            }
-        }
+        /*
+         Contract tmp = getContract(contract.getMission(), contract.getAgent());
+         if (tmp == null) {
+         throw new IllegalArgumentException("contract with this agent and mission is not in the database");
+         }
+         */
 
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "update CONTRACT set BUDGET = ?, STARTTIME = ?, ENDTIME = ? where MISSIONID = ? and AGENTID = ?");) {
                 connection.setAutoCommit(false);
+                Contract tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                if (tmp == null) {
+                    throw new IllegalArgumentException("contract with this agent and mission is not in the database");
+                }
                 st.setLong(1, contract.getBudget());
                 if (contract.getStartTime() != null) {
                     st.setDate(2, new java.sql.Date(contract.getStartTime().getTimeInMillis()));
@@ -191,8 +159,12 @@ public class ContractManagerImpl implements ContractManager {
                     connection.rollback();
                     throw new ServiceFailureException("more/less (" + results + ") than one same contract was found in the database");
                 }
+                Contract tmp2 = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                if (tmp2 == null) {
+                    throw new IllegalArgumentException("contract was not in  the database (after update)");
+                }
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Contract: {0} was updated inside the database to :{1}", new Object[]{tmp, contract});
+                    logger.log(Level.FINE, "Contract: {0} was updated inside the database to :{1}", new Object[]{tmp, tmp2});
                 }
             } catch (SQLException ex) {
                 connection.rollback();
@@ -209,6 +181,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public void removeContract(Contract contract) throws ServiceFailureException {
+        checkDataSource();
         if (contract.getAgent() == null) {
             throw new IllegalArgumentException("contract's agent is null");
         }
@@ -225,22 +198,21 @@ public class ContractManagerImpl implements ContractManager {
             throw new IllegalArgumentException("ID of contract's mission is null");
         }
 
-        if (getContract(contract.getMission(), contract.getAgent()) == null) {
-            throw new IllegalArgumentException("contract with this agent and mission is not in database");
-        }
-
-        Contract tmp = null;
-        if (logger.isLoggable(Level.FINE)) {
-            tmp = getContract(contract.getMission(), contract.getAgent());
-            if (tmp == null) {
-                throw new ServiceFailureException("contract was not found in the database");
-            }
-        }
+        /*
+         Contract tmp = getContract(contract.getMission(), contract.getAgent());
+         if (tmp == null) {
+         throw new IllegalArgumentException("contract with this agent and mission is not in the database");
+         }
+         */
 
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where MISSIONID = ? and AGENTID = ?");) {
                 connection.setAutoCommit(true);
+                Contract tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                if (tmp == null) {
+                    throw new IllegalArgumentException("contract with this agent and mission is not in the database");
+                }
                 st.setLong(1, contract.getMission().getId());
                 st.setLong(2, contract.getAgent().getId());
                 int results = st.executeUpdate();
@@ -266,6 +238,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public Contract getContract(Mission mission, Agent agent) throws ServiceFailureException {
+        checkDataSource();
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
@@ -286,26 +259,9 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public Contract getContract(long missionID, long agentID) throws ServiceFailureException {
+        checkDataSource();
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement st = connection.prepareStatement(
-                    "select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where MISSIONID = ? and AGENTID = ?");) {
-                st.setLong(1, missionID);
-                st.setLong(2, agentID);
-                Contract contract;
-                ResultSet contractResult = st.executeQuery();
-                if (contractResult.next()) {
-                    contract = createContractFromTableRow(contractResult);
-                    if (contractResult.next()) {
-                        throw new ServiceFailureException("more contracts were found for given mission and agent");
-                    }
-                    return contract;
-                } else {
-                    return null;
-                }
-            } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
-                throw new ServiceFailureException("Internal error with databese - PreparedStatement", ex);
-            }
+            return getContractWithConn(missionID, agentID, connection);
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
@@ -314,6 +270,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public List<Contract> findAllContracts() throws ServiceFailureException {
+        checkDataSource();
         String sql = "select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT";
         return findContracts(sql, null);
 
@@ -321,6 +278,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public List<Contract> findAllContracts(Agent agent) throws ServiceFailureException {
+        checkDataSource();
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
@@ -336,6 +294,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public List<Contract> findAllContracts(Mission mission) throws ServiceFailureException {
+        checkDataSource();
         if (mission == null) {
             throw new IllegalArgumentException("mission is null");
         }
@@ -351,6 +310,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public List<Mission> findAllMissionsForAgent(Agent agent) throws ServiceFailureException {
+        checkDataSource();
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
@@ -383,6 +343,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public List<Agent> findAllAgentsForMission(Mission mission) throws ServiceFailureException {
+        checkDataSource();
         if (mission == null) {
             throw new IllegalArgumentException("mission is null");
         }
@@ -466,6 +427,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public void removeAllMissionsForAgent(Agent agent) throws ServiceFailureException {
+        checkDataSource();
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
@@ -508,6 +470,7 @@ public class ContractManagerImpl implements ContractManager {
 
     @Override
     public void removeAllAgentsForMission(Mission mission) throws ServiceFailureException {
+        checkDataSource();
         if (mission == null) {
             throw new IllegalArgumentException("mission is null");
         }
@@ -515,7 +478,7 @@ public class ContractManagerImpl implements ContractManager {
         if (mission.getId() == null) {
             throw new IllegalArgumentException("ID of mission is null");
         }
-        
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where MISSIONID = ?");) {
@@ -575,6 +538,24 @@ public class ContractManagerImpl implements ContractManager {
             if (contract.getEndTime().getTimeInMillis() < contract.getStartTime().getTimeInMillis()) {
                 throw new IllegalArgumentException("contract's starTime is later than contract's endTime");
             }
+        }
+
+        try {
+            if (msManager.getMission(contract.getMission().getId()) == null) {
+                throw new IllegalArgumentException("no mission with given id was found by msManager");
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            throw new ServiceFailureException("Internal error of msManager", ex);
+        }
+
+        try {
+            if (agManager.getAgent(contract.getAgent().getId()) == null) {
+                throw new IllegalArgumentException("no mission with given id was found by agManager");
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            throw new ServiceFailureException("Internal error of agManager", ex);
         }
     }
     // Zbytocne zlozite - ak su tranzakcie uzavrete.
@@ -666,4 +647,26 @@ public class ContractManagerImpl implements ContractManager {
      }
      }
      */
+
+    private Contract getContractWithConn(long missionID, long agentID, Connection connection) throws ServiceFailureException {
+        try (PreparedStatement st = connection.prepareStatement(
+                "select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where MISSIONID = ? and AGENTID = ?");) {
+            st.setLong(1, missionID);
+            st.setLong(2, agentID);
+            Contract contract;
+            ResultSet contractResult = st.executeQuery();
+            if (contractResult.next()) {
+                contract = createContractFromTableRow(contractResult);
+                if (contractResult.next()) {
+                    throw new ServiceFailureException("more contracts were found for given mission and agent");
+                }
+                return contract;
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            throw new ServiceFailureException("Internal error with databese - PreparedStatement", ex);
+        }
+    }
 }
