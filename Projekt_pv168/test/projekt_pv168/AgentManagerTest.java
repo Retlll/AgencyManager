@@ -323,7 +323,6 @@ public class AgentManagerTest {
         assertTrue(manager.getAgentWithRank(1, 5).size() == 2);
     }
 
-    @Ignore
     @Test
     public void testGetAllAgents() {
         assertTrue(manager.getAllAgents().isEmpty());
@@ -335,6 +334,7 @@ public class AgentManagerTest {
         buildAgent(agent, "James Bond", birthday, true, 1, "");
 
         Calendar birthday2 = Calendar.getInstance();
+        birthday2.clear();
         birthday2.set(1991, 5, 10);
         Agent agent2 = new Agent();
         buildAgent(agent2, "Peter Novak", birthday2, false, 5, "Some notes");
