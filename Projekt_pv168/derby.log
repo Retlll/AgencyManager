@@ -1,0 +1,8 @@
+----------------------------------------------------------------
+2014-03-30 21:13:01.172 GMT:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instance a816c00e-0145-14d6-8d3a-000004d81e00 
+on database directory memory:\\localhost:1527\AgencyManager  with class loader sun.misc.Launcher$AppClassLoader@596b753 
+Loaded from file:/C:/Users/Lenovo/Desktop/Retlll/Dropbox/WorkSpace/PV168/Projekt/Projekt_pv168/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_40-b43
+Database Class Loader started - derby.database.classpath=''

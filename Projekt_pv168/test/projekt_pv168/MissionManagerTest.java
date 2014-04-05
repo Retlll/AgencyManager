@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,24 +26,28 @@ import org.junit.Ignore;
 public class MissionManagerTest {
 
     private MissionManagerImpl manager;
-    private Connection connection;
+    private DataSource dataSource;
 
     @Before
     public void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xmalych", "123456");
-        connection.prepareStatement("create table MISSION ( "
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
+        ds.setUsername("xmalych");
+        ds.setPassword("123456");
+        dataSource = ds;
+        
+        dataSource.getConnection().prepareStatement("create table MISSION ( "
                 + "id int primary key not null generated  always as identity, "
                 + "name varchar(50), "
                 + "difficulty int, "
                 + "details varchar(50), "
                 + "location varchar(50))").executeUpdate();
-        manager = new MissionManagerImpl(connection);
+        manager = new MissionManagerImpl(dataSource);
     }
     
     @After
     public void tearDown() throws SQLException {
-        connection.prepareStatement("drop table MISSION").executeUpdate();
-        connection.close();
+        dataSource.getConnection().prepareStatement("drop table MISSION").executeUpdate();
     }
 
     @Test
@@ -224,8 +230,7 @@ public class MissionManagerTest {
         assertEquals(mission, manager.getMission(mission.getId()));
         assertDeepEquals(mission, manager.getMission(mission.getId()));
     }
-
-    @Ignore
+    
     @Test
     public void testGetAllMissions() {
         Mission mission = new Mission();

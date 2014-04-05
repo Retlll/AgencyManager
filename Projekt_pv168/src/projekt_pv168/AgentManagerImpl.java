@@ -312,7 +312,6 @@ public class AgentManagerImpl implements AgentManager {
             
             agents.add(agent);
         }
-
         return agents;
     }
 
