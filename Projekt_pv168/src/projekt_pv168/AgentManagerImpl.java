@@ -13,6 +13,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
+import projekt_pv168.common.ServiceFailureException;
+import projekt_pv168.common.DBUtils;
 
 /**
  *
@@ -20,13 +23,23 @@ import java.util.logging.Logger;
  */
 public class AgentManagerImpl implements AgentManager {
 
-    public AgentManagerImpl(Connection conn) {
-        this.connection = conn;
+    private DataSource dataSource;
+    private static final Logger logger = Logger.getLogger(AgentManagerImpl.class.getName());
+
+    public AgentManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
-    private Connection connection;
+
+    private void checkDataSource() {
+        if (dataSource == null) {
+            throw new IllegalStateException("DataSource is not set");
+        }
+    }
 
     @Override
-    public void createAgent(Agent agent) {
+    public void createAgent(Agent agent) throws ServiceFailureException {
+        checkDataSource();
+
         if (agent == null) {
             throw new IllegalArgumentException("Agent is null");
         }
@@ -58,41 +71,61 @@ public class AgentManagerImpl implements AgentManager {
             throw new IllegalArgumentException("agent should be adult");
         }
 
-        try (PreparedStatement st = connection.prepareStatement("insert into AGENT (NAME, BORN, ACTIVE, RANK, NOTES) "
-                + "values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);) {
-            st.setString(1, agent.getName());
-            st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
-            st.setBoolean(3, agent.isActive());
-            st.setInt(4, agent.getRank());
-            st.setString(5, agent.getNotes());
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement st = connection.prepareStatement(
+                    "insert into AGENT (NAME, BORN, ACTIVE, RANK, NOTES) values (?,?,?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS);) {
+                st.setString(1, agent.getName());
+                st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
+                st.setBoolean(3, agent.isActive());
+                st.setInt(4, agent.getRank());
+                st.setString(5, agent.getNotes());
 
-            int newRows = st.executeUpdate();
-            if (newRows != 1) {
-                throw new SQLException("More rows then excepted");
-            }
+                int newRows = st.executeUpdate();
+                if (newRows != 1) {
+                    throw new ServiceFailureException("More rows in database than excepted when adding agent.");
+                }
 
-            ResultSet keys = st.getGeneratedKeys();
-
-            if (keys.next()) {
+                ResultSet keys = st.getGeneratedKeys();
                 if (keys.getMetaData().getColumnCount() != 1) {
-                    throw new SQLException("Key table has more collumns then excepted");
+                    throw new IllegalArgumentException("ResultSet contains more columns");
                 }
-                Long tempKey = keys.getLong(1);
                 if (keys.next()) {
-                    throw new SQLException("More then one row in key table");
+                    Long result = keys.getLong(1);
+                    if (keys.next()) {
+                        throw new IllegalArgumentException("ResultSet contains more rows");
+                    }
+                    agent.setId(result);
+                } else {
+                    throw new IllegalArgumentException("ResultSet contain no rows");
                 }
-                agent.setId(tempKey);
-            } else {
-                throw new SQLException("No row in key table");
-            }
 
+                connection.commit();
+            } catch (SQLException ex) {
+                /*try {
+                 connection.rollback();
+                 } catch (SQLException exc) {
+                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                 }*/
+            } finally {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                }
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(AgentManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            String msg = "Error when adding agent to database.";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
         }
     }
 
     @Override
     public void updateAgent(Agent agent) {
+        checkDataSource();
+
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
@@ -111,63 +144,102 @@ public class AgentManagerImpl implements AgentManager {
         if (agent.getRank() < 0) {
             throw new IllegalArgumentException("Negative rank");
         }
-        
-        try (PreparedStatement st = connection.prepareStatement(
-                "update AGENT set NAME = ?, BORN = ?, ACTIVE = ?, RANK = ?, NOTES = ? where id = ?");) {
-            st.setString(1, agent.getName());
-            st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
-            st.setBoolean(3, agent.isActive());
-            st.setInt(4, agent.getRank());
-            st.setString(5, agent.getNotes());
-            st.setLong(6, agent.getId());
-            st.execute();
 
+        try (Connection connection = dataSource.getConnection();) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement st = connection.prepareStatement(
+                    "update AGENT set NAME = ?, BORN = ?, ACTIVE = ?, RANK = ?, NOTES = ? where id = ?");) {
+                st.setString(1, agent.getName());
+                st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
+                st.setBoolean(3, agent.isActive());
+                st.setInt(4, agent.getRank());
+                st.setString(5, agent.getNotes());
+                st.setLong(6, agent.getId());
+
+                int count = st.executeUpdate();
+                if (count == 0) {
+                    throw new IllegalArgumentException("Agent: " + agent + "does not exist in database");
+                }
+                if (count != 1) {
+                    throw new ServiceFailureException("More row than excepten in database.");
+                }
+
+                connection.commit();
+            } catch (SQLException ex) {
+                /*try {
+                 connection.rollback();
+                 } catch (SQLException exc) {
+                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                 }*/
+            } finally {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                }
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(AgentManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+            String msg = "Error when updating agent in database";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        }
     }
 
-    //zistovat aj vek??
     @Override
     public void removeAgent(Agent agent) {
+        checkDataSource();
+
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
         }
         if (agent.getId() == null) {
             throw new IllegalArgumentException("Agents id is null");
-        }/*
-        if (agent.getName() == null) {
-            throw new IllegalArgumentException("Name is null");
         }
-        if (agent.getName().length() == 0) {
-            throw new IllegalArgumentException("No name");
-        }
-        if (agent.getBorn() == null) {
-            throw new IllegalArgumentException("Born date is null");
-        }
-        if (agent.getRank() < 0) {
-            throw new IllegalArgumentException("Negative rank");
-        }*/
 
-        try (PreparedStatement st = connection.prepareStatement(
-                "delete from AGENT where ID = ?");) {
-            /*st.setString(1, agent.getName());
-            st.setDate(2, new java.sql.Date(agent.getBorn().getTimeInMillis()));
-            st.setBoolean(3, agent.isActive());
-            st.setInt(4, agent.getRank());
-            st.setString(5, agent.getNotes());*/
-            st.setLong(1, agent.getId());
-            st.execute();
+        try (Connection connection = dataSource.getConnection();) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement st = connection.prepareStatement("delete from AGENT where ID = ?");) {
+                st.setLong(1, agent.getId());
 
+                int count = st.executeUpdate();
+                if (count == 0) {
+                    throw new IllegalArgumentException("Agent: " + agent + "does not exist in database");
+                }
+                if (count != 1) {
+                    throw new ServiceFailureException("More row than excepten in database.");
+                }
+
+                connection.commit();
+            } catch (SQLException ex) {
+                /*try {
+                 connection.rollback();
+                 } catch (SQLException exc) {
+                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                 }*/
+            } finally {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                }
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(AgentManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            String msg = "Error when deleting agent from database";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
         }
     }
 
     @Override
     public Agent getAgent(long id) throws SQLException {
-        try (PreparedStatement st = connection.prepareStatement(
-                "select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where ID = ?");) {
+        checkDataSource();
+
+        Connection connection = null;
+        PreparedStatement st = null;
+
+        try {
+            connection = dataSource.getConnection();
+            st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where ID = ?");
             st.setLong(1, id);
             ResultSet agents = st.executeQuery();
 
@@ -178,13 +250,13 @@ public class AgentManagerImpl implements AgentManager {
                 agent.setActive(agents.getBoolean("ACTIVE"));
                 agent.setRank(agents.getInt("RANK"));
                 agent.setNotes(agents.getString("NOTES"));
-                
+
                 Calendar born = Calendar.getInstance();
                 //born.clear();
                 born.setTimeInMillis(agents.getDate("BORN").getTime());
                 agent.setBorn(born);
                 if (agents.next()) {
-                    throw new SQLException("There is more then one agent with same id");
+                    throw new ServiceFailureException("There is more then one agent with same id");
                 }
                 return agent;
             } else {
@@ -192,7 +264,11 @@ public class AgentManagerImpl implements AgentManager {
             }
 
         } catch (SQLException ex) {
-            throw new SQLException("Error in creatign prepared statement");
+            String msg = "Error when getting agent with id = " + id + " from database";
+            logger.log(Level.SEVERE, msg, ex);
+            throw new ServiceFailureException(msg, ex);
+        } finally {
+            DBUtils.closeQuietly(connection, st);
         }
     }
 
