@@ -4,14 +4,14 @@
  */
 package projekt_pv168;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.sql.DataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,25 +25,30 @@ import org.junit.Ignore;
 public class AgentManagerTest {
 
     private AgentManagerImpl manager;
-    private Connection connection;
+    private DataSource dataSource;
 
     @Before
     public void setUp() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/AgencyManager;create=true", "xmalych", "123456");
-        connection.prepareStatement("create table AGENT (id int primary key not null generated  always as identity, "
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
+        ds.setUsername("xmalych");
+        ds.setPassword("123456");
+        dataSource = ds;
+        
+        dataSource.getConnection().prepareStatement("create table AGENT (id int primary key not null generated  always as identity, "
                 + "name varchar(50), "
                 + "born date, "
                 + "active boolean, "
                 + "rank int, "
                 + "notes varchar(50))").executeUpdate();
 
-        manager = new AgentManagerImpl(connection);
+        
+        manager = new AgentManagerImpl(dataSource);
     }
 
     @After
     public void tearDown() throws SQLException {
-        connection.prepareStatement("drop table AGENT").executeUpdate();
-        connection.close();
+        dataSource.getConnection().prepareStatement("drop table AGENT").executeUpdate();
     }
     
     @Test
@@ -253,7 +258,6 @@ public class AgentManagerTest {
         assertDeepEquals(agent, manager.getAgent(agent.getId()));
     }
 
-    @Ignore
     @Test
     public void testGetAgentWithRank_int() {
         Calendar birthday = Calendar.getInstance();
@@ -282,7 +286,6 @@ public class AgentManagerTest {
         assertTrue(manager.getAgentWithRank(5).size() == 2);
     }
 
-    @Ignore
     @Test
     public void testGetAgentWithRank_int_int() {
         Calendar birthday = Calendar.getInstance();
@@ -300,22 +303,24 @@ public class AgentManagerTest {
         manager.createAgent(agent2);
 
         assertTrue(manager.getAgentWithRank(6, 7).isEmpty());
-        assertTrue(manager.getAgentWithRank(7, 6).isEmpty());
+        
+        try{
+            assertTrue(manager.getAgentWithRank(7, 6).isEmpty());
+            fail();
+        }catch(Exception ex){
+            
+        }
 
         assertTrue(manager.getAgentWithRank(5, 7).size() == 1);
-        assertTrue(manager.getAgentWithRank(7, 5).size() == 1);
 
         assertTrue(manager.getAgentWithRank(1, 4).size() == 1);
-        assertTrue(manager.getAgentWithRank(4, 1).size() == 1);
 
         assertTrue(manager.getAgentWithRank(1, 5).size() == 2);
-        assertTrue(manager.getAgentWithRank(5, 1).size() == 2);
 
         agent.setRank(5);
         manager.updateAgent(agent);
 
         assertTrue(manager.getAgentWithRank(1, 5).size() == 2);
-        assertTrue(manager.getAgentWithRank(5, 1).size() == 2);
     }
 
     @Ignore
