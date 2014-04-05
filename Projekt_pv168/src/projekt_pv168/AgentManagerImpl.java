@@ -9,13 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import projekt_pv168.common.ServiceFailureException;
-import projekt_pv168.common.DBUtils;
 
 /**
  *
@@ -103,6 +104,7 @@ public class AgentManagerImpl implements AgentManager {
 
                 connection.commit();
             } catch (SQLException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 /*try {
                  connection.rollback();
                  } catch (SQLException exc) {
@@ -166,6 +168,7 @@ public class AgentManagerImpl implements AgentManager {
 
                 connection.commit();
             } catch (SQLException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 /*try {
                  connection.rollback();
                  } catch (SQLException exc) {
@@ -211,6 +214,7 @@ public class AgentManagerImpl implements AgentManager {
 
                 connection.commit();
             } catch (SQLException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 /*try {
                  connection.rollback();
                  } catch (SQLException exc) {
@@ -234,56 +238,129 @@ public class AgentManagerImpl implements AgentManager {
     public Agent getAgent(long id) throws SQLException {
         checkDataSource();
 
-        Connection connection = null;
-        PreparedStatement st = null;
+        try (Connection connection = dataSource.getConnection();) {
+            try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where ID = ?");) {
+                st.setLong(1, id);
+                ResultSet agents = st.executeQuery();
 
-        try {
-            connection = dataSource.getConnection();
-            st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where ID = ?");
-            st.setLong(1, id);
-            ResultSet agents = st.executeQuery();
-
-            if (agents.next()) {
-                Agent agent = new Agent();
-                agent.setId(id);
-                agent.setName(agents.getString("NAME"));
-                agent.setActive(agents.getBoolean("ACTIVE"));
-                agent.setRank(agents.getInt("RANK"));
-                agent.setNotes(agents.getString("NOTES"));
-
-                Calendar born = Calendar.getInstance();
-                //born.clear();
-                born.setTimeInMillis(agents.getDate("BORN").getTime());
-                agent.setBorn(born);
                 if (agents.next()) {
-                    throw new ServiceFailureException("There is more then one agent with same id");
-                }
-                return agent;
-            } else {
-                return null;
-            }
+                    Agent agent = new Agent();
+                    agent.setId(id);
+                    agent.setName(agents.getString("NAME"));
+                    agent.setActive(agents.getBoolean("ACTIVE"));
+                    agent.setRank(agents.getInt("RANK"));
+                    agent.setNotes(agents.getString("NOTES"));
 
+                    Calendar born = Calendar.getInstance();
+                    //born.clear();
+                    born.setTimeInMillis(agents.getDate("BORN").getTime());
+                    agent.setBorn(born);
+                    if (agents.next()) {
+                        throw new ServiceFailureException("There is more then one agent with same id");
+                    }
+                    return agent;
+                } else {
+                    return null;
+                }
+            } catch (SQLException ex) {
+                String msg = "Error when getting agent with id = " + id + " from database";
+                logger.log(Level.SEVERE, msg, ex);
+                throw new ServiceFailureException(msg, ex);
+            }
         } catch (SQLException ex) {
-            String msg = "Error when getting agent with id = " + id + " from database";
-            logger.log(Level.SEVERE, msg, ex);
-            throw new ServiceFailureException(msg, ex);
-        } finally {
-            DBUtils.closeQuietly(connection, st);
+            logger.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     @Override
     public List<Agent> getAgentWithRank(int minRank) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+
+        try (Connection connection = dataSource.getConnection();) {
+            try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where RANK >= ?");) {
+                st.setLong(1, minRank);
+                ResultSet agents = st.executeQuery();
+
+                return getAgentsFromResultSet(agents);
+                
+            } catch (SQLException ex) {
+                String msg = "Error when getting agents from database";
+                logger.log(Level.SEVERE, msg, ex);
+                throw new ServiceFailureException(msg, ex);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    private List<Agent> getAgentsFromResultSet(ResultSet resultSet) throws SQLException {
+        List<Agent> agents = new ArrayList<>();
+        while (resultSet.next()) {
+            Agent agent = new Agent();
+            agent.setId(resultSet.getLong("ID"));
+            agent.setName(resultSet.getString("NAME"));
+            agent.setActive(resultSet.getBoolean("ACTIVE"));
+            agent.setRank(resultSet.getInt("RANK"));
+            agent.setNotes(resultSet.getString("NOTES"));
+
+            Calendar born = Calendar.getInstance();
+            //born.clear();
+            born.setTimeInMillis(resultSet.getDate("BORN").getTime());
+            agent.setBorn(born);
+            
+            agents.add(agent);
+        }
+
+        return agents;
     }
 
     @Override
     public List<Agent> getAgentWithRank(int minRank, int maxRank) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+
+        if(minRank > maxRank)
+            throw new IllegalArgumentException("MaxRank is greater then minRankf");
+        
+        try (Connection connection = dataSource.getConnection();) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where RANK >= ? AND RANK <= ?");) {
+                st.setLong(1, minRank);
+                st.setLong(2, maxRank);
+                ResultSet agents = st.executeQuery();
+                connection.commit();
+
+                return getAgentsFromResultSet(agents);
+            } catch (SQLException ex) {
+                String msg = "Error when getting agents from database";
+                logger.log(Level.SEVERE, msg, ex);
+                throw new ServiceFailureException(msg, ex);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
     public List<Agent> getAllAgents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        checkDataSource();
+
+        try (Connection connection = dataSource.getConnection();) {
+            try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT");) {
+                ResultSet agents = st.executeQuery();
+
+                return getAgentsFromResultSet(agents);
+                
+            } catch (SQLException ex) {
+                String msg = "Error when getting agents from database";
+                logger.log(Level.SEVERE, msg, ex);
+                throw new ServiceFailureException(msg, ex);
+            }
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
