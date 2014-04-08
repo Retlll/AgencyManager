@@ -105,11 +105,11 @@ public class AgentManagerImpl implements AgentManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -169,11 +169,11 @@ public class AgentManagerImpl implements AgentManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -215,11 +215,11 @@ public class AgentManagerImpl implements AgentManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -283,7 +283,7 @@ public class AgentManagerImpl implements AgentManager {
                 ResultSet agents = st.executeQuery();
 
                 return getAgentsFromResultSet(agents);
-                
+
             } catch (SQLException ex) {
                 String msg = "Error when getting agents from database";
                 logger.log(Level.SEVERE, msg, ex);
@@ -309,7 +309,7 @@ public class AgentManagerImpl implements AgentManager {
             //born.clear();
             born.setTimeInMillis(resultSet.getDate("BORN").getTime());
             agent.setBorn(born);
-            
+
             agents.add(agent);
         }
         return agents;
@@ -319,9 +319,10 @@ public class AgentManagerImpl implements AgentManager {
     public List<Agent> getAgentWithRank(int minRank, int maxRank) {
         checkDataSource();
 
-        if(minRank > maxRank)
+        if (minRank > maxRank) {
             throw new IllegalArgumentException("MaxRank is greater then minRankf");
-        
+        }
+
         try (Connection connection = dataSource.getConnection();) {
             connection.setAutoCommit(false);
             try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where RANK >= ? AND RANK <= ?");) {
@@ -351,7 +352,7 @@ public class AgentManagerImpl implements AgentManager {
                 ResultSet agents = st.executeQuery();
 
                 return getAgentsFromResultSet(agents);
-                
+
             } catch (SQLException ex) {
                 String msg = "Error when getting agents from database";
                 logger.log(Level.SEVERE, msg, ex);
