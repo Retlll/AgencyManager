@@ -89,11 +89,11 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -152,11 +152,11 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -198,11 +198,11 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                /*try {
-                 connection.rollback();
-                 } catch (SQLException exc) {
-                 logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                 }*/
+                try {
+                    connection.rollback();
+                } catch (SQLException exc) {
+                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
+                }
             } finally {
                 try {
                     connection.setAutoCommit(true);
@@ -282,7 +282,7 @@ public class MissionManagerImpl implements MissionManager {
             mission.setDifficulty(resultSet.getInt("DIFFICULTY"));
             mission.setDetails(resultSet.getString("DETAILS"));
             mission.setLocation(resultSet.getString("LOCATION"));
-            
+
             missions.add(mission);
         }
 

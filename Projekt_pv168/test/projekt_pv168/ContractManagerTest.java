@@ -35,7 +35,7 @@ public class ContractManagerTest {
     private static DataSource prepareDataSource() throws SQLException {
         BasicDataSource ds = new BasicDataSource();
         //we will use in memory database
-        ds.setUrl("jdbc:derby:memory://localhost:1527/AgencyManager;create=true");
+        ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
         ds.setUsername("xmalych");
         ds.setPassword("123456");
         return ds;
