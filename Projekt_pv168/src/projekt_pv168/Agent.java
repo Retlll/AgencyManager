@@ -108,7 +108,7 @@ public class Agent implements Comparable<Agent> {
 
     @Override
     public String toString() {
-        return "Agent{" + "id=" + id + ", name=" + name + ", born=" + born + ", active=" + active + ", rank=" + rank + ", notes=" + notes + '}';
+        return "Agent{" + "id=" + id + ", name=" + name + ", born=" + born.getTime().toString() + ", active=" + active + ", rank=" + rank + ", notes=" + notes + '}';
     }
 
     @Override
