@@ -89,16 +89,12 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                try {
-                    connection.rollback();
-                } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                }
             } finally {
                 try {
+                    connection.rollback();
                     connection.setAutoCommit(true);
                 } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                    logger.log(Level.SEVERE, "Error when setting autocommit and doing rollback", exc);
                 }
             }
         } catch (SQLException ex) {
@@ -152,16 +148,12 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                try {
-                    connection.rollback();
-                } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                }
             } finally {
                 try {
+                    connection.rollback();
                     connection.setAutoCommit(true);
                 } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                    logger.log(Level.SEVERE, "Error when setting autocommit and doing rollback", exc);
                 }
             }
         } catch (SQLException ex) {
@@ -198,16 +190,12 @@ public class MissionManagerImpl implements MissionManager {
                 connection.commit();
             } catch (SQLException ex) {
                 logger.log(Level.SEVERE, null, ex);
-                try {
-                    connection.rollback();
-                } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when doing rollback", ex);
-                }
             } finally {
                 try {
+                    connection.rollback();
                     connection.setAutoCommit(true);
                 } catch (SQLException exc) {
-                    logger.log(Level.SEVERE, "Error when setting autocommit", exc);
+                    logger.log(Level.SEVERE, "Error when setting autocommit and doing rollback", exc);
                 }
             }
         } catch (SQLException ex) {
