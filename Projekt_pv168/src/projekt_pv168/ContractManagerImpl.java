@@ -34,25 +34,25 @@ public class ContractManagerImpl implements ContractManager {
         this.agManager = agManager;
         this.msManager = msManager;
     }
-    /*
-     public ContractManagerImpl() {
-     }
 
-     public ContractManagerImpl(DataSource dataSource) {
-     this.dataSource = dataSource;
-     agManager = new AgentManagerImpl(dataSource);
-     msManager = new MissionManagerImpl(dataSource);
-     }
+    public ContractManagerImpl() {
+    }
 
-     public void setDataSource(DataSource dataSource) {
-     this.dataSource = dataSource;
-     if (agManager == null) {
-     agManager = new AgentManagerImpl(dataSource);
-     }
-     if (msManager == null) {
-     msManager = new MissionManagerImpl(dataSource);
-     }
-     }*/
+    public ContractManagerImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+        agManager = new AgentManagerImpl(dataSource);
+        msManager = new MissionManagerImpl(dataSource);
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        if (agManager == null) {
+            agManager = new AgentManagerImpl(dataSource);
+        }
+        if (msManager == null) {
+            msManager = new MissionManagerImpl(dataSource);
+        }
+    }
 
     private void checkDataSource() {
         if (dataSource == null) {
