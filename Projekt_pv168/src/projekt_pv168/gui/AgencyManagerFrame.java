@@ -7,9 +7,7 @@ package projekt_pv168.gui;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import projekt_pv168.Agent;
 import projekt_pv168.Contract;
 import projekt_pv168.Mission;
@@ -29,13 +27,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
      */
     public AgencyManagerFrame() {
         initComponents();
-        
-        
+
         Calendar birthday = Calendar.getInstance();
         birthday.clear();
         birthday.set(1994, 3, 9);
-        agents.add(new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, ""));
-        missions.add(new Mission());
+        agents.add(new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "nothing"));
+        missions.add(new Mission(Long.valueOf(1), "Save general", 1000, "nothing", "Trenčín"));
+        contracts.add(new Contract(missions.get(0), agents.get(0), 1000, birthday, birthday));
     }
 
     /**
@@ -515,6 +513,42 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
 
         @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "Name";
+                case 1:
+                    return "Born";
+                case 2:
+                    return "Active";
+                case 3:
+                    return "Rank";
+                case 4:
+                    return "Notes";
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return Calendar.class;
+                case 2:
+                    return Boolean.class;
+                case 3:
+                    return Long.class;
+                case 4:
+                    return String.class;
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
+        }
+
+        @Override
         public int getRowCount() {
             return agents.size();
         }
@@ -537,7 +571,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     return agents.get(rowIndex).getRank();
                 case 4:
                     return agents.get(rowIndex).getNotes();
-                default: throw new IllegalArgumentException("undefined collum");
+                default:
+                    throw new IllegalArgumentException("undefined collum");
             }
         }
     }
@@ -545,6 +580,38 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static class missionTableModel extends AbstractTableModel {
 
         public missionTableModel() {
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "Name";
+                case 1:
+                    return "Difficulty";
+                case 2:
+                    return "Details";
+                case 3:
+                    return "Location";
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return Long.class;
+                case 2:
+                    return String.class;
+                case 3:
+                    return String.class;
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
         }
 
         @Override
@@ -563,12 +630,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 0:
                     return missions.get(rowIndex).getName();
                 case 1:
-                    return missions.get(rowIndex).getLocation();
-                case 2:
                     return missions.get(rowIndex).getDifficulty();
+                case 2:
+                    return missions.get(rowIndex).getLocation();
                 case 3:
                     return missions.get(rowIndex).getDetails();
-                default: throw new IllegalArgumentException("undefined collum");
+                default:
+                    throw new IllegalArgumentException("undefined collum");
             }
         }
     }
@@ -576,6 +644,42 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static class contractTableModel extends AbstractTableModel {
 
         public contractTableModel() {
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "Mission";
+                case 1:
+                    return "Agent";
+                case 2:
+                    return "Budget";
+                case 3:
+                    return "Start time";
+                case 4:
+                    return "End time";
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return String.class;
+                case 2:
+                    return Long.class;
+                case 3:
+                    return Calendar.class;
+                case 4:
+                    return Calendar.class;
+                default:
+                    throw new IllegalArgumentException("more column than excepted");
+            }
         }
 
         @Override
@@ -601,7 +705,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     return contracts.get(rowIndex).getStartTime().getTime().toString();
                 case 4:
                     return contracts.get(rowIndex).getEndTime().getTime().toString();
-                default: throw new IllegalArgumentException("undefined collum");
+                default:
+                    throw new IllegalArgumentException("undefined collum");
             }
         }
     }
