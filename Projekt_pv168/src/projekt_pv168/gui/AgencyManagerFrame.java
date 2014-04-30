@@ -30,23 +30,23 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
     private ContractManagerImpl contractManager;
-    
+
     /**
      * Creates new form AgencyManagerFrame
      */
     public AgencyManagerFrame() {
         initComponents();
-        
+
         BasicDataSource ds = new BasicDataSource();
         ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
         ds.setUsername("xmalych");
         ds.setPassword("123456");
         DataSource dataSource = ds;
-        
+
         missionManager = new MissionManagerImpl(dataSource);
         agentManager = new AgentManagerImpl(dataSource);
         contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
-        
+
         refreshLists();
     }
 
@@ -383,6 +383,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void addAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAgentButtonActionPerformed
         EditAgentDialog dialog = new EditAgentDialog(this, true);
         dialog.setVisible(true);
+        if (dialog.getAgent() != null) {
+            agentManager.createAgent(dialog.getAgent());
+            refreshLists();
+        }
+        dialog.dispose();
     }//GEN-LAST:event_addAgentButtonActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -392,20 +397,25 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void viewAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
-            ViewAgentDialog dialog = new ViewAgentDialog(this, true);
+            ViewAgentDialog dialog = new ViewAgentDialog(this, false, agents.get(agentTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewAgentButtonActionPerformed
 
     private void updateAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
-            EditAgentDialog dialog = new EditAgentDialog(this, true);
+            EditAgentDialog dialog = new EditAgentDialog(this, true, agents.get(agentTable.getSelectedRow()));
             dialog.setVisible(true);
+            if (dialog.getAgent() != null) {
+                agentManager.updateAgent(dialog.getAgent());
+                refreshLists();
+            }
+            dialog.dispose();
         }
     }//GEN-LAST:event_updateAgentButtonActionPerformed
 
     private void removeAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAgentButtonActionPerformed
-        if (agentTable.getSelectedRow()!= -1) {
+        if (agentTable.getSelectedRow() != -1) {
             agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
             refreshLists();
         }
@@ -414,12 +424,20 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void addMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMissionButtonActionPerformed
         EditMissionDialog dialog = new EditMissionDialog(this, true);
         dialog.setVisible(true);
+        if (dialog.getMission() != null) {
+            missionManager.createMission(dialog.getMission());
+            refreshLists();
+        }
     }//GEN-LAST:event_addMissionButtonActionPerformed
 
     private void updateMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
-            EditMissionDialog dialog = new EditMissionDialog(this, true);
+            EditMissionDialog dialog = new EditMissionDialog(this, true, missions.get(missionTable.getSelectedRow()));
             dialog.setVisible(true);
+            if (dialog.getMission() != null) {
+                missionManager.updateMission(dialog.getMission());
+                refreshLists();
+            }
         }
     }//GEN-LAST:event_updateMissionButtonActionPerformed
 
@@ -430,19 +448,19 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void viewMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
-            ViewMissionDialog dialog = new ViewMissionDialog(this, true);
+            ViewMissionDialog dialog = new ViewMissionDialog(this, false, missions.get(missionTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewMissionButtonActionPerformed
 
     private void addContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractButtonActionPerformed
-        EditContractDialog dialog = new EditContractDialog(this, true);
+        EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents());
         dialog.setVisible(true);
     }//GEN-LAST:event_addContractButtonActionPerformed
 
     private void updateContractButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateContractButton1ActionPerformed
         if (contractTable.getSelectedRow() != -1) {
-            EditContractDialog dialog = new EditContractDialog(this, true);
+            EditContractDialog dialog = new EditContractDialog(this, true, contracts.get(contractTable.getSelectedRow()), missionManager.getAllMissions(), agentManager.getAllAgents());
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_updateContractButton1ActionPerformed
@@ -454,7 +472,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void viewContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewContractButtonActionPerformed
         if (contractTable.getSelectedRow() != -1) {
-            ViewContractDialog dialog = new ViewContractDialog(this, true);
+            ViewContractDialog dialog = new ViewContractDialog(this, false, contracts.get(contractTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewContractButtonActionPerformed
@@ -736,17 +754,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }
 
-    private void refreshLists(){
+    private void refreshLists() {
         agents.clear();
-        for(Agent agent : agentManager.getAllAgents()){
+        for (Agent agent : agentManager.getAllAgents()) {
             agents.add(agent);
         }
         missions.clear();
-        for(Mission mission : missionManager.getAllMissions()){
+        for (Mission mission : missionManager.getAllMissions()) {
             missions.add(mission);
         }
         contracts.clear();
-        for(Contract contract : contractManager.findAllContracts()){
+        for (Contract contract : contractManager.findAllContracts()) {
             contracts.add(contract);
         }
     }
