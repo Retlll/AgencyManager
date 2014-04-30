@@ -7,10 +7,15 @@ package projekt_pv168.gui;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.sql.DataSource;
 import javax.swing.table.AbstractTableModel;
+import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
+import projekt_pv168.AgentManagerImpl;
 import projekt_pv168.Contract;
+import projekt_pv168.ContractManagerImpl;
 import projekt_pv168.Mission;
+import projekt_pv168.MissionManagerImpl;
 
 /**
  *
@@ -18,24 +23,31 @@ import projekt_pv168.Mission;
  */
 public class AgencyManagerFrame extends javax.swing.JFrame {
 
+    private DataSource dataSource;
     private static List<Agent> agents = new ArrayList<>();
     private static List<Mission> missions = new ArrayList<>();
     private static List<Contract> contracts = new ArrayList<>();
-
+    private MissionManagerImpl missionManager;
+    private AgentManagerImpl agentManager;
+    private ContractManagerImpl contractManager;
+    
     /**
      * Creates new form AgencyManagerFrame
      */
     public AgencyManagerFrame() {
         initComponents();
-
-        //for testing
-        Calendar birthday = Calendar.getInstance();
-        birthday.clear();
-        birthday.set(1994, 3, 9);
-        agents.add(new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "nothing"));
-        missions.add(new Mission(Long.valueOf(1), "Save general", 1000, "nothing", "Trenčín"));
-        contracts.add(new Contract(missions.get(0), agents.get(0), 1000, birthday, birthday));
-        contracts.add(new Contract(missions.get(0), agents.get(0), 50, birthday, birthday));
+        
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
+        ds.setUsername("xmalych");
+        ds.setPassword("123456");
+        DataSource dataSource = ds;
+        
+        missionManager = new MissionManagerImpl(dataSource);
+        agentManager = new AgentManagerImpl(dataSource);
+        contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
+        
+        refreshLists();
     }
 
     /**
@@ -710,6 +722,18 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 default:
                     throw new IllegalArgumentException("undefined collum");
             }
+        }
+    }
+
+    private void refreshLists(){
+        for(Agent agent : agentManager.getAllAgents()){
+            agents.add(agent);
+        }
+        for(Mission mission : missionManager.getAllMissions()){
+            missions.add(mission);
+        }
+        for(Contract contract : contractManager.findAllContracts()){
+            contracts.add(contract);
         }
     }
 }
