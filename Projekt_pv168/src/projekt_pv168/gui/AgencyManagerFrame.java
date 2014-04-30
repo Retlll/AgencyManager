@@ -28,12 +28,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     public AgencyManagerFrame() {
         initComponents();
 
+        //for testing
         Calendar birthday = Calendar.getInstance();
         birthday.clear();
         birthday.set(1994, 3, 9);
         agents.add(new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, "nothing"));
         missions.add(new Mission(Long.valueOf(1), "Save general", 1000, "nothing", "Trenčín"));
         contracts.add(new Contract(missions.get(0), agents.get(0), 1000, birthday, birthday));
+        contracts.add(new Contract(missions.get(0), agents.get(0), 50, birthday, birthday));
     }
 
     /**
