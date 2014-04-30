@@ -16,7 +16,18 @@ public class Mission implements Comparable<Mission> {
     private int difficulty;
     private String details;
     private String Location;
+
     //private int capacity;
+    public Mission(Long id, String name, int difficulty, String details, String Location) {
+        this.id = id;
+        this.name = name;
+        this.difficulty = difficulty;
+        this.details = details;
+        this.Location = Location;
+    }
+
+    public Mission() {
+    }
     
     @Override
     public int hashCode() {
