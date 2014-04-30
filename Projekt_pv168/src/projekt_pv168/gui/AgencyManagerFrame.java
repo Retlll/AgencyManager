@@ -4,19 +4,38 @@
  */
 package projekt_pv168.gui;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import projekt_pv168.Agent;
+import projekt_pv168.Contract;
+import projekt_pv168.Mission;
+
 /**
  *
  * @author Lenovo
  */
 public class AgencyManagerFrame extends javax.swing.JFrame {
 
-    private Long selectIndex[] = new Long[3];
+    private static List<Agent> agents = new ArrayList<>();
+    private static List<Mission> missions = new ArrayList<>();
+    private static List<Contract> contracts = new ArrayList<>();
 
     /**
      * Creates new form AgencyManagerFrame
      */
     public AgencyManagerFrame() {
         initComponents();
+        
+        
+        Calendar birthday = Calendar.getInstance();
+        birthday.clear();
+        birthday.set(1994, 3, 9);
+        agents.add(new Agent(Long.valueOf(1), "James Bond", birthday, true, 1, ""));
+        missions.add(new Mission());
     }
 
     /**
@@ -69,30 +88,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         agentScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        agentTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Smith",  new Long(20), "1983-1-23", null, "Nothing interesting"},
-                {"James Bond",  new Long(7), "1979-12-19",  new Boolean(true), ""}
-            },
-            new String [] {
-                "Name", "Rank", "Born", "Active", "Notes"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        agentTable.setModel(new agentTableModel());
         agentTable.setFillsViewportHeight(true);
         agentTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         agentScrollPane.setViewportView(agentTable);
@@ -164,29 +160,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         missionScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        missionTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Save general", "5", "Trenčín", "Just save him"}
-            },
-            new String [] {
-                "Name", "Difficulty", "Location", "Details"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        missionTable.setModel(new missionTableModel());
         missionTable.setFillsViewportHeight(true);
         missionTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         missionScrollPane.setViewportView(missionTable);
@@ -258,29 +232,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         contractScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        contractTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"James Bond", "Save general", "25000", "2014-4-28", "2014-5-28"}
-            },
-            new String [] {
-                "Agent", "Mission", "Budget", "Start time", "End time"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        contractTable.setModel(new contractTableModel());
         contractTable.setFillsViewportHeight(true);
         contractTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         contractScrollPane.setViewportView(contractTable);
@@ -361,7 +313,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -517,6 +469,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new AgencyManagerFrame().setVisible(true);
             }
@@ -555,4 +508,101 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private javax.swing.JButton viewContractButton;
     private javax.swing.JButton viewMissionButton;
     // End of variables declaration//GEN-END:variables
+
+    private static class agentTableModel extends AbstractTableModel {
+
+        public agentTableModel() {
+        }
+
+        @Override
+        public int getRowCount() {
+            return agents.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 5; //without id attribute
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return agents.get(rowIndex).getName();
+                case 1:
+                    return agents.get(rowIndex).getBorn().getTime().toString();
+                case 2:
+                    return agents.get(rowIndex).isActive();
+                case 3:
+                    return agents.get(rowIndex).getRank();
+                case 4:
+                    return agents.get(rowIndex).getNotes();
+                default: throw new IllegalArgumentException("undefined collum");
+            }
+        }
+    }
+
+    private static class missionTableModel extends AbstractTableModel {
+
+        public missionTableModel() {
+        }
+
+        @Override
+        public int getRowCount() {
+            return missions.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 4; //without id attribute
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return missions.get(rowIndex).getName();
+                case 1:
+                    return missions.get(rowIndex).getLocation();
+                case 2:
+                    return missions.get(rowIndex).getDifficulty();
+                case 3:
+                    return missions.get(rowIndex).getDetails();
+                default: throw new IllegalArgumentException("undefined collum");
+            }
+        }
+    }
+
+    private static class contractTableModel extends AbstractTableModel {
+
+        public contractTableModel() {
+        }
+
+        @Override
+        public int getRowCount() {
+            return contracts.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 5;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            switch (columnIndex) {
+                case 0:
+                    return contracts.get(rowIndex).getMission().getName();
+                case 1:
+                    return contracts.get(rowIndex).getAgent().getName();
+                case 2:
+                    return contracts.get(rowIndex).getBudget();
+                case 3:
+                    return contracts.get(rowIndex).getStartTime().getTime().toString();
+                case 4:
+                    return contracts.get(rowIndex).getEndTime().getTime().toString();
+                default: throw new IllegalArgumentException("undefined collum");
+            }
+        }
+    }
 }
