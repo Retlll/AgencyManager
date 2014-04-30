@@ -4,5 +4,7 @@ create table Contract (
     budget bigint,
     startTime date,
     endTime date,
-    primary key (missionID, AgentID)
+    primary key (missionID, AgentID),
+    foreign key (missionID) references Mission(id),
+    foreign key (agentID) references Agent(id)
 );
