@@ -350,6 +350,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         editMenu.setText("Edit");
 
         refreshMenuItem.setText("Refresh");
+        refreshMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(refreshMenuItem);
 
         properitiesMenuItem.setText("Properities");
@@ -400,7 +405,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_updateAgentButtonActionPerformed
 
     private void removeAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAgentButtonActionPerformed
-        if (agentTable.getSelectedRow() != -1) {
+        if (agentTable.getSelectedRow()!= -1) {
+            agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
+            refreshLists();
         }
     }//GEN-LAST:event_removeAgentButtonActionPerformed
 
@@ -451,6 +458,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewContractButtonActionPerformed
+
+    private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
+        refreshLists();
+    }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -726,12 +737,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }
 
     private void refreshLists(){
+        agents.clear();
         for(Agent agent : agentManager.getAllAgents()){
             agents.add(agent);
         }
+        missions.clear();
         for(Mission mission : missionManager.getAllMissions()){
             missions.add(mission);
         }
+        contracts.clear();
         for(Contract contract : contractManager.findAllContracts()){
             contracts.add(contract);
         }
