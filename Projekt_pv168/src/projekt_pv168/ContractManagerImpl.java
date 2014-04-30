@@ -4,6 +4,7 @@
  */
 package projekt_pv168;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.sql.DataSource;
 import projekt_pv168.common.ServiceFailureException;
 
@@ -33,6 +37,7 @@ public class ContractManagerImpl implements ContractManager {
         this.dataSource = dataSource;
         this.agManager = agManager;
         this.msManager = msManager;
+        loggerOutput();
     }
 
     public ContractManagerImpl() {
@@ -52,6 +57,19 @@ public class ContractManagerImpl implements ContractManager {
         if (msManager == null) {
             msManager = new MissionManagerImpl(dataSource);
         }
+    }
+
+    private void loggerOutput() {
+        FileHandler fh = null;
+        try {
+            fh = new FileHandler("C:/log/MyLogFile.log");
+        } catch (IOException | SecurityException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();
+        fh.setFormatter(formatter);
+        logger.setLevel(Level.ALL);
     }
 
     private void checkDataSource() {
@@ -79,6 +97,9 @@ public class ContractManagerImpl implements ContractManager {
          throw new IllegalArgumentException("contract with this agent and mission is already in database");
          }
          */
+
+        Contract tmp = null;
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "insert into CONTRACT ( MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME ) values (?, ?, ?, ?, ?)");) {
@@ -105,8 +126,7 @@ public class ContractManagerImpl implements ContractManager {
                     throw new ServiceFailureException("more/less (" + result + ") than one same contract was inserted in the database - rollback aplied");
                 }
                 if (logger.isLoggable(Level.FINE)) {
-                    Contract tmp = getContract(contract.getMission(), contract.getAgent());
-                    logger.log(Level.FINE, "Contract: {0} was added to the database", tmp);
+                    tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
                 }
             } catch (SQLException ex) {
                 connection.rollback();
@@ -118,6 +138,9 @@ public class ContractManagerImpl implements ContractManager {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Contract: {0} was added to the database", tmp);
         }
     }
 
@@ -133,11 +156,14 @@ public class ContractManagerImpl implements ContractManager {
          }
          */
 
+        Contract tmp2;
+        Contract tmp;
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "update CONTRACT set BUDGET = ?, STARTTIME = ?, ENDTIME = ? where MISSIONID = ? and AGENTID = ?");) {
                 connection.setAutoCommit(false);
-                Contract tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
                 if (tmp == null) {
                     throw new IllegalArgumentException("contract with this agent and mission is not in the database");
                 }
@@ -159,12 +185,9 @@ public class ContractManagerImpl implements ContractManager {
                     connection.rollback();
                     throw new ServiceFailureException("more/less (" + results + ") than one same contract was found in the database");
                 }
-                Contract tmp2 = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                tmp2 = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
                 if (tmp2 == null) {
                     throw new IllegalArgumentException("contract was not in  the database (after update)");
-                }
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Contract: {0} was updated inside the database to :{1}", new Object[]{tmp, tmp2});
                 }
             } catch (SQLException ex) {
                 connection.rollback();
@@ -176,6 +199,9 @@ public class ContractManagerImpl implements ContractManager {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Contract: {0} was updated inside the database to :{1}", new Object[]{tmp, tmp2});
         }
     }
 
@@ -205,11 +231,13 @@ public class ContractManagerImpl implements ContractManager {
          }
          */
 
+        Contract tmp;
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where MISSIONID = ? and AGENTID = ?");) {
                 connection.setAutoCommit(true);
-                Contract tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
+                tmp = getContractWithConn(contract.getMission().getId(), contract.getAgent().getId(), connection);
                 if (tmp == null) {
                     throw new IllegalArgumentException("contract with this agent and mission is not in the database");
                 }
@@ -219,9 +247,6 @@ public class ContractManagerImpl implements ContractManager {
                 if (results != 1) {
                     connection.rollback();
                     throw new ServiceFailureException("more/less (" + results + ")than one instance for given contract was found in the database");
-                }
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Contract: {0} removed from the database", tmp);
                 }
             } catch (SQLException ex) {
                 connection.rollback();
@@ -233,6 +258,9 @@ public class ContractManagerImpl implements ContractManager {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Contract: {0} removed from the database", tmp);
         }
     }
 
@@ -435,11 +463,14 @@ public class ContractManagerImpl implements ContractManager {
         if (agent.getId() == null) {
             throw new IllegalArgumentException("ID of agent is null");
         }
+        
+        List<Contract> contracts;
+        
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where AGENTID = ?");) {
                 connection.setAutoCommit(true);
-                List<Contract> contracts = findContracts("select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where AGENTID = ?", agent.getId(), connection);
+                contracts = findContracts("select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where AGENTID = ?", agent.getId(), connection);
                 if (contracts.isEmpty()) {
                     throw new IllegalArgumentException("no contracts for given agent were present in the database");
                 }
@@ -452,9 +483,7 @@ public class ContractManagerImpl implements ContractManager {
                  + " instances for given agent was found in the database");
                  }
                  */
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
-                }
+
             } catch (SQLException ex) {
                 connection.rollback();
                 logger.log(Level.SEVERE, null, ex);
@@ -465,6 +494,10 @@ public class ContractManagerImpl implements ContractManager {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
+        }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
         }
     }
 
@@ -479,11 +512,13 @@ public class ContractManagerImpl implements ContractManager {
             throw new IllegalArgumentException("ID of mission is null");
         }
 
+        List<Contract> contracts;
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where MISSIONID = ?");) {
                 connection.setAutoCommit(true);
-                List<Contract> contracts = findContracts("select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where MISSIONID = ?", mission.getId(), connection);
+                contracts = findContracts("select MISSIONID, AGENTID, BUDGET, STARTTIME, ENDTIME from CONTRACT where MISSIONID = ?", mission.getId(), connection);
                 if (contracts.isEmpty()) {
                     throw new IllegalArgumentException("no contracts for given mission were present in the database");
                 }
@@ -498,9 +533,6 @@ public class ContractManagerImpl implements ContractManager {
                  }
                  */
 
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
-                }
             } catch (SQLException ex) {
                 connection.rollback();
                 logger.log(Level.SEVERE, null, ex);
@@ -511,6 +543,10 @@ public class ContractManagerImpl implements ContractManager {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
+        }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
         }
     }
 
