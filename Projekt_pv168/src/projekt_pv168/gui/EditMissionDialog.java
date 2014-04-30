@@ -4,11 +4,16 @@
  */
 package projekt_pv168.gui;
 
+import projekt_pv168.Mission;
+
 /**
  *
  * @author Sebastián
  */
 public class EditMissionDialog extends javax.swing.JDialog {
+    
+    private Mission mission;
+    private Long id;
 
     /**
      * Creates new form EditMissionDialog
@@ -17,6 +22,26 @@ public class EditMissionDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
+    
+    public EditMissionDialog(java.awt.Frame parent, boolean modal, Mission mission) {
+        super(parent, modal);
+        initComponents();
+        if (mission != null) {
+            missionNameTextField.setText(str(mission.getName()));
+            locationTextField.setText(str(mission.getLocation()));
+            difficultySpinner.setValue(mission.getDifficulty());
+            detailsTextPane.setText(str(mission.getDetails()));
+            addButton.setText("Update");
+            id = mission.getId();
+            this.setTitle("Updating Agent (ID: " + id + ")");
+        }
+    }
+
+    public Mission getMission() {
+        return mission;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,8 +68,10 @@ public class EditMissionDialog extends javax.swing.JDialog {
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         warningLabel = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
-        setResizable(false);
+        setTitle("Adding a new Mission");
+        setMinimumSize(new java.awt.Dimension(408, 540));
 
         missionsDetailPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -72,8 +99,8 @@ public class EditMissionDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(detailsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(detailsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(detailsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         missionDataPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -115,8 +142,8 @@ public class EditMissionDialog extends javax.swing.JDialog {
                     .addGroup(missionDataPanelLayout.createSequentialGroup()
                         .addGroup(missionDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(diffcultyLabel)
-                            .addComponent(difficultySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(difficultySpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
+                        .addGap(160, 160, 160))
                     .addGroup(missionDataPanelLayout.createSequentialGroup()
                         .addComponent(missionNameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -158,6 +185,17 @@ public class EditMissionDialog extends javax.swing.JDialog {
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
         warningLabel.setText("* - tieto hodnuty musia byť vyplnené");
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 17, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,6 +216,11 @@ public class EditMissionDialog extends javax.swing.JDialog {
                             .addComponent(missionsDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(missionDataPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(145, 145, 145)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(146, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,14 +228,19 @@ public class EditMissionDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(missionDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(missionsDetailPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(missionsDetailPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(warningLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(261, 261, 261)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(262, Short.MAX_VALUE)))
         );
 
         pack();
@@ -211,6 +259,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
             locationTextField.requestFocus();
             return;
         }
+        mission = new Mission(id, missionNameTextField.getText(), (int) difficultySpinner.getValue(), detailsTextPane.getText(), locationTextField.getText());       
         this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -255,6 +304,20 @@ public class EditMissionDialog extends javax.swing.JDialog {
             }
         });
     }
+    
+    private String str(Object object) {
+        if (object == null) return "";
+        return object.toString();
+    }
+    
+    private String str(int val) {
+        return String.valueOf(val);
+    }
+    
+    private String str(long val) {
+        return String.valueOf(val);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton cancelButton;
@@ -263,6 +326,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
     private javax.swing.JTextPane detailsTextPane;
     private javax.swing.JLabel diffcultyLabel;
     private javax.swing.JSpinner difficultySpinner;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel locationLabel;
     private javax.swing.JTextField locationTextField;
     private javax.swing.JLabel missingValueLabel;

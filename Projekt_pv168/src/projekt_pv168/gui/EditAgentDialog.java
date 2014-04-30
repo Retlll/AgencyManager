@@ -4,6 +4,9 @@
  */
 package projekt_pv168.gui;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import projekt_pv168.Agent;
 
 /**
@@ -11,8 +14,9 @@ import projekt_pv168.Agent;
  * @author Sebastián
  */
 public class EditAgentDialog extends javax.swing.JDialog {
-    
+
     private Agent agent;
+    private Long id;
 
     /**
      * Creates new form EditAgentDialog
@@ -20,18 +24,21 @@ public class EditAgentDialog extends javax.swing.JDialog {
     public EditAgentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setTitle("Adding a new Agent");
     }
-    
+
     public EditAgentDialog(java.awt.Frame parent, boolean modal, Agent agent) {
         super(parent, modal);
         initComponents();
-        agentNameTextField.setText(agent.getName());
-        bornCalendar.setCalendar(agent.getBorn());
-        activeCheckBox.setSelected(agent.isActive());
-        rankSpinner.setValue(agent.getRank());
-        notesTextPane.setText(agent.getNotes());
-        this.setTitle("Updating Agent (ID: " + agent.getId() + ")");
+        if (agent != null) {
+            agentNameTextField.setText(str(agent.getName()));
+            bornCalendar.setCalendar(agent.getBorn());
+            activeCheckBox.setSelected(agent.isActive());
+            rankSpinner.setValue(agent.getRank());
+            notesTextPane.setText(str(agent.getNotes()));
+            id = agent.getId();
+            this.setTitle("Updating Agent (ID: " + id + ")");
+            addButton.setText("Update");
+        }
     }
 
     /**
@@ -57,11 +64,13 @@ public class EditAgentDialog extends javax.swing.JDialog {
         bornPanel = new javax.swing.JPanel();
         bornCalendar = new com.toedter.calendar.JCalendar();
         bornLabel = new javax.swing.JLabel();
+        missingValueLabel1 = new javax.swing.JLabel();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         warningLabel = new javax.swing.JLabel();
 
-        setResizable(false);
+        setTitle("Adding a new Agent");
+        setMinimumSize(new java.awt.Dimension(397, 683));
 
         notesPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -89,8 +98,8 @@ public class EditAgentDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(notesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(notesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(notesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         agentInfoPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -120,15 +129,15 @@ public class EditAgentDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(agentInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(agentInfoPaneLayout.createSequentialGroup()
-                        .addGroup(agentInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(agentInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(agentNameTextField, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(rankLabel, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, agentInfoPaneLayout.createSequentialGroup()
-                                .addComponent(rankSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                                .addComponent(rankSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                                .addGap(34, 34, 34)
                                 .addComponent(activeCheckBox)
                                 .addGap(27, 27, 27)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(agentInfoPaneLayout.createSequentialGroup()
                         .addComponent(agentNameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -157,6 +166,9 @@ public class EditAgentDialog extends javax.swing.JDialog {
         bornLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         bornLabel.setText("Born*");
 
+        missingValueLabel1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        missingValueLabel1.setForeground(new java.awt.Color(204, 0, 0));
+
         javax.swing.GroupLayout bornPanelLayout = new javax.swing.GroupLayout(bornPanel);
         bornPanel.setLayout(bornPanelLayout);
         bornPanelLayout.setHorizontalGroup(
@@ -164,19 +176,23 @@ public class EditAgentDialog extends javax.swing.JDialog {
             .addGroup(bornPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(bornPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bornCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(bornPanelLayout.createSequentialGroup()
+                        .addComponent(bornCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(bornPanelLayout.createSequentialGroup()
                         .addComponent(bornLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(missingValueLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         bornPanelLayout.setVerticalGroup(
             bornPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bornPanelLayout.createSequentialGroup()
-                .addGap(0, 13, Short.MAX_VALUE)
-                .addComponent(bornLabel)
+                .addGap(13, 13, 13)
+                .addGroup(bornPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bornLabel)
+                    .addComponent(missingValueLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bornCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bornCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
         );
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -209,16 +225,13 @@ public class EditAgentDialog extends javax.swing.JDialog {
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(bornPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(agentInfoPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(notesPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(bornPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(agentInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(notesPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 13, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -227,12 +240,12 @@ public class EditAgentDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(agentInfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(notesPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(notesPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bornPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bornPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(warningLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,10 +258,17 @@ public class EditAgentDialog extends javax.swing.JDialog {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (agentNameTextField.getText().equals("")) {
             missingValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingValueLabel1.setText("");
             agentNameTextField.requestFocus();
             return;
         }
-        agent = new Agent(Long.valueOf(1l), agentNameTextField.getText(), bornCalendar.getCalendar(), activeCheckBox.isSelected(), (int) rankSpinner.getValue(), notesTextPane.getText());
+        if (new GregorianCalendar().getTimeInMillis() - bornCalendar.getCalendar().getTimeInMillis() <= 18 * 60 * 60 * 100) {
+            missingValueLabel1.setText("- agent musí byť starší, ako 18 rokov");
+            missingValueLabel.setText("");
+            agentNameTextField.requestFocus();
+            return;
+        }
+        agent = new Agent(id, agentNameTextField.getText(), bornCalendar.getCalendar(), activeCheckBox.isSelected(), (int) rankSpinner.getValue(), notesTextPane.getText());
         this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -260,9 +280,6 @@ public class EditAgentDialog extends javax.swing.JDialog {
         return agent;
     }
 
-    
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -304,6 +321,21 @@ public class EditAgentDialog extends javax.swing.JDialog {
             }
         });
     }
+
+    private String str(Object object) {
+        if (object == null) {
+            return "";
+        }
+        return object.toString();
+    }
+
+    private String str(int val) {
+        return String.valueOf(val);
+    }
+
+    private String str(long val) {
+        return String.valueOf(val);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox activeCheckBox;
     private javax.swing.JButton addButton;
@@ -315,6 +347,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
     private javax.swing.JPanel bornPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JLabel missingValueLabel;
+    private javax.swing.JLabel missingValueLabel1;
     private javax.swing.JLabel notesLabel;
     private javax.swing.JPanel notesPane;
     private javax.swing.JScrollPane notesScrollPane;
