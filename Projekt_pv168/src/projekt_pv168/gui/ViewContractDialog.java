@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import java.awt.Dimension;
+import java.util.Calendar;
 import projekt_pv168.Contract;
 
 /**
@@ -25,8 +26,8 @@ public class ViewContractDialog extends javax.swing.JDialog {
             agentNameTextField.setText(str(contract.getAgent().getName()));
             agentIDTextField.setText(str(contract.getAgent().getId()));
             budgetTextField.setText(str(contract.getBudget()));
-            startTextField.setText(str(contract.getStartTime().getTime()));
-            endTextField.setText(str(contract.getEndTime().getTime()));
+            startTextField.setText(str(contract.getStartTime()));
+            endTextField.setText(str(contract.getEndTime()));
         }
     }
 
@@ -290,6 +291,11 @@ public class ViewContractDialog extends javax.swing.JDialog {
     private String str(Object object) {
         if (object == null) return "";
         return object.toString();
+    }
+    
+    private String str(Calendar cal) {
+        if (cal == null) return "";
+        return cal.getTime().toString();
     }
     
     private String str(int val) {

@@ -24,8 +24,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
     }
     
     public EditMissionDialog(java.awt.Frame parent, boolean modal, Mission mission) {
-        super(parent, modal);
-        initComponents();
+        this(parent, modal);
         if (mission != null) {
             missionNameTextField.setText(str(mission.getName()));
             locationTextField.setText(str(mission.getLocation()));
@@ -33,7 +32,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
             detailsTextPane.setText(str(mission.getDetails()));
             addButton.setText("Update");
             id = mission.getId();
-            this.setTitle("Updating Agent (ID: " + id + ")");
+            this.setTitle("Updating Mission (ID: " + id + ")");
         }
     }
 

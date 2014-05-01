@@ -27,8 +27,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
     }
 
     public EditAgentDialog(java.awt.Frame parent, boolean modal, Agent agent) {
-        super(parent, modal);
-        initComponents();
+        this(parent, modal);
         if (agent != null) {
             agentNameTextField.setText(str(agent.getName()));
             bornCalendar.setCalendar(agent.getBorn());
