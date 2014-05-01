@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.sql.DataSource;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
@@ -416,7 +417,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void removeAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
-            agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
+            if (contractManager.findAllContracts(agents.get(agentTable.getSelectedRow())).isEmpty()) {
+                agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
+                agents.remove(agentTable.getSelectedRow());
+            } else {
+                int dialogResult = JOptionPane.showConfirmDialog(null, "This agent has assigned contract, would you like to destroy all his contract?", "Warnign", JOptionPane.YES_NO_CANCEL_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    contractManager.removeAllContractsForAgent(agents.get(agentTable.getSelectedRow()));
+                    agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
+                    agents.remove(agentTable.getSelectedRow());
+                }
+            }
             refreshLists();
         }
     }//GEN-LAST:event_removeAgentButtonActionPerformed
@@ -443,6 +454,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void removeMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
+            if (contractManager.findAllContracts(missions.get(missionTable.getSelectedRow())).isEmpty()) {
+                missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
+                missions.remove(missionTable.getSelectedRow());
+            } else {
+                contractManager.removeAllContractsForMission(missions.get(missionTable.getSelectedRow()));
+                missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
+                missions.remove(missionTable.getSelectedRow());
+            }
+            refreshLists();
         }
     }//GEN-LAST:event_removeMissionButtonActionPerformed
 
@@ -488,6 +508,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void removeContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeContractButtonActionPerformed
         if (contractTable.getSelectedRow() != -1) {
+            contractManager.removeContract(contracts.get(contractTable.getSelectedRow()));
+            contracts.remove(contractTable.getSelectedRow());
+            refreshLists();
         }
     }//GEN-LAST:event_removeContractButtonActionPerformed
 
@@ -632,7 +655,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 2:
                     return agents.get(rowIndex).isActive();
                 case 3:
-                    return agents.get(rowIndex).getRank();
+                    //return agents.get(rowIndex).getRank();
+                    return agents.get(rowIndex).getId();
                 case 4:
                     return agents.get(rowIndex).getNotes();
                 default:
@@ -788,10 +812,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         for (Agent agent : agentManager.getAllAgents()) {
             agents.add(agent);
         }
+        agentTable.repaint();
+
         missions.clear();
         for (Mission mission : missionManager.getAllMissions()) {
             missions.add(mission);
         }
+        missionTable.repaint();
+
         contracts.clear();
         for (Contract contract : contractManager.findAllContracts()) {
             contracts.add(contract);
