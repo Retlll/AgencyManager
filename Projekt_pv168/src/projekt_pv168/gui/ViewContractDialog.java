@@ -4,15 +4,30 @@
  */
 package projekt_pv168.gui;
 
+import java.awt.Frame;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.Currency;
+import java.util.Date;
+import java.util.Locale;
 import projekt_pv168.Contract;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
+import projekt_pv168.Agent;
+import projekt_pv168.Mission;
 
 /**
  *
  * @author Sebastián
  */
 public class ViewContractDialog extends javax.swing.JDialog {
+    
+    private Agent ag;
+    private Mission ms;
 
     /**
      * Creates new form ViewContractDialog
@@ -20,14 +35,32 @@ public class ViewContractDialog extends javax.swing.JDialog {
     public ViewContractDialog(java.awt.Frame parent, boolean modal, Contract contract) {
         super(parent, modal);
         initComponents();
+        this.addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Rectangle b = getBounds();
+                if (b.height != 625) {
+                    b.height = 625;
+                    setBounds(b);
+                }
+                super.componentResized(e);
+            }
+        });
+        
         if (contract != null) {
-            missionNameTextField.setText(str(contract.getMission().getName()));
-            missionIDTextField.setText(str(contract.getMission().getId()));
-            agentNameTextField.setText(str(contract.getAgent().getName()));
-            agentIDTextField.setText(str(contract.getAgent().getId()));
-            budgetTextField.setText(str(contract.getBudget()));
-            startTextField.setText(str(contract.getStartTime()));
-            endTextField.setText(str(contract.getEndTime()));
+            ms = contract.getMission();
+            ag = contract.getAgent();
+            NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+            format.setCurrency(Currency.getInstance("EUR"));
+            
+            missionNameTextField.setText(str(ms.getName()));
+            missionIDTextField.setText(NumberFormat.getNumberInstance().format(ms.getId()));
+            agentNameTextField.setText(str(ag.getName()));
+            agentIDTextField.setText(str(ag.getId()));
+            budgetTextField.setText(format.format(contract.getBudget()));
+            startTextField.setText(getLocalDate(Locale.getDefault(), TimeZone.getDefault(), contract.getStartTime()));
+            endTextField.setText(getLocalDate(Locale.getDefault(), TimeZone.getDefault(),contract.getEndTime()));
         }
     }
 
@@ -55,6 +88,8 @@ public class ViewContractDialog extends javax.swing.JDialog {
         missionIDTextField = new javax.swing.JTextField();
         agentIDTextField = new javax.swing.JTextField();
         agentIDLabel = new javax.swing.JLabel();
+        viewMissionButton = new javax.swing.JButton();
+        viewAgentButton = new javax.swing.JButton();
         contracBudgetPanel = new javax.swing.JPanel();
         budgetLabel = new javax.swing.JLabel();
         budgetTextField = new javax.swing.JTextField();
@@ -62,11 +97,8 @@ public class ViewContractDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
         setTitle(bundle.getString("VIEW_CONTRACT")); // NOI18N
-        setAlwaysOnTop(true);
         setMaximumSize(new java.awt.Dimension(1007, 586));
         setMinimumSize(new java.awt.Dimension(352, 586));
-        setModal(true);
-        setResizable(false);
 
         contracTimePanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         contracTimePanel.setInheritsPopupMenu(true);
@@ -122,7 +154,7 @@ public class ViewContractDialog extends javax.swing.JDialog {
         missionNameLabel.setText(bundle.getString("MISSION")); // NOI18N
 
         agentNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentNameLabel.setText(bundle.getString("AGENT ")); // NOI18N
+        agentNameLabel.setText(bundle.getString("AGENT")); // NOI18N
 
         missionNameTextField.setEditable(false);
 
@@ -138,6 +170,20 @@ public class ViewContractDialog extends javax.swing.JDialog {
         agentIDLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         agentIDLabel.setText(bundle.getString("AGENT_ID")); // NOI18N
 
+        viewMissionButton.setText(bundle.getString("VIEW")); // NOI18N
+        viewMissionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewMissionButtonActionPerformed(evt);
+            }
+        });
+
+        viewAgentButton.setText(bundle.getString("VIEW")); // NOI18N
+        viewAgentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewAgentButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout contractInfoPanelLayout = new javax.swing.GroupLayout(contractInfoPanel);
         contractInfoPanel.setLayout(contractInfoPanelLayout);
         contractInfoPanelLayout.setHorizontalGroup(
@@ -145,29 +191,42 @@ public class ViewContractDialog extends javax.swing.JDialog {
             .addGroup(contractInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(contractInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(missionNameLabel)
+                    .addGroup(contractInfoPanelLayout.createSequentialGroup()
+                        .addComponent(missionNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(viewMissionButton))
                     .addComponent(missionNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(missionIDLabel)
                     .addComponent(missionIDTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(agentNameLabel)
                     .addComponent(agentNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                    .addComponent(agentIDLabel)
-                    .addComponent(agentIDTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+                    .addComponent(agentIDTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                    .addGroup(contractInfoPanelLayout.createSequentialGroup()
+                        .addGroup(contractInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(missionIDLabel)
+                            .addComponent(agentIDLabel))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(contractInfoPanelLayout.createSequentialGroup()
+                        .addComponent(agentNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(viewAgentButton)))
                 .addContainerGap())
         );
         contractInfoPanelLayout.setVerticalGroup(
             contractInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contractInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(missionNameLabel)
-                .addGap(9, 9, 9)
+                .addGroup(contractInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(missionNameLabel)
+                    .addComponent(viewMissionButton))
+                .addGap(5, 5, 5)
                 .addComponent(missionNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(missionIDLabel)
                 .addGap(9, 9, 9)
                 .addComponent(missionIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(agentNameLabel)
+                .addGroup(contractInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(agentNameLabel)
+                    .addComponent(viewAgentButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(agentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -219,12 +278,12 @@ public class ViewContractDialog extends javax.swing.JDialog {
                         .addComponent(contracBudgetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(contractInfoPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(contractInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,9 +294,9 @@ public class ViewContractDialog extends javax.swing.JDialog {
                 .addComponent(contracBudgetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(contracTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -246,6 +305,16 @@ public class ViewContractDialog extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void viewMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMissionButtonActionPerformed
+        ViewMissionDialog dialog = new ViewMissionDialog((Frame)this.getParent(), false, ms);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_viewMissionButtonActionPerformed
+
+    private void viewAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAgentButtonActionPerformed
+        ViewAgentDialog dialog = new ViewAgentDialog((Frame)this.getParent(), false, ag);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_viewAgentButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,6 +358,15 @@ public class ViewContractDialog extends javax.swing.JDialog {
         });
     }
     
+    private String getLocalDate(Locale locale, TimeZone tz, Calendar cal) {
+        if (cal == null)
+            return "";
+        Date date = cal.getTime();
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+        df.setTimeZone(tz);
+        return df.format(date);
+    }
+    
     private String str(Object object) {
         if (object == null) return "";
         return object.toString();
@@ -327,5 +405,7 @@ public class ViewContractDialog extends javax.swing.JDialog {
     private javax.swing.JTextField missionNameTextField;
     private javax.swing.JLabel startLabel;
     private javax.swing.JTextField startTextField;
+    private javax.swing.JButton viewAgentButton;
+    private javax.swing.JButton viewMissionButton;
     // End of variables declaration//GEN-END:variables
 }

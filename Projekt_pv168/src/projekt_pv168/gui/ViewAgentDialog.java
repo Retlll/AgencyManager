@@ -4,14 +4,21 @@
  */
 package projekt_pv168.gui;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import projekt_pv168.Agent;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**
  *
  * @author Sebastián
  */
 public class ViewAgentDialog extends javax.swing.JDialog {
+    private static final String PROJEKT_LOCALE = "projekt_pv168/configuration/Locale";
 
     /**
      * Creates new form ViewAgentDialog
@@ -21,13 +28,13 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         initComponents();
         if (agent != null) {
             agentNameTextField.setText(str(agent.getName()));
-            agentIDTextField.setText(str(agent.getId()));
-            agentBornTextField.setText(str(agent.getBorn().getTime()));
-            rankTextField.setText(str(agent.getRank()));
+            agentIDTextField.setText(NumberFormat.getNumberInstance().format(agent.getId()));
+            agentBornTextField.setText(getLocalDate(Locale.getDefault(), TimeZone.getDefault(),agent.getBorn()));
+            rankTextField.setText(NumberFormat.getNumberInstance().format(agent.getRank()));
             if (agent.isActive()) {
-                ActiveTextField.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("YES"));
+                ActiveTextField.setText(ResourceBundle.getBundle(PROJEKT_LOCALE).getString("YES"));
             } else {
-                ActiveTextField.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("NO"));
+                ActiveTextField.setText(ResourceBundle.getBundle(PROJEKT_LOCALE).getString("NO"));
             }
             notesTextPane.setText(str(agent.getNotes()));
         }
@@ -73,7 +80,6 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         notesLabel.setText(bundle.getString("NOTES")); // NOI18N
 
         notesTextPane.setEditable(false);
-        notesTextPane.setText("kidy");
         notesScrollPane.setViewportView(notesTextPane);
 
         javax.swing.GroupLayout agentNotesPanelLayout = new javax.swing.GroupLayout(agentNotesPanel);
@@ -279,6 +285,15 @@ public class ViewAgentDialog extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    }
+    
+    private String getLocalDate(Locale locale, TimeZone tz, Calendar cal) {
+        if (cal == null)
+            return "";
+        Date date = cal.getTime();
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+        df.setTimeZone(tz);
+        return df.format(date);
     }
     
     private String str(Object object) {
