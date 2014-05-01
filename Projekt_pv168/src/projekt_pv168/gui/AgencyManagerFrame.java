@@ -52,16 +52,53 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         update.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (agentTable.hasFocus() && agentTable.getSelectedRowCount() != 0) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
                     updateAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    updateMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    updateContractButton1ActionPerformed(null);
                 }
             }
         });
-
         contextMenu.add(update);
+        
         JMenuItem view = new JMenuItem("View");
+        view.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
+                    viewAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    viewMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    viewContractButtonActionPerformed(null);
+                }
+            }
+        });
         contextMenu.add(view);
+        
         JMenuItem remove = new JMenuItem("Remove");
+        remove.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
+                    removeAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    removeMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    removeContractButtonActionPerformed(null);
+                }
+            }
+        });
         contextMenu.add(remove);
 
         agentTable.setComponentPopupMenu(contextMenu);
@@ -91,7 +128,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        agencyTablesTabbedPane = new javax.swing.JTabbedPane();
         agentPanel = new javax.swing.JPanel();
         agentScrollPane = new javax.swing.JScrollPane();
         agentTable = new javax.swing.JTable();
@@ -125,7 +162,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 330));
 
-        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        agencyTablesTabbedPane.setBackground(new java.awt.Color(255, 255, 255));
 
         agentPanel.setOpaque(false);
 
@@ -202,7 +239,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        jTabbedPane1.addTab("Agent", agentPanel);
+        agencyTablesTabbedPane.addTab("Agent", agentPanel);
 
         missionPanel.setOpaque(false);
 
@@ -279,7 +316,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        jTabbedPane1.addTab("Mission", missionPanel);
+        agencyTablesTabbedPane.addTab("Mission", missionPanel);
 
         contractPanel.setOpaque(false);
 
@@ -356,7 +393,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        jTabbedPane1.addTab("Contract", contractPanel);
+        agencyTablesTabbedPane.addTab("Contract", contractPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -364,14 +401,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(agencyTablesTabbedPane)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(agencyTablesTabbedPane)
                 .addContainerGap())
         );
 
@@ -636,6 +673,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private javax.swing.JButton addAgentButton;
     private javax.swing.JButton addContractButton;
     private javax.swing.JButton addMissionButton;
+    private javax.swing.JTabbedPane agencyTablesTabbedPane;
     private javax.swing.JPanel agentPanel;
     private javax.swing.JScrollPane agentScrollPane;
     private javax.swing.JTable agentTable;
@@ -646,7 +684,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JPopupMenu.Separator menuSeparator1;
     private javax.swing.JPanel missionPanel;
