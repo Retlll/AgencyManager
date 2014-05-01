@@ -477,13 +477,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         missionManager = new MissionManagerImpl(dataSource);
         agentManager = new AgentManagerImpl(dataSource);
         contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
-
-        agents.clear();
-        agentTable.repaint();
-        missions.clear();
-        missionTable.repaint();
-        contracts.clear();
-        contractTable.repaint();
         
         refreshLists();
     }
@@ -1012,18 +1005,23 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void refreshLists() {
         agents.clear();
+        agentTable.repaint();
+        missions.clear();
+        missionTable.repaint();
+        contracts.clear();
+        contractTable.repaint();
+        
         for (Agent agent : agentManager.getAllAgents()) {
             agents.add(agent);
         }
         agentTable.repaint();
 
-        missions.clear();
         for (Mission mission : missionManager.getAllMissions()) {
             missions.add(mission);
         }
         missionTable.repaint();
 
-        contracts.clear();
+        
         for (Contract contract : contractManager.findAllContracts()) {
             contracts.add(contract);
         }
