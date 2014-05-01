@@ -4,9 +4,13 @@
  */
 package projekt_pv168.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractListModel;
+import javax.swing.ListModel;
 import projekt_pv168.Agent;
 import projekt_pv168.Contract;
+import projekt_pv168.ContractManager;
 import projekt_pv168.Mission;
 
 /**
@@ -14,26 +18,65 @@ import projekt_pv168.Mission;
  * @author Sebastián
  */
 public class EditContractDialog extends javax.swing.JDialog {
-    
+
     private Contract contract;
-    private Long missionID;
-    private Long agentID;
+    private ContractManager contractManager;
 
     /**
      * Creates new form EditContractDialog
      */
-    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents) {
+    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, ContractManager contractManager) {
         super(parent, modal);
+
+        if (agents == null) {
+            throw new IllegalArgumentException("agents cannot be null");
+        }
+
+        if (missions == null) {
+            throw new IllegalArgumentException("missions cannot be null");
+        }
+
+        if (contractManager == null) {
+            throw new IllegalArgumentException("contractManager cannot be null");
+        }
+
+        if (agents.isEmpty() || missions.isEmpty()) {
+            this.setVisible(false);
+        }
+
         initComponents();
+        agentList.setModel(new AgentModel((agents)));
+        missionList.setModel(new MissionModel((missions)));
+        this.contractManager = contractManager;
     }
-    
-    public EditContractDialog(java.awt.Frame parent, boolean modal, Contract contract, List<Mission> missions, List<Agent> agents) {
+
+    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, ContractManager contractManager, Mission mission, Agent agent) {
+        this(parent, modal, missions, agents, contractManager);
+        selectInLists(missions, mission, agents, agent);
+    }
+
+    public EditContractDialog(java.awt.Frame parent, boolean modal, Contract contract) {
         super(parent, modal);
+
+        if (contract.getAgent() == null) {
+            throw new IllegalArgumentException("contract.getAgent cannot be null");
+        }
+
+        if (contract.getMission() == null) {
+            throw new IllegalArgumentException("contract.getMission cannot be null");
+        }
+
         initComponents();
         if (contract != null) {
+
+            missionList.setModel(new MissionModel(contract.getMission()));
+            agentList.setModel(new AgentModel(contract.getAgent()));
+            missionList.setSelectedIndex(0);
+            agentList.setSelectedIndex(0);
+
             budgetSplinner.setValue(contract.getBudget());
-            starTimeBox.setSelected(contract.getStartTime() != null);
-            if (starTimeBox.isSelected()) {
+            startTimeBox.setSelected(contract.getStartTime() != null);
+            if (startTimeBox.isSelected()) {
                 startTimeCalendar.setEnabled(true);
                 startTimeCalendar.setCalendar(contract.getStartTime());
             }
@@ -42,8 +85,13 @@ public class EditContractDialog extends javax.swing.JDialog {
                 endTimeCalendar.setEnabled(true);
                 endTimeCalendar.setCalendar(contract.getEndTime());
             }
+            this.setTitle("Updating Contract");
             addButton.setText("Update");
         }
+    }
+
+    public Contract getContract() {
+        return contract;
     }
 
     /**
@@ -62,7 +110,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         missingAgentValueLabel = new javax.swing.JLabel();
         startTimePanel = new javax.swing.JPanel();
         startTimeCalendar = new com.toedter.calendar.JCalendar();
-        starTimeBox = new javax.swing.JCheckBox();
+        startTimeBox = new javax.swing.JCheckBox();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         missionPanel = new javax.swing.JPanel();
@@ -77,6 +125,8 @@ public class EditContractDialog extends javax.swing.JDialog {
         budgetLabel = new javax.swing.JLabel();
         budgetSplinner = new javax.swing.JSpinner();
         warningLabel = new javax.swing.JLabel();
+        contractExistLabel = new javax.swing.JLabel();
+        calenderProblemLabel = new javax.swing.JLabel();
 
         setTitle("Adding a new Contract");
         setMinimumSize(new java.awt.Dimension(735, 697));
@@ -87,6 +137,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         agentLabel.setText("Agent*");
 
         agentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        agentList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                agentListFocusLost(evt);
+            }
+        });
         agentScrollPane.setViewportView(agentList);
 
         missingAgentValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -115,7 +170,7 @@ public class EditContractDialog extends javax.swing.JDialog {
                     .addComponent(agentLabel)
                     .addComponent(missingAgentValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -123,12 +178,12 @@ public class EditContractDialog extends javax.swing.JDialog {
 
         startTimeCalendar.setEnabled(false);
 
-        starTimeBox.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        starTimeBox.setText("Start Time");
-        starTimeBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        starTimeBox.addChangeListener(new javax.swing.event.ChangeListener() {
+        startTimeBox.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        startTimeBox.setText("Start Time");
+        startTimeBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        startTimeBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                starTimeBoxStateChanged(evt);
+                startTimeBoxStateChanged(evt);
             }
         });
 
@@ -140,7 +195,7 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(startTimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(startTimePanelLayout.createSequentialGroup()
-                        .addComponent(starTimeBox)
+                        .addComponent(startTimeBox)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(startTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                 .addContainerGap())
@@ -149,7 +204,7 @@ public class EditContractDialog extends javax.swing.JDialog {
             startTimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, startTimePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(starTimeBox)
+                .addComponent(startTimeBox)
                 .addGap(5, 5, 5)
                 .addComponent(startTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
         );
@@ -177,6 +232,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         missionLabel.setText("Mission*");
 
         missionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        missionList.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                missionListFocusLost(evt);
+            }
+        });
         missionScrollPanel.setViewportView(missionList);
 
         missingMissionValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -276,6 +336,12 @@ public class EditContractDialog extends javax.swing.JDialog {
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
         warningLabel.setText("* - tieto hodnuty musia byť vyplnené");
 
+        contractExistLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        contractExistLabel.setForeground(new java.awt.Color(204, 0, 0));
+
+        calenderProblemLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        calenderProblemLabel.setForeground(new java.awt.Color(204, 0, 0));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -289,6 +355,7 @@ public class EditContractDialog extends javax.swing.JDialog {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(contractExistLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(budgetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(75, 75, 75)
@@ -303,7 +370,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(startTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(endTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(endTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(calenderProblemLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -313,9 +381,13 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(agentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(missionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(contractExistLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(budgetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(calenderProblemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -334,6 +406,53 @@ public class EditContractDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        if (missionList.getSelectedIndex() == -1) {
+            missingMissionValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingAgentValueLabel.setText("");
+            calenderProblemLabel.setText("");
+            contractExistLabel.setText("");
+            missionList.requestFocus();
+            return;
+        }
+        if (agentList.getSelectedIndex() == -1) {
+            missingMissionValueLabel.setText("");
+            missingAgentValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            calenderProblemLabel.setText("");
+            contractExistLabel.setText("");
+            agentList.requestFocus();
+            return;
+        }
+
+        Mission ms = (Mission) ((MissionModel) missionList.getModel()).getMissionAt(missionList.getSelectedIndex());
+        Agent ag = (Agent) ((AgentModel) agentList.getModel()).getAgentAt(agentList.getSelectedIndex());
+
+        if (contractManager != null && contractManager.getContract(ms, ag) != null) {
+            missingMissionValueLabel.setText("");
+            missingAgentValueLabel.setText("");
+            calenderProblemLabel.setText("");
+            contractExistLabel.setText("- contract with this mission and agent already exist");
+            missionList.requestFocus();
+            return;
+        }
+        contract = new Contract();
+        contract.setMission(ms);
+        contract.setAgent(ag);
+        if (startTimeBox.isSelected() && endTimeBox.isSelected()) {
+            if (startTimeCalendar.getCalendar().compareTo(endTimeCalendar.getCalendar()) > 0) {
+                missingMissionValueLabel.setText("");
+                missingAgentValueLabel.setText("");
+                calenderProblemLabel.setText("- start time must be earlier than end time");
+                contractExistLabel.setText("");
+                startTimeCalendar.requestFocus();
+                return;
+            }
+        }
+        if (startTimeBox.isSelected()) {
+            contract.setStartTime(startTimeCalendar.getCalendar());
+        }
+        if (endTimeBox.isSelected()) {
+            contract.setEndTime(endTimeCalendar.getCalendar());
+        }
         this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -341,13 +460,25 @@ public class EditContractDialog extends javax.swing.JDialog {
         this.setVisible(false);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
-    private void starTimeBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_starTimeBoxStateChanged
-        startTimeCalendar.setEnabled(starTimeBox.isSelected());
-    }//GEN-LAST:event_starTimeBoxStateChanged
+    private void startTimeBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_startTimeBoxStateChanged
+        startTimeCalendar.setEnabled(startTimeBox.isSelected());
+    }//GEN-LAST:event_startTimeBoxStateChanged
 
     private void endTimeBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_endTimeBoxStateChanged
         endTimeCalendar.setEnabled(endTimeBox.isSelected());
     }//GEN-LAST:event_endTimeBoxStateChanged
+
+    private void agentListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agentListFocusLost
+        if (contractManager == null) {
+            agentList.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_agentListFocusLost
+
+    private void missionListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_missionListFocusLost
+        if (contractManager == null) {
+            missionList.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_missionListFocusLost
 
     /**
      * @param args the command line arguments
@@ -379,7 +510,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EditContractDialog dialog = new EditContractDialog(new javax.swing.JFrame(), true, null, null);
+                EditContractDialog dialog = new EditContractDialog(new javax.swing.JFrame(), true, null, null, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -390,20 +521,98 @@ public class EditContractDialog extends javax.swing.JDialog {
             }
         });
     }
-    
+
+    private void selectInLists(List<Mission> missions, Mission mission, List<Agent> agents, Agent agent) {
+        if (mission != null) {
+            for (int i = 0; i < missions.size(); i++) {
+                if (missions.get(i).equals(mission)) {
+                    missionList.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        if (agent != null) {
+            for (int i = 0; i < agents.size(); i++) {
+                if (agents.get(i).equals(agent)) {
+                    agentList.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private class AgentModel extends AbstractListModel {
+
+        private List<Agent> agents = new ArrayList<>();
+
+        public AgentModel(List agents) {
+            this.agents = agents;
+        }
+
+        public AgentModel(Agent agent) {
+            this.agents = new ArrayList<>(1);
+            this.agents.add(agent);
+        }
+
+        @Override
+        public int getSize() {
+            return agents.size();
+        }
+
+        @Override
+        public Object getElementAt(int index) {
+            Agent ag = agents.get(index);
+            return ag.getName() + " (id: " + ag.getId() + " )";
+        }
+
+        public Agent getAgentAt(int index) {
+            return agents.get(index);
+        }
+    }
+
+    private class MissionModel extends AbstractListModel {
+
+        private List<Mission> missions = new ArrayList<>();
+
+        public MissionModel(List missions) {
+            this.missions = missions;
+        }
+
+        public MissionModel(Mission mission) {
+            this.missions = new ArrayList<>(1);
+            this.missions.add(mission);
+        }
+
+        @Override
+        public int getSize() {
+            return missions.size();
+        }
+
+        @Override
+        public Object getElementAt(int index) {
+            Mission ms = missions.get(index);
+            return ms.getName() + " (id: " + ms.getId() + " )";
+        }
+
+        public Mission getMissionAt(int index) {
+            return missions.get(index);
+        }
+    }
+
     private String str(Object object) {
-        if (object == null) return "";
+        if (object == null) {
+            return "";
+        }
         return object.toString();
     }
-    
+
     private String str(int val) {
         return String.valueOf(val);
     }
-    
+
     private String str(long val) {
         return String.valueOf(val);
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JLabel agentLabel;
@@ -413,7 +622,9 @@ public class EditContractDialog extends javax.swing.JDialog {
     private javax.swing.JLabel budgetLabel;
     private javax.swing.JPanel budgetPanel;
     private javax.swing.JSpinner budgetSplinner;
+    private javax.swing.JLabel calenderProblemLabel;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel contractExistLabel;
     private javax.swing.JCheckBox endTimeBox;
     private com.toedter.calendar.JCalendar endTimeCalendar;
     private javax.swing.JPanel endTimePanel;
@@ -423,7 +634,7 @@ public class EditContractDialog extends javax.swing.JDialog {
     private javax.swing.JList missionList;
     private javax.swing.JPanel missionPanel;
     private javax.swing.JScrollPane missionScrollPanel;
-    private javax.swing.JCheckBox starTimeBox;
+    private javax.swing.JCheckBox startTimeBox;
     private com.toedter.calendar.JCalendar startTimeCalendar;
     private javax.swing.JPanel startTimePanel;
     private javax.swing.JLabel warningLabel;

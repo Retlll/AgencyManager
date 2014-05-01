@@ -462,14 +462,27 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         if (missionTable.getSelectedRow() != -1) {
             mission = missions.get(missionTable.getSelectedRow());
         }
-        EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), mission, agent);
+        EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
+
         dialog.setVisible(true);
+
+        if (dialog.getContract() != null) {
+            contractManager.createContract(dialog.getContract());
+            refreshLists();
+        }
     }//GEN-LAST:event_addContractButtonActionPerformed
 
     private void updateContractButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateContractButton1ActionPerformed
         if (contractTable.getSelectedRow() != -1) {
-            EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contracts.get(contractTable.getSelectedRow()));
+            Contract contr = contracts.get(contractTable.getSelectedRow());
+            EditContractDialog dialog = new EditContractDialog(this, true, contr);
+
             dialog.setVisible(true);
+
+            if (dialog.getContract() != null) {
+                contractManager.updateContract(dialog.getContract());
+                refreshLists();
+            }
         }
     }//GEN-LAST:event_updateContractButton1ActionPerformed
 
@@ -753,9 +766,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 2:
                     return contracts.get(rowIndex).getBudget();
                 case 3:
-                    return contracts.get(rowIndex).getStartTime().getTime().toString();
+                    if (contracts.get(rowIndex).getStartTime() != null) {
+                        return contracts.get(rowIndex).getStartTime().getTime().toString();
+                    } else {
+                        return "";
+                    }
                 case 4:
-                    return contracts.get(rowIndex).getEndTime().getTime().toString();
+                    if (contracts.get(rowIndex).getEndTime() != null) {
+                        return contracts.get(rowIndex).getEndTime().getTime().toString();
+                    } else {
+                        return "";
+                    }
                 default:
                     throw new IllegalArgumentException("undefined collum");
             }
@@ -775,5 +796,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         for (Contract contract : contractManager.findAllContracts()) {
             contracts.add(contract);
         }
+        contractTable.repaint();
     }
 }
