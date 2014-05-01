@@ -47,63 +47,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     public AgencyManagerFrame() {
         initComponents();
 
-        final JPopupMenu contextMenu = new JPopupMenu();
-        JMenuItem update = new JMenuItem("Update");
-        update.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
-                    updateAgentButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
-                    updateMissionButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
-                    updateContractButton1ActionPerformed(null);
-                }
-            }
-        });
-        contextMenu.add(update);
-        
-        JMenuItem view = new JMenuItem("View");
-        view.addActionListener(new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
-                    viewAgentButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
-                    viewMissionButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
-                    viewContractButtonActionPerformed(null);
-                }
-            }
-        });
-        contextMenu.add(view);
-        
-        JMenuItem remove = new JMenuItem("Remove");
-        remove.addActionListener(new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
-                    removeAgentButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
-                    removeMissionButtonActionPerformed(null);
-                }
-                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
-                    removeContractButtonActionPerformed(null);
-                }
-            }
-        });
-        contextMenu.add(remove);
-
-        agentTable.setComponentPopupMenu(contextMenu);
-        missionTable.setComponentPopupMenu(contextMenu);
-        contractTable.setComponentPopupMenu(contextMenu);
+        contextMenu();
 
         BasicDataSource ds = new BasicDataSource();
         ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
@@ -463,6 +407,66 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void contextMenu(){
+        final JPopupMenu contextMenu = new JPopupMenu();
+        JMenuItem update = new JMenuItem("Update");
+        update.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
+                    updateAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    updateMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    updateContractButton1ActionPerformed(null);
+                }
+            }
+        });
+        contextMenu.add(update);
+        
+        JMenuItem view = new JMenuItem("View");
+        view.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
+                    viewAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    viewMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    viewContractButtonActionPerformed(null);
+                }
+            }
+        });
+        contextMenu.add(view);
+        
+        JMenuItem remove = new JMenuItem("Remove");
+        remove.addActionListener(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
+                    removeAgentButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 1 && missionTable.getSelectedRowCount() != 0) {
+                    removeMissionButtonActionPerformed(null);
+                }
+                if (agencyTablesTabbedPane.getSelectedIndex() == 2 && contractTable.getSelectedRowCount() != 0) {
+                    removeContractButtonActionPerformed(null);
+                }
+            }
+        });
+        contextMenu.add(remove);
+
+        agentTable.setComponentPopupMenu(contextMenu);
+        missionTable.setComponentPopupMenu(contextMenu);
+        contractTable.setComponentPopupMenu(contextMenu);
+    }
+    
     private void addAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAgentButtonActionPerformed
         EditAgentDialog dialog = new EditAgentDialog(this, true);
         dialog.setVisible(true);
