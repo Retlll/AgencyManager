@@ -454,13 +454,21 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_viewMissionButtonActionPerformed
 
     private void addContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractButtonActionPerformed
-        EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents());
+        Agent agent = null;
+        Mission mission = null;
+        if (agentTable.getSelectedRow() != -1) {
+            agent = agents.get(agentTable.getSelectedRow());
+        }
+        if (missionTable.getSelectedRow() != -1) {
+            mission = missions.get(missionTable.getSelectedRow());
+        }
+        EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), mission, agent);
         dialog.setVisible(true);
     }//GEN-LAST:event_addContractButtonActionPerformed
 
     private void updateContractButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateContractButton1ActionPerformed
         if (contractTable.getSelectedRow() != -1) {
-            EditContractDialog dialog = new EditContractDialog(this, true, contracts.get(contractTable.getSelectedRow()), missionManager.getAllMissions(), agentManager.getAllAgents());
+            EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contracts.get(contractTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_updateContractButton1ActionPerformed
