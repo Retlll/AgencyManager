@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import java.awt.Frame;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
@@ -141,6 +142,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         agentLabel.setText(bundle.getString("AGENT_F")); // NOI18N
 
         agentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        agentList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agentListMouseClicked(evt);
+            }
+        });
         agentList.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 agentListFocusLost(evt);
@@ -246,6 +252,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         missionLabel.setText(bundle.getString("MISSION_F")); // NOI18N
 
         missionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        missionList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                missionListMouseClicked(evt);
+            }
+        });
         missionList.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 missionListFocusLost(evt);
@@ -379,11 +390,10 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(contractExistLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93))
+                        .addGap(45, 45, 45)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(calenderProblemLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
@@ -462,7 +472,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         contract = new Contract();
         contract.setMission(ms);
         contract.setAgent(ag);
-        contract.setBudget((Long)budgetSplinner.getValue());
+        contract.setBudget((Long) budgetSplinner.getValue());
         if (startTimeBox.isSelected() && endTimeBox.isSelected()) {
             if (startTimeCalendar.getCalendar().compareTo(endTimeCalendar.getCalendar()) > 0) {
                 missingMissionValueLabel.setText("");
@@ -521,6 +531,18 @@ public class EditContractDialog extends javax.swing.JDialog {
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewAgentButtonActionPerformed
+
+    private void missionListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_missionListMouseClicked
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            viewMissionButtonActionPerformed(null);
+        }
+    }//GEN-LAST:event_missionListMouseClicked
+
+    private void agentListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agentListMouseClicked
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            viewAgentButtonActionPerformed(null);
+        }
+    }//GEN-LAST:event_agentListMouseClicked
 
     /**
      * @param args the command line arguments
