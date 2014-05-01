@@ -597,7 +597,7 @@ public class ContractManagerTest {
         }
         
         try {
-            manager.removeAllMissionsForAgent((Agent)null);
+            manager.removeAllContractsForAgent((Agent)null);
             fail();
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
@@ -611,7 +611,7 @@ public class ContractManagerTest {
         }
         
         try {
-            manager.removeAllMissionsForAgent(c1.getAgent());
+            manager.removeAllContractsForAgent(c1.getAgent());
             fail();
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
@@ -658,11 +658,11 @@ public class ContractManagerTest {
 
         assertEquals(expected, actual);
         
-        manager.removeAllMissionsForAgent(c1.getAgent());
+        manager.removeAllContractsForAgent(c1.getAgent());
         assertEquals(0, manager.findAllMissionsForAgent(c1.getAgent()).size());
         assertEquals(2, manager.findAllMissionsForAgent(c2.getAgent()).size());
         
-        manager.removeAllMissionsForAgent(c2.getAgent());
+        manager.removeAllContractsForAgent(c2.getAgent());
         assertEquals(0, manager.findAllMissionsForAgent(c1.getAgent()).size());
         assertEquals(0, manager.findAllMissionsForAgent(c2.getAgent()).size());
     }
@@ -684,7 +684,7 @@ public class ContractManagerTest {
         }
         
         try {
-            manager.removeAllAgentsForMission(null);
+            manager.removeAllContractsForMission(null);
             fail();
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
@@ -698,7 +698,7 @@ public class ContractManagerTest {
         }
         
         try {
-            manager.removeAllAgentsForMission(c1.getMission());
+            manager.removeAllContractsForMission(c1.getMission());
             fail();
         } catch (IllegalArgumentException | NullPointerException ex) {
         }
@@ -758,17 +758,17 @@ public class ContractManagerTest {
 
         assertEquals(expected, actual);
         
-        manager.removeAllAgentsForMission(c1.getMission());
+        manager.removeAllContractsForMission(c1.getMission());
         assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(2, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
         
-        manager.removeAllAgentsForMission(c2.getMission());
+        manager.removeAllContractsForMission(c2.getMission());
         assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(1, manager.findAllAgentsForMission(c3.getMission()).size());
         
-        manager.removeAllAgentsForMission(c3.getMission());
+        manager.removeAllContractsForMission(c3.getMission());
         assertEquals(0, manager.findAllAgentsForMission(c1.getMission()).size());
         assertEquals(0, manager.findAllAgentsForMission(c2.getMission()).size());
         assertEquals(0, manager.findAllAgentsForMission(c3.getMission()).size());

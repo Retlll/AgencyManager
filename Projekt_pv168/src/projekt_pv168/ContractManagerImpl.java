@@ -59,6 +59,12 @@ public class ContractManagerImpl implements ContractManager {
         }
     }
 
+    @Override
+    public ContractManager duplicate() {
+        return new ContractManagerImpl(this.dataSource, this.msManager, this.agManager);
+    }
+    
+
     private void loggerOutput() {
         FileHandler fh = null;
         try {
@@ -454,7 +460,7 @@ public class ContractManagerImpl implements ContractManager {
     }
 
     @Override
-    public void removeAllMissionsForAgent(Agent agent) throws ServiceFailureException {
+    public void removeAllContractsForAgent(Agent agent) throws ServiceFailureException {
         checkDataSource();
         if (agent == null) {
             throw new IllegalArgumentException("agent is null");
@@ -463,9 +469,9 @@ public class ContractManagerImpl implements ContractManager {
         if (agent.getId() == null) {
             throw new IllegalArgumentException("ID of agent is null");
         }
-        
+
         List<Contract> contracts;
-        
+
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement st = connection.prepareStatement(
                     "delete from CONTRACT where AGENTID = ?");) {
@@ -502,7 +508,7 @@ public class ContractManagerImpl implements ContractManager {
     }
 
     @Override
-    public void removeAllAgentsForMission(Mission mission) throws ServiceFailureException {
+    public void removeAllContractsForMission(Mission mission) throws ServiceFailureException {
         checkDataSource();
         if (mission == null) {
             throw new IllegalArgumentException("mission is null");
