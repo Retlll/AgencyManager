@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import projekt_pv168.Mission;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -52,14 +53,15 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View mission");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("VIEW_MISSION")); // NOI18N
         setMinimumSize(new java.awt.Dimension(389, 572));
         setModal(true);
 
         missionDetailsPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         detailsLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        detailsLabel.setText("Details");
+        detailsLabel.setText(bundle.getString("DETAILS")); // NOI18N
 
         detailsTextPane.setEditable(false);
         detailsScrollPane.setViewportView(detailsTextPane);
@@ -90,15 +92,15 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         missionInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         missionNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionNameLabel.setText("Mission Name");
+        missionNameLabel.setText(bundle.getString("MISSION_NAME")); // NOI18N
 
         missionNameTextField.setEditable(false);
 
         difficultyLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        difficultyLabel.setText("Difficulty");
+        difficultyLabel.setText(bundle.getString("DIFFICULTY")); // NOI18N
 
         locationLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        locationLabel.setText("Location");
+        locationLabel.setText(bundle.getString("LOCATION")); // NOI18N
 
         locationTextField.setEditable(false);
 
@@ -107,7 +109,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         missionIDTextField.setEditable(false);
 
         missionIDLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionIDLabel.setText("Mission ID");
+        missionIDLabel.setText(bundle.getString("MISSION_ID")); // NOI18N
 
         javax.swing.GroupLayout missionInfoPanelLayout = new javax.swing.GroupLayout(missionInfoPanel);
         missionInfoPanel.setLayout(missionInfoPanelLayout);
@@ -149,7 +151,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         );
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);

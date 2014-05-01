@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import projekt_pv168.Agent;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -24,9 +25,9 @@ public class ViewAgentDialog extends javax.swing.JDialog {
             agentBornTextField.setText(str(agent.getBorn().getTime()));
             rankTextField.setText(str(agent.getRank()));
             if (agent.isActive()) {
-                ActiveTextField.setText("Yes");
+                ActiveTextField.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("YES"));
             } else {
-                ActiveTextField.setText("No");
+                ActiveTextField.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("NO"));
             }
             notesTextPane.setText(str(agent.getNotes()));
         }
@@ -62,13 +63,14 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View agent");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("VIEW_AGENT")); // NOI18N
         setMinimumSize(new java.awt.Dimension(389, 603));
 
         agentNotesPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         notesLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        notesLabel.setText("Notes");
+        notesLabel.setText(bundle.getString("NOTES")); // NOI18N
 
         notesTextPane.setEditable(false);
         notesTextPane.setText("kidy");
@@ -100,24 +102,24 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         agentInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         agentNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentNameLabel.setText("Agent Name");
+        agentNameLabel.setText(bundle.getString("AGENT_NAME")); // NOI18N
 
         agentNameTextField.setEditable(false);
 
         agentIDLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentIDLabel.setText("Agent ID");
+        agentIDLabel.setText(bundle.getString("AGENT_ID")); // NOI18N
 
         agentIDTextField.setEditable(false);
 
         ActiveTextField.setEditable(false);
 
         rankLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        rankLabel.setText("Rank");
+        rankLabel.setText(bundle.getString("RANK")); // NOI18N
 
         rankTextField.setEditable(false);
 
         activeLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        activeLabel.setText("Active");
+        activeLabel.setText(bundle.getString("ACTIVE")); // NOI18N
 
         javax.swing.GroupLayout agentInfoPanelLayout = new javax.swing.GroupLayout(agentInfoPanel);
         agentInfoPanel.setLayout(agentInfoPanelLayout);
@@ -168,7 +170,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         bornPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         bornLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        bornLabel.setText("Born");
+        bornLabel.setText(bundle.getString("BORN")); // NOI18N
 
         agentBornTextField.setEditable(false);
 
@@ -194,7 +196,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         );
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
