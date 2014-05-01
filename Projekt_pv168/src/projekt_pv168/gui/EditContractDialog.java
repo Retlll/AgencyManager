@@ -7,7 +7,6 @@ package projekt_pv168.gui;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
 import projekt_pv168.Agent;
 import projekt_pv168.Contract;
 import projekt_pv168.ContractManager;
@@ -550,7 +549,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
 
         public AgentModel(Agent agent) {
-            this.agents = new ArrayList<>(1);
+            this.agents = new ArrayList<>();
             this.agents.add(agent);
         }
 
@@ -579,7 +578,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
 
         public MissionModel(Mission mission) {
-            this.missions = new ArrayList<>(1);
+            this.missions = new ArrayList<>();
             this.missions.add(mission);
         }
 
