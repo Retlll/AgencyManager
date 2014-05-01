@@ -4,6 +4,8 @@
  */
 package projekt_pv168.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.sql.DataSource;
+import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -43,6 +46,27 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
      */
     public AgencyManagerFrame() {
         initComponents();
+
+        final JPopupMenu contextMenu = new JPopupMenu();
+        JMenuItem update = new JMenuItem("Update");
+        update.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (agentTable.hasFocus() && agentTable.getSelectedRowCount() != 0) {
+                    updateAgentButtonActionPerformed(null);
+                }
+            }
+        });
+
+        contextMenu.add(update);
+        JMenuItem view = new JMenuItem("View");
+        contextMenu.add(view);
+        JMenuItem remove = new JMenuItem("Remove");
+        contextMenu.add(remove);
+
+        agentTable.setComponentPopupMenu(contextMenu);
+        missionTable.setComponentPopupMenu(contextMenu);
+        contractTable.setComponentPopupMenu(contextMenu);
 
         BasicDataSource ds = new BasicDataSource();
         ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
@@ -554,9 +578,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             if (agentTable.getSelectedColumnCount() != 0) {
                 viewAgentButtonActionPerformed(null);
             }
-        }
-        if (evt.getButton() == MouseEvent.BUTTON2) {
-            //evt.getComponent().set
         }
     }//GEN-LAST:event_agentTableMouseClicked
 
