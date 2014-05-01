@@ -57,18 +57,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         contextMenu();
         initProperties();
-
-        BasicDataSource ds = new BasicDataSource();
-        ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
-        ds.setUsername("xmalych");
-        ds.setPassword("123456");
-        DataSource dataSource = ds;
-
-        missionManager = new MissionManagerImpl(dataSource);
-        agentManager = new AgentManagerImpl(dataSource);
-        contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
-
-        refreshLists();
+        connectToDataSource();
     }
 
     /**
@@ -114,6 +103,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 330));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         agencyTablesTabbedPane.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -394,6 +388,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         editMenu.add(refreshMenuItem);
 
         properitiesMenuItem.setText("Properities");
+        properitiesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                properitiesMenuItemActionPerformed(evt);
+            }
+        });
         editMenu.add(properitiesMenuItem);
 
         menuBar.add(editMenu);
@@ -418,32 +417,75 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void initProperties() {
         config = new Properties();
-        try {
-            FileOutputStream fp = new FileOutputStream("Configuration.properties");
-            //FileInputStream fi = new FileInputStream("Configuration.properties");
-            //config.load(fi);
-            config.put("SERVER_URL", "jdbc:derby://localhost:1527/AgencyManager;create=true");
-            config.put("SERVER_NAME", "xmalych");
-            config.put("SERVER_KEY", "123456");
-            config.store(fp, null);
-            fp.close();
-        } catch (FileNotFoundException ex) {
-            try {
-                FileOutputStream fp = new FileOutputStream("Configuration.properties");
 
+        try {
+            FileInputStream fileInput = new FileInputStream("Configuration.properties");
+            config.load(fileInput);
+            if (!config.containsKey("SERVER_URL")) {
                 config.put("SERVER_URL", "jdbc:derby://localhost:1527/AgencyManager;create=true");
+            }
+            if (!config.containsKey("SERVER_NAME")) {
                 config.put("SERVER_NAME", "xmalych");
+            }
+            if (!config.containsKey("SERVER_PASSWORD")) {
                 config.put("SERVER_KEY", "123456");
-                fp.flush();
-                fp.close();
+            }
+        } catch (FileNotFoundException ex) {
+            FileOutputStream fileOutput = null;
+            try {
+                fileOutput = new FileOutputStream("Configuration.properties");
             } catch (FileNotFoundException ex1) {
                 Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
-            } catch (IOException ex1) {
-                Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
             }
+            config.put("SERVER_URL", "jdbc:derby://localhost:1527/AgencyManager;create=true");
+            config.put("SERVER_NAME", "xmalych");
+            config.put("SERVER_PASSWORD", "123456");
+
+            System.err.append("config file missing, default settings set");
+            //Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void saveProperities(){
+        try {
+                FileOutputStream fileOut = new FileOutputStream("Configuration.properties");
+                config.store(fileOut, null);
+            } catch (FileNotFoundException ex1) {
+                System.out.println("unable to create config file");
+                Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
+            } catch (IOException ex) {
+                System.out.println("unable to edit config file");
+            Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void connectToDataSource(){
+        BasicDataSource ds = new BasicDataSource();
+        
+        ds.setUrl(config.getProperty("SERVER_URL").toString());
+        ds.setUsername(config.getProperty("SERVER_NAME").toString());
+        ds.setPassword(config.getProperty("SERVER_PASSWORD").toString());
+        
+        
+        //ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
+        //ds.setUsername("xmalych");
+        //ds.setPassword("123456");
+        DataSource dataSource = ds;
+
+        missionManager = new MissionManagerImpl(dataSource);
+        agentManager = new AgentManagerImpl(dataSource);
+        contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
+
+        agents.clear();
+        agentTable.repaint();
+        missions.clear();
+        missionTable.repaint();
+        contracts.clear();
+        contractTable.repaint();
+        
+        refreshLists();
     }
 
     private void contextMenu() {
@@ -515,6 +557,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_addAgentButtonActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        saveProperities();
         this.dispose();
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
@@ -675,6 +718,16 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_contractTableMouseClicked
 
+    private void properitiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_properitiesMenuItemActionPerformed
+        ProperitiesDialog dialog = new ProperitiesDialog(this, true, config);
+        dialog.setVisible(true);
+        connectToDataSource();
+    }//GEN-LAST:event_properitiesMenuItemActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        saveProperities();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -806,7 +859,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     return agents.get(rowIndex).isActive();
                 case 3:
                     return agents.get(rowIndex).getRank();
-                    //return agents.get(rowIndex).getId();
+                //return agents.get(rowIndex).getId();
                 case 4:
                     return agents.get(rowIndex).getNotes();
                 default:
