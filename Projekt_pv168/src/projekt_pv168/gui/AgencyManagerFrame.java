@@ -4,11 +4,17 @@
  */
 package projekt_pv168.gui;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.sql.DataSource;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.event.MouseInputListener;
 import javax.swing.table.AbstractTableModel;
 import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
@@ -473,9 +479,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
                 missions.remove(missionTable.getSelectedRow());
             } else {
-                contractManager.removeAllContractsForMission(missions.get(missionTable.getSelectedRow()));
-                missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
-                missions.remove(missionTable.getSelectedRow());
+                int dialogResult = JOptionPane.showConfirmDialog(null, "This mission has assigned contract, would you like to destroy all his contract?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    contractManager.removeAllContractsForMission(missions.get(missionTable.getSelectedRow()));
+                    missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
+                    missions.remove(missionTable.getSelectedRow());
+                }
             }
             refreshLists();
         }
@@ -541,26 +550,29 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     private void agentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agentTableMouseClicked
-        if(evt.getClickCount() == 2){
-            if(agentTable.getSelectedColumnCount() != 0){
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            if (agentTable.getSelectedColumnCount() != 0) {
                 viewAgentButtonActionPerformed(null);
-            } 
+            }
+        }
+        if (evt.getButton() == MouseEvent.BUTTON2) {
+            //evt.getComponent().set
         }
     }//GEN-LAST:event_agentTableMouseClicked
 
     private void missionTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_missionTableMouseClicked
-        if(evt.getClickCount() == 2){
-            if(missionTable.getSelectedColumnCount() != 0){
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            if (missionTable.getSelectedColumnCount() != 0) {
                 viewMissionButtonActionPerformed(null);
-            } 
+            }
         }
     }//GEN-LAST:event_missionTableMouseClicked
 
     private void contractTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contractTableMouseClicked
-        if(evt.getClickCount() == 2){
-            if(contractTable.getSelectedColumnCount() != 0){
+        if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
+            if (contractTable.getSelectedColumnCount() != 0) {
                 viewContractButtonActionPerformed(null);
-            } 
+            }
         }
     }//GEN-LAST:event_contractTableMouseClicked
 
