@@ -182,6 +182,11 @@ public class EditMissionDialog extends javax.swing.JDialog {
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
         warningLabel.setText(bundle.getString("VALUES_ERROR")); // NOI18N
@@ -263,6 +268,10 @@ public class EditMissionDialog extends javax.swing.JDialog {
         mission = new Mission(id, missionNameTextField.getText(), (int) difficultySpinner.getValue(), detailsTextPane.getText(), locationTextField.getText());       
         this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments

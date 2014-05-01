@@ -4,6 +4,7 @@
  */
 package projekt_pv168.gui;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
@@ -108,6 +109,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         agentScrollPane = new javax.swing.JScrollPane();
         agentList = new javax.swing.JList();
         missingAgentValueLabel = new javax.swing.JLabel();
+        viewAgentButton = new javax.swing.JButton();
         startTimePanel = new javax.swing.JPanel();
         startTimeCalendar = new com.toedter.calendar.JCalendar();
         startTimeBox = new javax.swing.JCheckBox();
@@ -118,6 +120,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         missionScrollPanel = new javax.swing.JScrollPane();
         missionList = new javax.swing.JList();
         missingMissionValueLabel = new javax.swing.JLabel();
+        viewMissionButton = new javax.swing.JButton();
         endTimePanel = new javax.swing.JPanel();
         endTimeCalendar = new com.toedter.calendar.JCalendar();
         endTimeBox = new javax.swing.JCheckBox();
@@ -148,6 +151,13 @@ public class EditContractDialog extends javax.swing.JDialog {
         missingAgentValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         missingAgentValueLabel.setForeground(new java.awt.Color(204, 0, 0));
 
+        viewAgentButton.setText(bundle.getString("VIEW")); // NOI18N
+        viewAgentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewAgentButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout agentPanelLayout = new javax.swing.GroupLayout(agentPanel);
         agentPanel.setLayout(agentPanelLayout);
         agentPanelLayout.setHorizontalGroup(
@@ -155,13 +165,14 @@ public class EditContractDialog extends javax.swing.JDialog {
             .addGroup(agentPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(agentPanelLayout.createSequentialGroup()
-                        .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(agentScrollPane)
                     .addGroup(agentPanelLayout.createSequentialGroup()
                         .addComponent(agentLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(missingAgentValueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(missingAgentValueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(viewAgentButton)))
+                .addContainerGap())
         );
         agentPanelLayout.setVerticalGroup(
             agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,9 +180,10 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(agentLabel)
-                    .addComponent(missingAgentValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(missingAgentValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewAgentButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -195,10 +207,10 @@ public class EditContractDialog extends javax.swing.JDialog {
             .addGroup(startTimePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(startTimePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(startTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(startTimePanelLayout.createSequentialGroup()
                         .addComponent(startTimeBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(startTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         startTimePanelLayout.setVerticalGroup(
@@ -207,7 +219,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(startTimeBox)
                 .addGap(5, 5, 5)
-                .addComponent(startTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                .addComponent(startTimeCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -243,6 +256,13 @@ public class EditContractDialog extends javax.swing.JDialog {
         missingMissionValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         missingMissionValueLabel.setForeground(new java.awt.Color(204, 0, 0));
 
+        viewMissionButton.setText(bundle.getString("VIEW")); // NOI18N
+        viewMissionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewMissionButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout missionPanelLayout = new javax.swing.GroupLayout(missionPanel);
         missionPanel.setLayout(missionPanelLayout);
         missionPanelLayout.setHorizontalGroup(
@@ -250,23 +270,26 @@ public class EditContractDialog extends javax.swing.JDialog {
             .addGroup(missionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(missionPanelLayout.createSequentialGroup()
-                        .addComponent(missionScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(missionScrollPanel)
                     .addGroup(missionPanelLayout.createSequentialGroup()
                         .addComponent(missionLabel)
-                        .addGap(4, 4, 4)
-                        .addComponent(missingMissionValueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(missingMissionValueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(viewMissionButton)))
+                .addContainerGap())
         );
         missionPanelLayout.setVerticalGroup(
             missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(missionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(missionLabel)
-                    .addComponent(missingMissionValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(missionLabel)
+                        .addComponent(missingMissionValueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(viewMissionButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(missionScrollPanel)
+                .addComponent(missionScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -293,7 +316,7 @@ public class EditContractDialog extends javax.swing.JDialog {
                     .addGroup(endTimePanelLayout.createSequentialGroup()
                         .addComponent(endTimeBox)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(endTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))
+                    .addComponent(endTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         endTimePanelLayout.setVerticalGroup(
@@ -302,7 +325,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addGap(9, 9, 9)
                 .addComponent(endTimeBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(endTimeCalendar, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                .addComponent(endTimeCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         budgetPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -321,8 +345,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(budgetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(budgetLabel)
-                    .addComponent(budgetSplinner, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(budgetSplinner, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                .addGap(364, 364, 364))
         );
         budgetPanelLayout.setVerticalGroup(
             budgetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,41 +372,43 @@ public class EditContractDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(22, 22, 22)
+                .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contractExistLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93))
+                    .addComponent(calenderProblemLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(contractExistLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(budgetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(75, 75, 75)
-                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(93, 93, 93))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(missionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(agentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(startTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(endTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(calenderProblemLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE))
-                        .addContainerGap())))
+                                .addComponent(endTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(budgetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(agentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(missionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contractExistLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(budgetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,9 +417,7 @@ public class EditContractDialog extends javax.swing.JDialog {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(endTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(2, 2, 2)))
+                    .addComponent(endTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(8, 8, 8)
                 .addComponent(warningLabel)
                 .addGap(18, 18, 18)
@@ -424,8 +448,8 @@ public class EditContractDialog extends javax.swing.JDialog {
             return;
         }
 
-        Mission ms = (Mission) ((MissionModel) missionList.getModel()).getMissionAt(missionList.getSelectedIndex());
-        Agent ag = (Agent) ((AgentModel) agentList.getModel()).getAgentAt(agentList.getSelectedIndex());
+        Mission ms = ((MissionModel) missionList.getModel()).getMissionAt(missionList.getSelectedIndex());
+        Agent ag = ((AgentModel) agentList.getModel()).getAgentAt(agentList.getSelectedIndex());
 
         if (contractManager != null && contractManager.getContract(ms, ag) != null) {
             missingMissionValueLabel.setText("");
@@ -438,6 +462,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         contract = new Contract();
         contract.setMission(ms);
         contract.setAgent(ag);
+        contract.setBudget((Long)budgetSplinner.getValue());
         if (startTimeBox.isSelected() && endTimeBox.isSelected()) {
             if (startTimeCalendar.getCalendar().compareTo(endTimeCalendar.getCalendar()) > 0) {
                 missingMissionValueLabel.setText("");
@@ -480,6 +505,22 @@ public class EditContractDialog extends javax.swing.JDialog {
             missionList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_missionListFocusLost
+
+    private void viewMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMissionButtonActionPerformed
+        if (missionList.getSelectedIndex() != -1) {
+            Mission ms = ((MissionModel) missionList.getModel()).getMissionAt(missionList.getSelectedIndex());
+            ViewMissionDialog dialog = new ViewMissionDialog((Frame) this.getParent(), true, ms);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_viewMissionButtonActionPerformed
+
+    private void viewAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAgentButtonActionPerformed
+        if (agentList.getSelectedIndex() != -1) {
+            Agent ag = ((AgentModel) agentList.getModel()).getAgentAt(agentList.getSelectedIndex());
+            ViewAgentDialog dialog = new ViewAgentDialog((Frame) this.getParent(), true, ag);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_viewAgentButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -638,6 +679,8 @@ public class EditContractDialog extends javax.swing.JDialog {
     private javax.swing.JCheckBox startTimeBox;
     private com.toedter.calendar.JCalendar startTimeCalendar;
     private javax.swing.JPanel startTimePanel;
+    private javax.swing.JButton viewAgentButton;
+    private javax.swing.JButton viewMissionButton;
     private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables
 }

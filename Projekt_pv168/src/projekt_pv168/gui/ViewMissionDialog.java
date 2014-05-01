@@ -4,6 +4,7 @@
  */
 package projekt_pv168.gui;
 
+import java.text.NumberFormat;
 import projekt_pv168.Mission;
 import java.util.ResourceBundle;
 
@@ -21,9 +22,9 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         initComponents();
         if (mission != null) {
             missionNameTextField.setText(str(mission.getName()));
-            missionIDTextField.setText(str(mission.getId()));
+            missionIDTextField.setText(NumberFormat.getNumberInstance().format(mission.getId()));
             locationTextField.setText(str(mission.getLocation()));
-            difficultyTextField.setText(str(mission.getDifficulty()));
+            difficultyTextField.setText(NumberFormat.getNumberInstance().format(mission.getDifficulty()));
             detailsTextPane.setText(str(mission.getDetails()));
         }
     }
@@ -56,7 +57,6 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
         setTitle(bundle.getString("VIEW_MISSION")); // NOI18N
         setMinimumSize(new java.awt.Dimension(389, 572));
-        setModal(true);
 
         missionDetailsPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
