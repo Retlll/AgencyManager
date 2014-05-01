@@ -104,6 +104,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         agentTable.setModel(new agentTableModel());
         agentTable.setFillsViewportHeight(true);
         agentTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        agentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agentTableMouseClicked(evt);
+            }
+        });
         agentScrollPane.setViewportView(agentTable);
 
         addAgentButton.setText("Add");
@@ -147,14 +152,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeAgentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewAgentButton)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
         );
         agentPanelLayout.setVerticalGroup(
             agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agentPanelLayout.createSequentialGroup()
-                .addContainerGap(225, Short.MAX_VALUE)
+                .addContainerGap(229, Short.MAX_VALUE)
                 .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addAgentButton)
                     .addComponent(removeAgentButton)
@@ -163,7 +168,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(agentPanelLayout.createSequentialGroup()
-                    .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                    .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -176,6 +181,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         missionTable.setModel(new missionTableModel());
         missionTable.setFillsViewportHeight(true);
         missionTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        missionTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                missionTableMouseClicked(evt);
+            }
+        });
         missionScrollPane.setViewportView(missionTable);
 
         addMissionButton.setText("Add");
@@ -219,14 +229,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeMissionButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewMissionButton)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(missionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                .addComponent(missionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
         );
         missionPanelLayout.setVerticalGroup(
             missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, missionPanelLayout.createSequentialGroup()
-                .addContainerGap(225, Short.MAX_VALUE)
+                .addContainerGap(229, Short.MAX_VALUE)
                 .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addMissionButton)
                     .addComponent(removeMissionButton)
@@ -235,7 +245,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(missionPanelLayout.createSequentialGroup()
-                    .addComponent(missionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                    .addComponent(missionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -248,6 +258,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         contractTable.setModel(new contractTableModel());
         contractTable.setFillsViewportHeight(true);
         contractTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        contractTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                contractTableMouseClicked(evt);
+            }
+        });
         contractScrollPane.setViewportView(contractTable);
 
         addContractButton.setText("Add");
@@ -291,14 +306,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeContractButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewContractButton)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
             .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
         );
         contractPanelLayout.setVerticalGroup(
             contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contractPanelLayout.createSequentialGroup()
-                .addContainerGap(225, Short.MAX_VALUE)
+                .addContainerGap(229, Short.MAX_VALUE)
                 .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addContractButton)
                     .addComponent(removeContractButton)
@@ -307,7 +322,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contractPanelLayout.createSequentialGroup()
-                    .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                    .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -524,6 +539,30 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
         refreshLists();
     }//GEN-LAST:event_refreshMenuItemActionPerformed
+
+    private void agentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agentTableMouseClicked
+        if(evt.getClickCount() == 2){
+            if(agentTable.getSelectedColumnCount() != 0){
+                viewAgentButtonActionPerformed(null);
+            } 
+        }
+    }//GEN-LAST:event_agentTableMouseClicked
+
+    private void missionTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_missionTableMouseClicked
+        if(evt.getClickCount() == 2){
+            if(missionTable.getSelectedColumnCount() != 0){
+                viewMissionButtonActionPerformed(null);
+            } 
+        }
+    }//GEN-LAST:event_missionTableMouseClicked
+
+    private void contractTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contractTableMouseClicked
+        if(evt.getClickCount() == 2){
+            if(contractTable.getSelectedColumnCount() != 0){
+                viewContractButtonActionPerformed(null);
+            } 
+        }
+    }//GEN-LAST:event_contractTableMouseClicked
 
     /**
      * @param args the command line arguments
