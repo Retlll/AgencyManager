@@ -33,8 +33,12 @@ public interface ContractManager {
     
     public List<Agent> findAllAgentsForMission(Mission mission) throws ServiceFailureException;
     
-    public void removeAllMissionsForAgent(Agent agent) throws ServiceFailureException;
+    public void removeAllContractsForAgent(Agent agent) throws ServiceFailureException;
     
-    public void removeAllAgentsForMission(Mission mission) throws ServiceFailureException;
+    public void removeAllContractsForMission(Mission mission) throws ServiceFailureException;
+    
+    public ContractManager duplicate();
+    
+    
     
 }
