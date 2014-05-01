@@ -9,9 +9,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -40,6 +47,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
     private ContractManagerImpl contractManager;
+    private Properties config;
 
     /**
      * Creates new form AgencyManagerFrame
@@ -48,6 +56,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         initComponents();
 
         contextMenu();
+        initProperties();
 
         BasicDataSource ds = new BasicDataSource();
         ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
@@ -407,7 +416,37 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void contextMenu(){
+    private void initProperties() {
+        config = new Properties();
+        try {
+            FileOutputStream fp = new FileOutputStream("Configuration.properties");
+            //FileInputStream fi = new FileInputStream("Configuration.properties");
+            //config.load(fi);
+            config.put("SERVER_URL", "jdbc:derby://localhost:1527/AgencyManager;create=true");
+            config.put("SERVER_NAME", "xmalych");
+            config.put("SERVER_KEY", "123456");
+            config.store(fp, null);
+            fp.close();
+        } catch (FileNotFoundException ex) {
+            try {
+                FileOutputStream fp = new FileOutputStream("Configuration.properties");
+
+                config.put("SERVER_URL", "jdbc:derby://localhost:1527/AgencyManager;create=true");
+                config.put("SERVER_NAME", "xmalych");
+                config.put("SERVER_KEY", "123456");
+                fp.flush();
+                fp.close();
+            } catch (FileNotFoundException ex1) {
+                Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
+            } catch (IOException ex1) {
+                Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void contextMenu() {
         final JPopupMenu contextMenu = new JPopupMenu();
         JMenuItem update = new JMenuItem("Update");
         update.addActionListener(new AbstractAction() {
@@ -425,10 +464,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
         contextMenu.add(update);
-        
+
         JMenuItem view = new JMenuItem("View");
         view.addActionListener(new AbstractAction() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
@@ -443,10 +481,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
         contextMenu.add(view);
-        
+
         JMenuItem remove = new JMenuItem("Remove");
         remove.addActionListener(new AbstractAction() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (agencyTablesTabbedPane.getSelectedIndex() == 0 && agentTable.getSelectedRowCount() != 0) {
@@ -466,7 +503,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         missionTable.setComponentPopupMenu(contextMenu);
         contractTable.setComponentPopupMenu(contextMenu);
     }
-    
+
     private void addAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAgentButtonActionPerformed
         EditAgentDialog dialog = new EditAgentDialog(this, true);
         dialog.setVisible(true);
@@ -768,8 +805,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 2:
                     return agents.get(rowIndex).isActive();
                 case 3:
-                    //return agents.get(rowIndex).getRank();
-                    return agents.get(rowIndex).getId();
+                    return agents.get(rowIndex).getRank();
+                    //return agents.get(rowIndex).getId();
                 case 4:
                     return agents.get(rowIndex).getNotes();
                 default:
