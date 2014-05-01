@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import projekt_pv168.Mission;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -30,9 +31,9 @@ public class EditMissionDialog extends javax.swing.JDialog {
             locationTextField.setText(str(mission.getLocation()));
             difficultySpinner.setValue(mission.getDifficulty());
             detailsTextPane.setText(str(mission.getDetails()));
-            addButton.setText("Update");
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
             id = mission.getId();
-            this.setTitle("Updating Mission (ID: " + id + ")");
+            this.setTitle(java.text.MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_MISSION"), new Object[] {id}));
         }
     }
 
@@ -69,13 +70,14 @@ public class EditMissionDialog extends javax.swing.JDialog {
         warningLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
 
-        setTitle("Adding a new Mission");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("ADDING_MISSION")); // NOI18N
         setMinimumSize(new java.awt.Dimension(408, 540));
 
         missionsDetailPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         detailsLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        detailsLabel.setText("Details");
+        detailsLabel.setText(bundle.getString("DETAILS")); // NOI18N
 
         detailsScrollPane.setViewportView(detailsTextPane);
 
@@ -105,16 +107,16 @@ public class EditMissionDialog extends javax.swing.JDialog {
         missionDataPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         missionNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionNameLabel.setText("Mission Name*");
+        missionNameLabel.setText(bundle.getString("MISSION_NAME_F")); // NOI18N
 
         diffcultyLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        diffcultyLabel.setText("Difficulty*");
+        diffcultyLabel.setText(bundle.getString("DIFFICULTY_F")); // NOI18N
 
         difficultySpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         difficultySpinner.setName(""); // NOI18N
 
         locationLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        locationLabel.setText("Location*");
+        locationLabel.setText(bundle.getString("LOCATION_F")); // NOI18N
 
         missingValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         missingValueLabel.setForeground(new java.awt.Color(204, 0, 0));
@@ -171,7 +173,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
         );
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        addButton.setText("Add");
+        addButton.setText(bundle.getString("ADD")); // NOI18N
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
@@ -179,10 +181,10 @@ public class EditMissionDialog extends javax.swing.JDialog {
         });
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
 
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
-        warningLabel.setText("* - tieto hodnuty musia byť vyplnené");
+        warningLabel.setText(bundle.getString("VALUES_ERROR")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -247,13 +249,13 @@ public class EditMissionDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (missionNameTextField.getText().equals("")) {
-            missingValueLabel1.setText("- tato hodnata nesmie byť prazdna");
+            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
             missingValueLabel.setText("");
             missionNameTextField.requestFocus();
             return;
         }
         if (locationTextField.getText().equals("")) {
-            missingValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
             missingValueLabel1.setText("");
             locationTextField.requestFocus();
             return;

@@ -4,9 +4,9 @@
  */
 package projekt_pv168.gui;
 
-import java.awt.Dimension;
 import java.util.Calendar;
 import projekt_pv168.Contract;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -60,7 +60,8 @@ public class ViewContractDialog extends javax.swing.JDialog {
         budgetTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View contract");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("VIEW_CONTRACT")); // NOI18N
         setAlwaysOnTop(true);
         setMaximumSize(new java.awt.Dimension(1007, 586));
         setMinimumSize(new java.awt.Dimension(352, 586));
@@ -71,10 +72,10 @@ public class ViewContractDialog extends javax.swing.JDialog {
         contracTimePanel.setInheritsPopupMenu(true);
 
         startLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        startLabel.setText("Start Time");
+        startLabel.setText(bundle.getString("START_TIME")); // NOI18N
 
         endLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        endLabel.setText("End Time");
+        endLabel.setText(bundle.getString("END_TIME")); // NOI18N
 
         startTextField.setEditable(false);
 
@@ -108,7 +109,7 @@ public class ViewContractDialog extends javax.swing.JDialog {
         );
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -118,24 +119,24 @@ public class ViewContractDialog extends javax.swing.JDialog {
         contractInfoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         missionNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionNameLabel.setText("Mission");
+        missionNameLabel.setText(bundle.getString("MISSION")); // NOI18N
 
         agentNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentNameLabel.setText("Agent ");
+        agentNameLabel.setText(bundle.getString("AGENT ")); // NOI18N
 
         missionNameTextField.setEditable(false);
 
         agentNameTextField.setEditable(false);
 
         missionIDLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionIDLabel.setText("Mission ID");
+        missionIDLabel.setText(bundle.getString("MISSION_ID")); // NOI18N
 
         missionIDTextField.setEditable(false);
 
         agentIDTextField.setEditable(false);
 
         agentIDLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentIDLabel.setText("Agent ID");
+        agentIDLabel.setText(bundle.getString("AGENT_ID")); // NOI18N
 
         javax.swing.GroupLayout contractInfoPanelLayout = new javax.swing.GroupLayout(contractInfoPanel);
         contractInfoPanel.setLayout(contractInfoPanelLayout);
@@ -179,7 +180,7 @@ public class ViewContractDialog extends javax.swing.JDialog {
         contracBudgetPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         budgetLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        budgetLabel.setText("Contract Budget");
+        budgetLabel.setText(bundle.getString("CONTRACT_BUDGET")); // NOI18N
 
         budgetTextField.setEditable(false);
 

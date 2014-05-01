@@ -4,10 +4,10 @@
  */
 package projekt_pv168.gui;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import projekt_pv168.Agent;
+import java.util.ResourceBundle;
+import java.text.MessageFormat;
 
 /**
  *
@@ -35,8 +35,8 @@ public class EditAgentDialog extends javax.swing.JDialog {
             rankSpinner.setValue(agent.getRank());
             notesTextPane.setText(str(agent.getNotes()));
             id = agent.getId();
-            this.setTitle("Updating Agent (ID: " + id + ")");
-            addButton.setText("Update");
+            this.setTitle(MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_AGENT"), new Object[] {id}));
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
         }
     }
 
@@ -68,13 +68,14 @@ public class EditAgentDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         warningLabel = new javax.swing.JLabel();
 
-        setTitle("Adding a new Agent");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("ADDING_AGENT")); // NOI18N
         setMinimumSize(new java.awt.Dimension(397, 683));
 
         notesPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         notesLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        notesLabel.setText("Notes");
+        notesLabel.setText(bundle.getString("NOTES")); // NOI18N
 
         notesScrollPane.setViewportView(notesTextPane);
 
@@ -104,16 +105,16 @@ public class EditAgentDialog extends javax.swing.JDialog {
         agentInfoPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         agentNameLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentNameLabel.setText("Agent Name*");
+        agentNameLabel.setText(bundle.getString("AGENT_NAME_F")); // NOI18N
 
         rankLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        rankLabel.setText("Rank*");
+        rankLabel.setText(bundle.getString("RANK_F")); // NOI18N
 
         rankSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         rankSpinner.setName(""); // NOI18N
 
         activeCheckBox.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        activeCheckBox.setText("Active*");
+        activeCheckBox.setText(bundle.getString("ACTIVE_F")); // NOI18N
         activeCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         missingValueLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
@@ -163,7 +164,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         bornPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         bornLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        bornLabel.setText("Born*");
+        bornLabel.setText(bundle.getString("BORN_F")); // NOI18N
 
         missingValueLabel1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         missingValueLabel1.setForeground(new java.awt.Color(204, 0, 0));
@@ -195,7 +196,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         );
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        addButton.setText("Add");
+        addButton.setText(bundle.getString("ADD")); // NOI18N
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
@@ -203,7 +204,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         });
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -211,7 +212,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         });
 
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
-        warningLabel.setText("* - tieto hodnuty musia byť vyplnené");
+        warningLabel.setText(bundle.getString("VALUES_ERROR")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -256,13 +257,13 @@ public class EditAgentDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (agentNameTextField.getText().equals("")) {
-            missingValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
             missingValueLabel1.setText("");
             agentNameTextField.requestFocus();
             return;
         }
         if (new GregorianCalendar().getTimeInMillis() - bornCalendar.getCalendar().getTimeInMillis() <= 18 * 60 * 60 * 100) {
-            missingValueLabel1.setText("- agent musí byť starší, ako 18 rokov");
+            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("AGE_ERROR"));
             missingValueLabel.setText("");
             agentNameTextField.requestFocus();
             return;

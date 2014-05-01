@@ -11,6 +11,7 @@ import projekt_pv168.Agent;
 import projekt_pv168.Contract;
 import projekt_pv168.ContractManager;
 import projekt_pv168.Mission;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -84,8 +85,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                 endTimeCalendar.setEnabled(true);
                 endTimeCalendar.setCalendar(contract.getEndTime());
             }
-            this.setTitle("Updating Contract");
-            addButton.setText("Update");
+            this.setTitle(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_CONTRACT"));
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
         }
     }
 
@@ -127,13 +128,14 @@ public class EditContractDialog extends javax.swing.JDialog {
         contractExistLabel = new javax.swing.JLabel();
         calenderProblemLabel = new javax.swing.JLabel();
 
-        setTitle("Adding a new Contract");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        setTitle(bundle.getString("ADDING_CONTRACT")); // NOI18N
         setMinimumSize(new java.awt.Dimension(735, 697));
 
         agentPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         agentLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        agentLabel.setText("Agent*");
+        agentLabel.setText(bundle.getString("AGENT_F")); // NOI18N
 
         agentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         agentList.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -178,7 +180,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         startTimeCalendar.setEnabled(false);
 
         startTimeBox.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        startTimeBox.setText("Start Time");
+        startTimeBox.setText(bundle.getString("START_TIME")); // NOI18N
         startTimeBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         startTimeBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -209,8 +211,8 @@ public class EditContractDialog extends javax.swing.JDialog {
         );
 
         addButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        addButton.setText("Add");
-        addButton.setToolTipText("Adding a new Contract");
+        addButton.setText(bundle.getString("ADD")); // NOI18N
+        addButton.setToolTipText(bundle.getString("ADDING_CONTRACT")); // NOI18N
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
@@ -218,7 +220,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         });
 
         cancelButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        cancelButton.setText("Cancel");
+        cancelButton.setText(bundle.getString("CANCEL")); // NOI18N
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -228,7 +230,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         missionPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         missionLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        missionLabel.setText("Mission*");
+        missionLabel.setText(bundle.getString("MISSION_F")); // NOI18N
 
         missionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         missionList.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -273,7 +275,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         endTimeCalendar.setEnabled(false);
 
         endTimeBox.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        endTimeBox.setText("End Time");
+        endTimeBox.setText(bundle.getString("END_TIME")); // NOI18N
         endTimeBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         endTimeBox.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -306,7 +308,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         budgetPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         budgetLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        budgetLabel.setText("Contract Budget*");
+        budgetLabel.setText(bundle.getString("CONTRACT_BUDGET_F")); // NOI18N
 
         budgetSplinner.setModel(new javax.swing.SpinnerNumberModel(Long.valueOf(0L), Long.valueOf(0L), Long.valueOf(1000000000000000000L), Long.valueOf(1L)));
         budgetSplinner.setName(""); // NOI18N
@@ -333,7 +335,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         );
 
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
-        warningLabel.setText("* - tieto hodnuty musia byť vyplnené");
+        warningLabel.setText(bundle.getString("VALUES_ERROR")); // NOI18N
 
         contractExistLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         contractExistLabel.setForeground(new java.awt.Color(204, 0, 0));
@@ -406,7 +408,7 @@ public class EditContractDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (missionList.getSelectedIndex() == -1) {
-            missingMissionValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingMissionValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
             missingAgentValueLabel.setText("");
             calenderProblemLabel.setText("");
             contractExistLabel.setText("");
@@ -415,7 +417,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
         if (agentList.getSelectedIndex() == -1) {
             missingMissionValueLabel.setText("");
-            missingAgentValueLabel.setText("- tato hodnata nesmie byť prazdna");
+            missingAgentValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
             calenderProblemLabel.setText("");
             contractExistLabel.setText("");
             agentList.requestFocus();
@@ -429,7 +431,7 @@ public class EditContractDialog extends javax.swing.JDialog {
             missingMissionValueLabel.setText("");
             missingAgentValueLabel.setText("");
             calenderProblemLabel.setText("");
-            contractExistLabel.setText("- contract with this mission and agent already exist");
+            contractExistLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("CONTRACT_EXIST"));
             missionList.requestFocus();
             return;
         }
@@ -440,7 +442,7 @@ public class EditContractDialog extends javax.swing.JDialog {
             if (startTimeCalendar.getCalendar().compareTo(endTimeCalendar.getCalendar()) > 0) {
                 missingMissionValueLabel.setText("");
                 missingAgentValueLabel.setText("");
-                calenderProblemLabel.setText("- start time must be earlier than end time");
+                calenderProblemLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("CALENDAR_ERROR"));
                 contractExistLabel.setText("");
                 startTimeCalendar.requestFocus();
                 return;
