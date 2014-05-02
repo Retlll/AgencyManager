@@ -701,14 +701,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             if (missionTable.getSelectedRow() != -1) {
                 mission = missions.get(missionTable.getSelectedRow());
             }
-            EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
-
-            dialog.setVisible(true);
-
-            if (dialog.getContract() != null) {
-                contractManager.createContract(dialog.getContract());
-                refreshLists();
-            }
+            ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission, agent);
         } else {
             JOptionPane.showMessageDialog(this, "Start session first!");
         }
@@ -1227,7 +1220,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         @Override
         protected Void doInBackground() throws Exception {
-            Thread.sleep(100000);
+//            Thread.sleep(100000);
             dialog = new EditContractDialog(frame, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
             return null;
         }
