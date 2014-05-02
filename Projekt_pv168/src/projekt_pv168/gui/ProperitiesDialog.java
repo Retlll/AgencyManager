@@ -29,6 +29,7 @@ public class ProperitiesDialog extends javax.swing.JDialog {
         initComponents();
         serverUrlTextField.setText(config.getProperty("SERVER_URL"));
         serverNameTextField.setText(config.getProperty("SERVER_NAME"));
+        serverPasswordField.setText(config.getProperty("SERVER_PASSWORD"));
     }
 
     /**
