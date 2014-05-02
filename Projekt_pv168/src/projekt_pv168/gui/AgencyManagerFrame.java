@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import javax.swing.AbstractAction;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -1207,6 +1208,38 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             DefaultTableModel tableModel = (DefaultTableModel) contractTable.getModel();
             tableModel.fireTableDataChanged();
             //contractTable.repaint();
+        }
+    }
+
+    private class ContractAddSwingWorker extends SwingWorker<Void, Void> {
+        
+        EditContractDialog dialog;
+        
+        Mission mission;
+        Agent agent;
+        JFrame frame;
+
+        public ContractAddSwingWorker(JFrame parent, Mission mission, Agent agent) {
+            this.mission = mission;
+            this.agent = agent;
+            frame = parent;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            Thread.sleep(100000);
+            dialog = new EditContractDialog(frame, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            dialog.setVisible(true);
+
+            if (dialog.getContract() != null) {
+                contractManager.createContract(dialog.getContract());
+                refreshLists();
+            };
         }
     }
 
