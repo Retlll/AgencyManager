@@ -79,7 +79,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int column = agentTable.columnAtPoint(e.getPoint());
                 DefaultTableModel tableModel = null;
-                String columnName = contractTable.getColumnName(column);
+                String columnName = agentTable.getColumnName(column);
                 if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME"))) {
                     if (lastSort[0] != 0) {
                         Collections.sort(agents, new Comparators.AgentComparatorByName());
@@ -133,7 +133,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int column = missionTable.columnAtPoint(e.getPoint());
                 DefaultTableModel tableModel = null;
-                String columnName = contractTable.getColumnName(column);
+                String columnName = missionTable.getColumnName(column);
                 if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME"))) {
                     if (lastSort[1] != 0) {
                         Collections.sort(missions, new Comparators.MissionComparatorByName());

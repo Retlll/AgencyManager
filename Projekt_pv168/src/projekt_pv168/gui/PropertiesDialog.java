@@ -287,7 +287,7 @@ public class PropertiesDialog extends javax.swing.JDialog {
         
         config.put("SERVER_URL", serverUrlTextField.getText());
         config.put("SERVER_NAME", serverNameTextField.getText());
-        config.put("SERVER_KEY", String.valueOf(serverPasswordField.getPassword()));
+        config.put("SERVER_PASSWORD", String.valueOf(serverPasswordField.getPassword()));
         if(viewRadioButton.isSelected())
             config.put("DOUBLE_CLICK", "0");
         if(updateRadioButton.isSelected())
