@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
 import projekt_pv168.AgentManagerImpl;
@@ -871,7 +872,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private javax.swing.JButton viewMissionButton;
     // End of variables declaration//GEN-END:variables
 
-    private static class agentTableModel extends AbstractTableModel {
+    private static class agentTableModel extends DefaultTableModel {
 
         public agentTableModel() {
         }
@@ -943,7 +944,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }
 
-    private static class missionTableModel extends AbstractTableModel {
+    private static class missionTableModel extends DefaultTableModel {
 
         public missionTableModel() {
         }
@@ -1007,7 +1008,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }
 
-    private static class contractTableModel extends AbstractTableModel {
+    private static class contractTableModel extends DefaultTableModel {
 
         public contractTableModel() {
         }
@@ -1156,7 +1157,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected void done() {
             workerDone[0] = true;
-            agentTable.repaint();
+            DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+            tableModel.fireTableDataChanged();
+            //agentTable.repaint();
         }
     }
 
@@ -1173,7 +1176,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected void done() {
             workerDone[1] = true;
-            missionTable.repaint();
+            DefaultTableModel tableModel = (DefaultTableModel) missionTable.getModel();
+            tableModel.fireTableDataChanged();
+            //missionTable.repaint();
         }
     }
 
@@ -1190,7 +1195,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected void done() {
             workerDone[2] = true;
-            contractTable.repaint();
+            DefaultTableModel tableModel = (DefaultTableModel) contractTable.getModel();
+            tableModel.fireTableDataChanged();
+            //contractTable.repaint();
         }
     }
 
