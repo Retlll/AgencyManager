@@ -18,6 +18,7 @@ import javax.swing.ButtonGroup;
 public class PropertiesDialog extends javax.swing.JDialog {
 
     Properties config;
+    boolean serverChange;
 
     /**
      * Creates new form PropertiesDialog
@@ -25,6 +26,10 @@ public class PropertiesDialog extends javax.swing.JDialog {
     public PropertiesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+    
+    public boolean serverChange(){
+        return true;
     }
 
     public PropertiesDialog(java.awt.Frame parent, boolean modal, Properties config) {
@@ -246,6 +251,7 @@ public class PropertiesDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        serverChange = false;
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -268,6 +274,16 @@ public class PropertiesDialog extends javax.swing.JDialog {
             missingServerPasswordLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             return;
         }
+        if(config.getProperty("SERVER_URL") != serverUrlTextField.getText()){
+            serverChange = true;
+        }
+        if(config.getProperty("SERVER_NAME") != serverNameTextField.getText()){
+            serverChange = true;
+        }
+        if(config.getProperty("SERVER_PASSWORD") != String.valueOf(serverPasswordField.getPassword())){
+            serverChange = true;
+        }
+        
         config.put("SERVER_URL", serverUrlTextField.getText());
         config.put("SERVER_NAME", serverNameTextField.getText());
         config.put("SERVER_KEY", String.valueOf(serverPasswordField.getPassword()));
