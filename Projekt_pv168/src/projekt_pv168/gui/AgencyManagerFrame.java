@@ -654,6 +654,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_viewMissionButtonActionPerformed
 
     private void addContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractButtonActionPerformed
+        if(connected){
         Agent agent = null;
         Mission mission = null;
         if (agentTable.getSelectedRow() != -1) {
@@ -669,6 +670,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         if (dialog.getContract() != null) {
             contractManager.createContract(dialog.getContract());
             refreshLists();
+        }
+        } else {
+            JOptionPane.showMessageDialog(this, "Start session first!");
         }
     }//GEN-LAST:event_addContractButtonActionPerformed
 
