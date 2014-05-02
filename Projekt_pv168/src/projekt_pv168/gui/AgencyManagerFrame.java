@@ -57,6 +57,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private boolean connected;
     private static boolean[] workerDone;
     private static boolean workDone;
+    private int[] lastSort = new int[]{0, 0, 0};
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
     private ContractManagerImpl contractManager;
@@ -79,22 +80,46 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 DefaultTableModel tableModel = null;
                 switch (agentTable.getColumnName(column)) {
                     case "Name":
-                        Collections.sort(agents, new Comparators.AgentComparatorByName());
+                        if (lastSort[0] != 0) {
+                            Collections.sort(agents, new Comparators.AgentComparatorByName());
+                            lastSort[0] = 0;
+                        } else {
+                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByName()));
+                            lastSort[0] = -1;
+                        }
                         tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Born":
-                        Collections.sort(agents, new Comparators.AgentComparatorByBorn());
+                        if (lastSort[0] != 1) {
+                            Collections.sort(agents, new Comparators.AgentComparatorByBorn());
+                            lastSort[0] = 1;
+                        } else {
+                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByBorn()));
+                            lastSort[0] = -1;
+                        }
                         tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Active":
-                        Collections.sort(agents, new Comparators.AgentComparatorByActive());
+                        if (lastSort[0] != 2) {
+                            Collections.sort(agents, new Comparators.AgentComparatorByActive());
+                            lastSort[0] = 2;
+                        } else {
+                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByActive()));
+                            lastSort[0] = -1;
+                        }
                         tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Rank":
-                        Collections.sort(agents, new Comparators.AgentComparatorByRank());
+                        if (lastSort[0] != 3) {
+                            Collections.sort(agents, new Comparators.AgentComparatorByRank());
+                            lastSort[0] = 3;
+                        } else {
+                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByRank()));
+                            lastSort[0] = -1;
+                        }
                         tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
@@ -110,17 +135,35 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 DefaultTableModel tableModel = null;
                 switch (missionTable.getColumnName(column)) {
                     case "Name":
-                        Collections.sort(missions, new Comparators.MissionComparatorByName());
+                        if (lastSort[1] != 0) {
+                            Collections.sort(missions, new Comparators.MissionComparatorByName());
+                            lastSort[1] = 0;
+                        } else {
+                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByName()));
+                            lastSort[1] = -1;
+                        }
                         tableModel = (DefaultTableModel) missionTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Difficulty":
-                        Collections.sort(missions, new Comparators.MissionComparatorByDifficulty());
+                        if (lastSort[1] != 1) {
+                            Collections.sort(missions, new Comparators.MissionComparatorByDifficulty());
+                            lastSort[1] = 1;
+                        } else {
+                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByDifficulty()));
+                            lastSort[1] = -1;
+                        }
                         tableModel = (DefaultTableModel) missionTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Location":
-                        Collections.sort(missions, new Comparators.MissionComparatorByLocation());
+                        if (lastSort[1] != 2) {
+                            Collections.sort(missions, new Comparators.MissionComparatorByLocation());
+                            lastSort[1] = 2;
+                        } else {
+                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByLocation()));
+                            lastSort[1] = -1;
+                        }
                         tableModel = (DefaultTableModel) missionTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
@@ -136,27 +179,57 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 DefaultTableModel tableModel = null;
                 switch (contractTable.getColumnName(column)) {
                     case "Agent":
-                        Collections.sort(contracts, new Comparators.ContractComparatorByAgent());
+                        if (lastSort[2] != 0) {
+                            Collections.sort(contracts, new Comparators.ContractComparatorByAgent());
+                            lastSort[2] = 0;
+                        } else {
+                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByAgent()));
+                            lastSort[2] = -1;
+                        }
                         tableModel = (DefaultTableModel) contractTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Mission":
-                        Collections.sort(contracts, new Comparators.ContractComparatorByMission());
+                        if (lastSort[2] != 1) {
+                            Collections.sort(contracts, new Comparators.ContractComparatorByMission());
+                            lastSort[2] = 1;
+                        } else {
+                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByMission()));
+                            lastSort[2] = -1;
+                        }
                         tableModel = (DefaultTableModel) contractTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Budget":
-                        Collections.sort(contracts, new Comparators.ContractComparatorByBudget());
+                        if (lastSort[2] != 2) {
+                            Collections.sort(contracts, new Comparators.ContractComparatorByBudget());
+                            lastSort[2] = 2;
+                        } else {
+                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByBudget()));
+                            lastSort[2] = -1;
+                        }
                         tableModel = (DefaultTableModel) contractTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Start time":
-                        Collections.sort(contracts, new Comparators.ContractComparatorByStartTime());
+                        if (lastSort[2] != 3) {
+                            Collections.sort(contracts, new Comparators.ContractComparatorByStartTime());
+                            lastSort[2] = 3;
+                        } else {
+                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByStartTime()));
+                            lastSort[2] = -1;
+                        }
                         tableModel = (DefaultTableModel) contractTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "End time":
-                        Collections.sort(contracts, new Comparators.ContractComparatorByEndTime());
+                        if (lastSort[2] != 4) {
+                            Collections.sort(contracts, new Comparators.ContractComparatorByEndTime());
+                            lastSort[2] = 4;
+                        } else {
+                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByEndTime()));
+                            lastSort[2] = -1;
+                        }
                         tableModel = (DefaultTableModel) contractTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
@@ -1354,7 +1427,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         private List<Mission> missions;
         private List<Agent> agents;
-
         private Mission mission;
         private Agent agent;
         private JFrame frame;
@@ -1368,14 +1440,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected Void doInBackground() throws Exception {
             enableAll(false);
-            
+
             workDone = false;
             LoadingContractSwingWorker loadingWorker = new LoadingContractSwingWorker();
             loadingWorker.execute();
-            
+
             agents = agentManager.getAllAgents();
             missions = missionManager.getAllMissions();
-            
+
             workDone = true;
             while (loadingWorker.isDone()) {
             }
