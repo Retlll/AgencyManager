@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -34,6 +35,7 @@ import projekt_pv168.Contract;
 import projekt_pv168.ContractManagerImpl;
 import projekt_pv168.Mission;
 import projekt_pv168.MissionManagerImpl;
+import projekt_pv168.common.ServiceFailureException;
 
 /**
  *
@@ -1029,6 +1031,26 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("undefined collum");
             }
         }
+    }
+    
+    private void checkDatabase(MissionManagerImpl msManager, AgentManagerImpl agManager, ContractManagerImpl cnManager) 
+    throws ServiceFailureException {
+        
+        Agent ag = new Agent(null,"test",new GregorianCalendar(),true,150,"test");
+        Mission ms = new Mission(null, "test", 150, "test", "test");
+        Contract ct = new Contract(ms, ag, 150000000000l,new GregorianCalendar(),new GregorianCalendar());
+        
+        msManager.createMission(ms);
+        agManager.createAgent(ag);
+        cnManager.createContract(ct);
+        
+        msManager.updateMission(ms);
+        agManager.updateAgent(ag);
+        cnManager.updateContract(ct);
+        
+        cnManager.removeContract(ct);
+        msManager.removeMission(ms);
+        agManager.removeAgent(ag);
     }
 
     private void refreshLists() {
