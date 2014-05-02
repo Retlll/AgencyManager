@@ -991,13 +991,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
     
-    public void viewDialog(Contract contract, Agent agent) {
-        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, contract, agent);
+    public void viewDialog(Agent agent) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, agent);
             contractWorker.execute();
     }
     
-    public void viewDialog(Contract contract, Mission mission) {
-        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, contract,mission);
+    public void viewDialog(Mission mission) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission);
             contractWorker.execute();
         
     }
@@ -1469,7 +1469,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         private List<Contract> contracts;
         private Mission mission;
         private Agent agent;
-        private Contract contract;
         private JFrame frame;
         
         private int select;
@@ -1481,21 +1480,18 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             select = 1;
         }
 
-        public ContractAddSwingWorker(JFrame parent, Contract contract) {
-            this.contract = contract;
+        public ContractAddSwingWorker(JFrame parent) {
             frame = parent;
             select = 2;
         }
 
-        public ContractAddSwingWorker(JFrame parent, Contract contract, Agent agent) {
-            this.contract = contract;
+        public ContractAddSwingWorker(JFrame parent, Agent agent) {
             this.agent = agent;
             frame = parent;
             select = 4;
         }
 
-        public ContractAddSwingWorker(JFrame parent, Contract contract, Mission mission) {
-            this.contract = contract;
+        public ContractAddSwingWorker(JFrame parent, Mission mission) {
             this.mission = mission;
             frame = parent;
             select = 3;
