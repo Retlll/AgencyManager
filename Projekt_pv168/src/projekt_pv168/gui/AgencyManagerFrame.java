@@ -969,6 +969,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             connectToDataSource();
             if (!connected) {
                 refreshLists();
+                JOptionPane.showMessageDialog(this, "Unable to connect to database, change properties!");
             }
         }
 
@@ -981,7 +982,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void startSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSessionMenuItemActionPerformed
         connectToDataSource();
+        if(!connected){
+            JOptionPane.showMessageDialog(this, "Unable to connect to database, change properties!");
+            started = false;
+        } else {
         started = true;
+        }
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
     /**
