@@ -67,14 +67,14 @@ public class ContractManagerImpl implements ContractManager {
 
     private void loggerOutput() {
         FileHandler fh = null;
-        /*try {
+        try {
             fh = new FileHandler("MyLogFile.log");
         } catch (IOException | SecurityException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();
-        fh.setFormatter(formatter);*/
+        fh.setFormatter(formatter);
         logger.setLevel(Level.ALL);
     }
     
