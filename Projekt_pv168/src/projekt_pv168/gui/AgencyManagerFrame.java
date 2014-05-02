@@ -11,11 +11,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -925,7 +929,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 0:
                     return agents.get(rowIndex).getName();
                 case 1:
-                    return agents.get(rowIndex).getBorn().getTime().toString();
+                    //return agents.get(rowIndex).getBorn().getTime().toString();
+                    return getLocalDate(Locale.getDefault(), TimeZone.getDefault(), agents.get(rowIndex).getBorn());
                 case 2:
                     return agents.get(rowIndex).isActive();
                 case 3:
@@ -1064,17 +1069,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 2:
                     return contracts.get(rowIndex).getBudget();
                 case 3:
-                    if (contracts.get(rowIndex).getStartTime() != null) {
-                        return contracts.get(rowIndex).getStartTime().getTime().toString();
-                    } else {
-                        return "";
-                    }
+                    return getLocalDate(Locale.getDefault(), TimeZone.getDefault(), contracts.get(rowIndex).getStartTime());
                 case 4:
-                    if (contracts.get(rowIndex).getEndTime() != null) {
-                        return contracts.get(rowIndex).getEndTime().getTime().toString();
-                    } else {
-                        return "";
-                    }
+                    return getLocalDate(Locale.getDefault(), TimeZone.getDefault(), contracts.get(rowIndex).getEndTime());
                 default:
                     throw new IllegalArgumentException("undefined collum");
             }
@@ -1207,5 +1204,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         } else {
             statLabel.setText(" ");
         }
+    }
+
+    private static String getLocalDate(Locale locale, TimeZone tz, Calendar cal) {
+        if (cal == null) {
+            return "";
+        }
+        Date date = cal.getTime();
+        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+        df.setTimeZone(tz);
+        return df.format(date);
     }
 }
