@@ -31,9 +31,9 @@ public class EditMissionDialog extends javax.swing.JDialog {
             locationTextField.setText(str(mission.getLocation()));
             difficultySpinner.setValue(mission.getDifficulty());
             detailsTextPane.setText(str(mission.getDetails()));
-            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATE"));
             id = mission.getId();
-            this.setTitle(java.text.MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_MISSION"), new Object[] {id}));
+            this.setTitle(java.text.MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATING_MISSION"), new Object[] {id}));
         }
     }
 
@@ -70,7 +70,7 @@ public class EditMissionDialog extends javax.swing.JDialog {
         warningLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
         setTitle(bundle.getString("ADDING_MISSION")); // NOI18N
         setMinimumSize(new java.awt.Dimension(408, 540));
 
@@ -252,13 +252,13 @@ public class EditMissionDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (missionNameTextField.getText().equals("")) {
-            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
+            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             missingValueLabel.setText("");
             missionNameTextField.requestFocus();
             return;
         }
         if (locationTextField.getText().equals("")) {
-            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
+            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             missingValueLabel1.setText("");
             locationTextField.requestFocus();
             return;

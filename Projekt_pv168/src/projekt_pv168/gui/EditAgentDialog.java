@@ -35,8 +35,8 @@ public class EditAgentDialog extends javax.swing.JDialog {
             rankSpinner.setValue(agent.getRank());
             notesTextPane.setText(str(agent.getNotes()));
             id = agent.getId();
-            this.setTitle(MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_AGENT"), new Object[] {id}));
-            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
+            this.setTitle(MessageFormat.format(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATING_AGENT"), new Object[] {id}));
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATE"));
         }
     }
 
@@ -68,7 +68,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
         warningLabel = new javax.swing.JLabel();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
         setTitle(bundle.getString("ADDING_AGENT")); // NOI18N
         setMinimumSize(new java.awt.Dimension(397, 683));
 
@@ -258,13 +258,13 @@ public class EditAgentDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (agentNameTextField.getText().equals("")) {
-            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
+            missingValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             missingValueLabel1.setText("");
             agentNameTextField.requestFocus();
             return;
         }
         if (new GregorianCalendar().getTimeInMillis() - bornCalendar.getCalendar().getTimeInMillis() <= 18 * 60 * 60 * 100) {
-            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("AGE_ERROR"));
+            missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGE_ERROR"));
             missingValueLabel.setText("");
             agentNameTextField.requestFocus();
             return;
