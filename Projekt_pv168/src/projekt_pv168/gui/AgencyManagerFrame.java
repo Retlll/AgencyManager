@@ -714,6 +714,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 mission = missions.get(missionTable.getSelectedRow());
             }
             ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission, agent);
+            contractWorker.execute();
         } else {
             JOptionPane.showMessageDialog(this, "Start session first!");
         }
@@ -1221,10 +1222,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private class ContractAddSwingWorker extends SwingWorker<Void, Void> {
 
-        EditContractDialog dialog;
-        Mission mission;
-        Agent agent;
-        JFrame frame;
+        private List<Mission> missions;
+        private List<Agent> agents;
+
+        private Mission mission;
+        private Agent agent;
+        private JFrame frame;
 
         public ContractAddSwingWorker(JFrame parent, Mission mission, Agent agent) {
             this.mission = mission;
@@ -1234,13 +1237,23 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         @Override
         protected Void doInBackground() throws Exception {
-//            Thread.sleep(100000);
-            dialog = new EditContractDialog(frame, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
+            enableAll(false);
+            
+            workerDone = new boolean[]{false, false, false};
+            LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
+            loadingWorker.execute();
+            
+            agents = agentManager.getAllAgents();
+            missions = missionManager.getAllMissions();
+            
+            workerDone = new boolean[]{true, true, true};
+            while (loadingWorker.isDone());
             return null;
         }
 
         @Override
         protected void done() {
+            EditContractDialog dialog = new EditContractDialog(frame, true, missions, agents, contractManager, mission, agent);
             dialog.setVisible(true);
 
             if (dialog.getContract() != null) {
