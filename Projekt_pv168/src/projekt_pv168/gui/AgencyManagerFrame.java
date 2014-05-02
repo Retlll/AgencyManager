@@ -1061,6 +1061,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
 
         @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        @Override
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
@@ -1133,6 +1138,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
 
         @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+        @Override
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
@@ -1194,6 +1204,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static class contractTableModel extends DefaultTableModel {
 
         public contractTableModel() {
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
         }
 
         @Override
