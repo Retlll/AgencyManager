@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
  * @author Sebastián
  */
 public class ViewMissionDialog extends javax.swing.JDialog {
+    private Mission mission;
 
     /**
      * Creates new form ViewMissionDialog
@@ -20,6 +21,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
     public ViewMissionDialog(java.awt.Frame parent, boolean modal, Mission mission) {
         super(parent, modal);
         initComponents();
+        this.mission = mission;
         if (mission != null) {
             missionNameTextField.setText(str(mission.getName()));
             missionIDTextField.setText(NumberFormat.getNumberInstance().format(mission.getId()));
@@ -52,6 +54,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         missionIDTextField = new javax.swing.JTextField();
         missionIDLabel = new javax.swing.JLabel();
         cancelButton = new javax.swing.JButton();
+        contractButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
@@ -76,7 +79,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
                     .addComponent(detailsScrollPane)
                     .addGroup(missionDetailsPanelLayout.createSequentialGroup()
                         .addComponent(detailsLabel)
-                        .addGap(0, 277, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         missionDetailsPanelLayout.setVerticalGroup(
@@ -118,13 +121,13 @@ public class ViewMissionDialog extends javax.swing.JDialog {
             .addGroup(missionInfoPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(missionInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(missionNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                    .addComponent(missionNameTextField)
                     .addComponent(missionNameLabel)
                     .addComponent(difficultyLabel)
-                    .addComponent(locationTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                    .addComponent(locationTextField)
                     .addComponent(locationLabel)
-                    .addComponent(difficultyTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
-                    .addComponent(missionIDTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                    .addComponent(difficultyTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(missionIDTextField)
                     .addComponent(missionIDLabel))
                 .addContainerGap())
         );
@@ -158,6 +161,14 @@ public class ViewMissionDialog extends javax.swing.JDialog {
             }
         });
 
+        contractButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        contractButton.setText("Contracts");
+        contractButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contractButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,7 +179,8 @@ public class ViewMissionDialog extends javax.swing.JDialog {
                     .addComponent(missionInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(missionDetailsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(contractButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -180,7 +192,9 @@ public class ViewMissionDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(missionDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(contractButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
 
@@ -190,6 +204,10 @@ public class ViewMissionDialog extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void contractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractButtonActionPerformed
+        ((AgencyManagerFrame)this.getParent()).viewDialog(mission);
+    }//GEN-LAST:event_contractButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,6 +266,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton contractButton;
     private javax.swing.JLabel detailsLabel;
     private javax.swing.JScrollPane detailsScrollPane;
     private javax.swing.JTextPane detailsTextPane;
