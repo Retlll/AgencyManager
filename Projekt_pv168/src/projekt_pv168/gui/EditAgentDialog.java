@@ -212,7 +212,7 @@ public class EditAgentDialog extends javax.swing.JDialog {
         });
 
         warningLabel.setForeground(new java.awt.Color(102, 102, 102));
-        warningLabel.setText(bundle.getString("VALUES_ERROR")); // NOI18N
+        warningLabel.setText(bundle.getString("VALUES_ERROR_F")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
