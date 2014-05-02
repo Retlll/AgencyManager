@@ -162,7 +162,7 @@ public class ViewMissionDialog extends javax.swing.JDialog {
         });
 
         contractButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        contractButton.setText("Contracts");
+        contractButton.setText(bundle.getString("CONTRACTS")); // NOI18N
         contractButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contractButtonActionPerformed(evt);
