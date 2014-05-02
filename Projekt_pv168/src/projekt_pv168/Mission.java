@@ -28,6 +28,11 @@ public class Mission implements Comparable<Mission> {
 
     public Mission() {
     }
+
+    @Override
+    public String toString() {
+        return "Mission{" + "id=" + id + ", name=" + name + ", difficulty=" + difficulty + ", details=" + details + ", Location=" + Location + '}';
+    }
     
     @Override
     public int hashCode() {

@@ -68,7 +68,7 @@ public class ContractManagerImpl implements ContractManager {
     private void loggerOutput() {
         FileHandler fh = null;
         /*try {
-            fh = new FileHandler("C:/log/MyLogFile.log");
+            fh = new FileHandler("MyLogFile.log");
         } catch (IOException | SecurityException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
@@ -76,6 +76,19 @@ public class ContractManagerImpl implements ContractManager {
         SimpleFormatter formatter = new SimpleFormatter();
         fh.setFormatter(formatter);*/
         logger.setLevel(Level.ALL);
+    }
+    
+    public void loggerOutput(String path, Level newLevel) {
+        FileHandler fh = null;
+        try {
+            fh = new FileHandler(path);
+        } catch (IOException | SecurityException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();
+        fh.setFormatter(formatter);
+        logger.setLevel(newLevel);
     }
 
     private void checkDataSource() {
@@ -90,7 +103,8 @@ public class ContractManagerImpl implements ContractManager {
 
     public void setMsManager(MissionManager msManager) {
         this.msManager = msManager;
-    }
+    } 
+    
 
     @Override
     public void createContract(Contract contract) throws ServiceFailureException {
@@ -146,7 +160,7 @@ public class ContractManagerImpl implements ContractManager {
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Contract: {0} was added to the database", tmp);
+            logger.log(Level.FINE, "Contract: " + tmp + " was added to the database");
         }
     }
 
@@ -207,7 +221,7 @@ public class ContractManagerImpl implements ContractManager {
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Contract: {0} was updated inside the database to :{1}", new Object[]{tmp, tmp2});
+            logger.log(Level.FINE, "Contract: " + tmp + " was updated inside the database to :{" + tmp2);
         }
     }
 
@@ -266,7 +280,7 @@ public class ContractManagerImpl implements ContractManager {
             throw new ServiceFailureException("Internal error with databese - DataSource", ex);
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Contract: {0} removed from the database", tmp);
+            logger.log(Level.FINE, "Contract: " + tmp + " removed from the database");
         }
     }
 
@@ -503,7 +517,7 @@ public class ContractManagerImpl implements ContractManager {
         }
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
+            logger.log(Level.FINE, "Contracts: " + contracts + " removed from the database");
         }
     }
 
@@ -552,7 +566,7 @@ public class ContractManagerImpl implements ContractManager {
         }
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
+            logger.log(Level.FINE, "Contracts: " + contracts + " removed from the database");
         }
     }
 
@@ -630,7 +644,7 @@ public class ContractManagerImpl implements ContractManager {
      }
      }
      if (logger.isLoggable(Level.FINE)) {
-     logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
+     logger.log(Level.FINE, "Contracts: " + contracts + " removed from the database");
      }
      } catch (SQLException ex) {
      connection.rollback();
@@ -674,7 +688,7 @@ public class ContractManagerImpl implements ContractManager {
      }
      }
      if (logger.isLoggable(Level.FINE)) {
-     logger.log(Level.FINE, "Contracts: {0} removed from the database", contracts);
+     logger.log(Level.FINE, "Contracts: " + contracts + " removed from the database");
      }
      } catch (SQLException ex) {
      connection.rollback();
