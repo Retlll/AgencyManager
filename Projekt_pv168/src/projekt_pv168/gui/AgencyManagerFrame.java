@@ -238,6 +238,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void viewDialog(Agent agent) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, agent);
+            contractWorker.execute();
+    }
+    
+    public void viewDialog(Mission mission) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission);
+            contractWorker.execute();
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -990,17 +1001,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
-    
-    public void viewDialog(Agent agent) {
-        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, agent);
-            contractWorker.execute();
-    }
-    
-    public void viewDialog(Mission mission) {
-        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission);
-            contractWorker.execute();
-        
-    }
     
     /**
      * @param args the command line arguments
