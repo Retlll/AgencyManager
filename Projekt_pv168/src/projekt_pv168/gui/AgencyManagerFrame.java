@@ -64,7 +64,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         contextMenu();
         initProperties();
-        connectToDataSource();
+        //connectToDataSource();
     }
 
     /**
@@ -175,14 +175,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeAgentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewAgentButton)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(161, Short.MAX_VALUE))
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
         agentPanelLayout.setVerticalGroup(
             agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agentPanelLayout.createSequentialGroup()
-                .addContainerGap(260, Short.MAX_VALUE)
+                .addContainerGap(264, Short.MAX_VALUE)
                 .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addAgentButton)
                     .addComponent(removeAgentButton)
@@ -191,7 +191,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(agentPanelLayout.createSequentialGroup()
-                    .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                    .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -252,14 +252,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeMissionButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewMissionButton)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(161, Short.MAX_VALUE))
             .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(missionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addComponent(missionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
         missionPanelLayout.setVerticalGroup(
             missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, missionPanelLayout.createSequentialGroup()
-                .addContainerGap(260, Short.MAX_VALUE)
+                .addContainerGap(264, Short.MAX_VALUE)
                 .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addMissionButton)
                     .addComponent(removeMissionButton)
@@ -268,7 +268,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(missionPanelLayout.createSequentialGroup()
-                    .addComponent(missionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                    .addComponent(missionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -329,14 +329,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeContractButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewContractButton)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(161, Short.MAX_VALUE))
             .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+                .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
         contractPanelLayout.setVerticalGroup(
             contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contractPanelLayout.createSequentialGroup()
-                .addContainerGap(260, Short.MAX_VALUE)
+                .addContainerGap(264, Short.MAX_VALUE)
                 .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addContractButton)
                     .addComponent(removeContractButton)
@@ -345,7 +345,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(contractPanelLayout.createSequentialGroup()
-                    .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                    .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
         );
 
@@ -395,6 +395,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         startSessionMenuItem.setText("Start session");
         startSessionMenuItem.setToolTipText("");
+        startSessionMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startSessionMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(startSessionMenuItem);
         fileMenu.add(menuSeparator1);
 
@@ -800,6 +805,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         saveProperities();
     }//GEN-LAST:event_formWindowClosing
+
+    private void startSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSessionMenuItemActionPerformed
+        connectToDataSource();
+    }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
