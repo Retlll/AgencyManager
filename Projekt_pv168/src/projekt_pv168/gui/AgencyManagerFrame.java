@@ -430,7 +430,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 config.put("SERVER_NAME", "xmalych");
             }
             if (!config.containsKey("SERVER_PASSWORD")) {
-                config.put("SERVER_KEY", "123456");
+                config.put("SERVER_PASSWORD", "123456");
             }
         } catch (FileNotFoundException ex) {
             FileOutputStream fileOutput = null;
