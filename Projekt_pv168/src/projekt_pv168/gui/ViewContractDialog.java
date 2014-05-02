@@ -97,7 +97,6 @@ public class ViewContractDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
         setTitle(bundle.getString("VIEW_CONTRACT")); // NOI18N
-        setMaximumSize(new java.awt.Dimension(1007, 586));
         setMinimumSize(new java.awt.Dimension(352, 586));
 
         contracTimePanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
