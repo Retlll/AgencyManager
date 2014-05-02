@@ -101,6 +101,68 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 }
             }
         });
+
+        JTableHeader missionHeader = missionTable.getTableHeader();
+        missionHeader.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int column = missionTable.columnAtPoint(e.getPoint());
+                DefaultTableModel tableModel = null;
+                switch (missionTable.getColumnName(column)) {
+                    case "Name":
+                        Collections.sort(missions, new Comparators.MissionComparatorByName());
+                        tableModel = (DefaultTableModel) missionTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "Difficulty":
+                        Collections.sort(missions, new Comparators.MissionComparatorByDifficulty());
+                        tableModel = (DefaultTableModel) missionTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "Location":
+                        Collections.sort(missions, new Comparators.MissionComparatorByLocation());
+                        tableModel = (DefaultTableModel) missionTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                }
+            }
+        });
+
+        JTableHeader contractHeader = contractTable.getTableHeader();
+        contractHeader.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int column = contractTable.columnAtPoint(e.getPoint());
+                DefaultTableModel tableModel = null;
+                switch (contractTable.getColumnName(column)) {
+                    case "Agent":
+                        Collections.sort(contracts, new Comparators.ContractComparatorByAgent());
+                        tableModel = (DefaultTableModel) contractTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "Mission":
+                        Collections.sort(contracts, new Comparators.ContractComparatorByMission());
+                        tableModel = (DefaultTableModel) contractTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "Budget":
+                        Collections.sort(contracts, new Comparators.ContractComparatorByBudget());
+                        tableModel = (DefaultTableModel) contractTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "Start time":
+                        Collections.sort(contracts, new Comparators.ContractComparatorByStartTime());
+                        tableModel = (DefaultTableModel) contractTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                    case "End time":
+                        Collections.sort(contracts, new Comparators.ContractComparatorByEndTime());
+                        tableModel = (DefaultTableModel) contractTable.getModel();
+                        tableModel.fireTableDataChanged();
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -999,9 +1061,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 1:
                     return "Difficulty";
                 case 2:
-                    return "Details";
-                case 3:
                     return "Location";
+                case 3:
+                    return "Details";
                 default:
                     throw new IllegalArgumentException("more column than excepted");
             }
