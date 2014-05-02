@@ -605,11 +605,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
     }
 
-    private class AgentModel extends AbstractListModel {
+    private class AgentModel extends AbstractListModel<String> {
 
         private List<Agent> agents = new ArrayList<>();
 
-        public AgentModel(List agents) {
+        public AgentModel(List<Agent> agents) {
             this.agents = agents;
         }
 
@@ -624,7 +624,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
 
         @Override
-        public Object getElementAt(int index) {
+        public String getElementAt(int index) {
             Agent ag = agents.get(index);
             return ag.getName() + " (id: " + ag.getId() + " )";
         }
@@ -634,11 +634,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
     }
 
-    private class MissionModel extends AbstractListModel {
+    private class MissionModel extends AbstractListModel<String> {
 
         private List<Mission> missions = new ArrayList<>();
 
-        public MissionModel(List missions) {
+        public MissionModel(List<Mission> missions) {
             this.missions = missions;
         }
 
@@ -653,7 +653,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
 
         @Override
-        public Object getElementAt(int index) {
+        public String getElementAt(int index) {
             Mission ms = missions.get(index);
             return ms.getName() + " (id: " + ms.getId() + " )";
         }
