@@ -54,6 +54,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static List<Agent> agents = new ArrayList<>();
     private static List<Mission> missions = new ArrayList<>();
     private static List<Contract> contracts = new ArrayList<>();
+    private boolean started;
     private boolean connected;
     private static boolean[] workerDone;
     private static boolean workDone;
@@ -68,6 +69,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
      */
     public AgencyManagerFrame() {
         initComponents();
+        started = false;
 
         contextMenu();
         initProperties();
@@ -908,10 +910,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_viewContractButtonActionPerformed
 
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
-        if (!connected) {
-            connectToDataSource();
+        if (started) {
+            if (!connected) {
+                connectToDataSource();
+            }
+            refreshLists();
+        } else{
+            JOptionPane.showMessageDialog(this, "Start session first!");
         }
-        refreshLists();
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
     private void agentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agentTableMouseClicked
@@ -960,13 +966,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         PropertiesDialog dialog = new PropertiesDialog(this, true, config);
         dialog.setVisible(true);
 
-        connectToDataSource();
-        refreshLists();
-        /*if (connected) {
-         refreshLists();
-         } else {
-         saveProperities();
-         }*/
+        if (started) {
+            connectToDataSource();
+            refreshLists();
+        }
+
         saveProperities();
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
 
@@ -976,6 +980,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void startSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSessionMenuItemActionPerformed
         connectToDataSource();
+        started = true;
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
     /**
