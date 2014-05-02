@@ -77,7 +77,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 int column = agentTable.columnAtPoint(e.getPoint());
                 switch (agentTable.getColumnName(column)) {
                     case "Name":
-                        //Collections.sort(agents, Comparators.AgentComparatorByName());
+                        Collections.sort(agents, new Comparators.AgentComparatorByName());                        
+                        DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+                        tableModel.fireTableDataChanged();
                         break;
                 }
             }
