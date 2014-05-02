@@ -58,7 +58,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private boolean connected;
     private boolean changeServerProperties;
     private static boolean[] workerDone;
-    private static boolean workDone;
     private int[] lastSort = new int[]{0, 0, 0};
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
@@ -1392,7 +1391,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             int i = 0;
             while (true) {
                 for (long l = 0; l < 100000000l; l++) {
-                    if (workDone) {
+                    if (isCancelled()) {
                         return null;
                     }
                 }
@@ -1448,16 +1447,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         protected Void doInBackground() throws Exception {
             enableAll(false);
 
-            workDone = false;
             LoadingContractSwingWorker loadingWorker = new LoadingContractSwingWorker();
             loadingWorker.execute();
 
             agents = agentManager.getAllAgents();
             missions = missionManager.getAllMissions();
 
-            workDone = true;
-            while (loadingWorker.isDone()) {
-            }
+            loadingWorker.cancel(false);
             return null;
         }
 
