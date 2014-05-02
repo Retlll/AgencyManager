@@ -5,6 +5,7 @@
 package projekt_pv168.gui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,6 +32,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
 import projekt_pv168.AgentManagerImpl;
@@ -66,6 +68,16 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         contextMenu();
         initProperties();
         //connectToDataSource();
+        JTableHeader agentHeader = agentTable.getTableHeader();
+        agentHeader.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int column = agentTable.columnAtPoint(e.getPoint());
+                JOptionPane.showMessageDialog(agentTable, "Column header #" + column + " is clicked");
+            }
+            
+        });
     }
 
     /**
@@ -792,10 +804,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         connectToDataSource();
         refreshLists();
         /*if (connected) {
-            refreshLists();
-        } else {
-            saveProperities();
-        }*/
+         refreshLists();
+         } else {
+         saveProperities();
+         }*/
         saveProperities();
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
 
