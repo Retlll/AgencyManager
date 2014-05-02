@@ -1499,11 +1499,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         @Override
         protected Void doInBackground() throws Exception {
-            enableAll(false);
 
             LoadingContractSwingWorker loadingWorker = new LoadingContractSwingWorker();
 
             if (select == 1) {
+                enableAll(false);
                 loadingWorker.execute();
                 agents = agentManager.getAllAgents();
                 missions = missionManager.getAllMissions();
