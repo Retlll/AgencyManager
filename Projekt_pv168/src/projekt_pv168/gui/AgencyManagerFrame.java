@@ -56,6 +56,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static List<Contract> contracts = new ArrayList<>();
     private boolean started;
     private boolean connected;
+    private boolean changeServerProperties;
     private static boolean[] workerDone;
     private static boolean workDone;
     private int[] lastSort = new int[]{0, 0, 0};
@@ -963,10 +964,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_contractTableMouseClicked
 
     private void properitiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_properitiesMenuItemActionPerformed
+        changeServerProperties = false;
         PropertiesDialog dialog = new PropertiesDialog(this, true, config);
         dialog.setVisible(true);
 
-        if (started) {
+        if (started && dialog.serverChange) {
             connectToDataSource();
             refreshLists();
         }
