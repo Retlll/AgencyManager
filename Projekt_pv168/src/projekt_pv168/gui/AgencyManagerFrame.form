@@ -158,17 +158,12 @@
                           <Component id="removeAgentButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="viewAgentButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="219" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="contractButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="125" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Component id="agentScrollPane" alignment="1" pref="520" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="312" max="-2" attributes="0"/>
-                              <Component id="contractButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="121" max="32767" attributes="0"/>
-                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -181,6 +176,7 @@
                               <Component id="removeAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="updateAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="viewAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="contractButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -188,13 +184,6 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="agentScrollPane" pref="272" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" rootIndex="2" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="272" max="32767" attributes="0"/>
-                              <Component id="contractButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

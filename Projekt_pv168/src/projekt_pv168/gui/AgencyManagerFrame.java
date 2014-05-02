@@ -367,14 +367,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeAgentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewAgentButton)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(contractButton)
+                .addContainerGap(125, Short.MAX_VALUE))
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE))
-            .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(agentPanelLayout.createSequentialGroup()
-                    .addGap(312, 312, 312)
-                    .addComponent(contractButton)
-                    .addContainerGap(121, Short.MAX_VALUE)))
         );
         agentPanelLayout.setVerticalGroup(
             agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,17 +381,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addComponent(addAgentButton)
                     .addComponent(removeAgentButton)
                     .addComponent(updateAgentButton)
-                    .addComponent(viewAgentButton))
+                    .addComponent(viewAgentButton)
+                    .addComponent(contractButton))
                 .addContainerGap())
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(agentPanelLayout.createSequentialGroup()
                     .addComponent(agentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                     .addGap(38, 38, 38)))
-            .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agentPanelLayout.createSequentialGroup()
-                    .addContainerGap(272, Short.MAX_VALUE)
-                    .addComponent(contractButton)
-                    .addContainerGap()))
         );
 
         agencyTablesTabbedPane.addTab("Agent", agentPanel);
