@@ -1,10 +1,30 @@
-máj 02, 2014 3:58:06 PM projekt_pv168.AgentManagerImpl getAllAgents
+máj 02, 2014 4:36:31 PM projekt_pv168.AgentManagerImpl getAllAgents
 FINE: Geting all agents
-máj 02, 2014 3:58:06 PM projekt_pv168.AgentManagerImpl getAgent
+máj 02, 2014 4:36:31 PM projekt_pv168.AgentManagerImpl getAgent
 FINE: Start geting agent with id:19
-máj 02, 2014 3:58:06 PM projekt_pv168.AgentManagerImpl getAgent
+máj 02, 2014 4:36:31 PM projekt_pv168.AgentManagerImpl getAgent
 FINE: Successful, agent Agent{id=19, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}
-máj 02, 2014 3:58:06 PM projekt_pv168.AgentManagerImpl getAgent
+máj 02, 2014 4:36:31 PM projekt_pv168.AgentManagerImpl getAgent
 FINE: Start geting agent with id:23
-máj 02, 2014 3:58:06 PM projekt_pv168.AgentManagerImpl getAgent
+máj 02, 2014 4:36:31 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Successful, agent Agent{id=23, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Start geting agent with id:19
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Successful, agent Agent{id=19, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Start geting agent with id:23
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Successful, agent Agent{id=23, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAllAgents
+FINE: Geting all agents
+máj 02, 2014 4:36:38 PM projekt_pv168.AgentManagerImpl getAllAgents
+FINE: Geting all agents
+máj 02, 2014 4:36:39 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Start geting agent with id:19
+máj 02, 2014 4:36:39 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Successful, agent Agent{id=19, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}
+máj 02, 2014 4:36:39 PM projekt_pv168.AgentManagerImpl getAgent
+FINE: Start geting agent with id:23
+máj 02, 2014 4:36:39 PM projekt_pv168.AgentManagerImpl getAgent
 FINE: Successful, agent Agent{id=23, name=Jakub Svoboda, born=Wed Dec 19 00:00:00 CET 1979, active=false, rank=22, notes=dead}

@@ -39,7 +39,7 @@ import projekt_pv168.common.ServiceFailureException;
  * @author Lenovo
  */
 public class AgencyManagerFrame extends javax.swing.JFrame {
-    
+
     private DataSource dataSource;
     private static List<Agent> agents = new ArrayList<>();
     private static List<Mission> missions = new ArrayList<>();
@@ -57,7 +57,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
      */
     public AgencyManagerFrame() {
         initComponents();
-        
+
         contextMenu();
         initProperties();
         connectToDataSource();
@@ -447,7 +447,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void initProperties() {
         config = new Properties();
-        
+
         try {
             FileInputStream fileInput = new FileInputStream("Configuration.properties");
             config.load(fileInput);
@@ -460,6 +460,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             if (!config.containsKey("SERVER_PASSWORD")) {
                 config.put("SERVER_PASSWORD", "");
             }
+            if (!config.containsKey("DOUBLE_CLICK")) {
+                config.put("DOUBLE_CLICK", "0");
+            }
         } catch (FileNotFoundException ex) {
             FileOutputStream fileOutput = null;
             try {
@@ -470,14 +473,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             config.put("SERVER_URL", "");
             config.put("SERVER_NAME", "");
             config.put("SERVER_PASSWORD", "");
-            
+            config.put("DOUBLE_CLICK", "0");
+
             System.err.append("config file missing, default settings set");
             //Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void saveProperities() {
         try {
             FileOutputStream fileOut = new FileOutputStream("Configuration.properties");
@@ -490,14 +494,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void connectToDataSource() {
         BasicDataSource ds = new BasicDataSource();
-        
+
         ds.setUrl(config.getProperty("SERVER_URL", "").toString());
         ds.setUsername(config.getProperty("SERVER_NAME", "").toString());
         ds.setPassword(config.getProperty("SERVER_PASSWORD", "").toString());
-        
+
         DataSource dataSource = ds;
         try {
             ds.getConnection();
@@ -507,14 +511,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        
+
         missionManager = new MissionManagerImpl(dataSource);
         agentManager = new AgentManagerImpl(dataSource);
         contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
-        
+
         refreshLists();
     }
-    
+
     private void contextMenu() {
         final JPopupMenu contextMenu = new JPopupMenu();
         JMenuItem update = new JMenuItem("Update");
@@ -533,7 +537,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
         contextMenu.add(update);
-        
+
         JMenuItem view = new JMenuItem("View");
         view.addActionListener(new AbstractAction() {
             @Override
@@ -550,7 +554,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
         contextMenu.add(view);
-        
+
         JMenuItem remove = new JMenuItem("Remove");
         remove.addActionListener(new AbstractAction() {
             @Override
@@ -567,12 +571,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
         contextMenu.add(remove);
-        
+
         agentTable.setComponentPopupMenu(contextMenu);
         missionTable.setComponentPopupMenu(contextMenu);
         contractTable.setComponentPopupMenu(contextMenu);
     }
-    
+
     private void addAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAgentButtonActionPerformed
         if (connected) {
             EditAgentDialog dialog = new EditAgentDialog(this, true);
@@ -586,20 +590,20 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Start session first!");
         }
     }//GEN-LAST:event_addAgentButtonActionPerformed
-    
+
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         saveProperities();
         this.dispose();
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
-    
+
     private void viewAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
             ViewAgentDialog dialog = new ViewAgentDialog(this, false, agents.get(agentTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewAgentButtonActionPerformed
-    
+
     private void updateAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
             EditAgentDialog dialog = new EditAgentDialog(this, true, agents.get(agentTable.getSelectedRow()));
@@ -611,7 +615,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             dialog.dispose();
         }
     }//GEN-LAST:event_updateAgentButtonActionPerformed
-    
+
     private void removeAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
             if (contractManager.findAllContracts(agents.get(agentTable.getSelectedRow())).isEmpty()) {
@@ -628,7 +632,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             refreshLists();
         }
     }//GEN-LAST:event_removeAgentButtonActionPerformed
-    
+
     private void addMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMissionButtonActionPerformed
         if (connected) {
             EditMissionDialog dialog = new EditMissionDialog(this, true);
@@ -641,7 +645,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Start session first!");
         }
     }//GEN-LAST:event_addMissionButtonActionPerformed
-    
+
     private void updateMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
             EditMissionDialog dialog = new EditMissionDialog(this, true, missions.get(missionTable.getSelectedRow()));
@@ -652,7 +656,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_updateMissionButtonActionPerformed
-    
+
     private void removeMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
             if (contractManager.findAllContracts(missions.get(missionTable.getSelectedRow())).isEmpty()) {
@@ -669,14 +673,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             refreshLists();
         }
     }//GEN-LAST:event_removeMissionButtonActionPerformed
-    
+
     private void viewMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
             ViewMissionDialog dialog = new ViewMissionDialog(this, false, missions.get(missionTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewMissionButtonActionPerformed
-    
+
     private void addContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractButtonActionPerformed
         if (connected) {
             Agent agent = null;
@@ -688,9 +692,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 mission = missions.get(missionTable.getSelectedRow());
             }
             EditContractDialog dialog = new EditContractDialog(this, true, missionManager.getAllMissions(), agentManager.getAllAgents(), contractManager, mission, agent);
-            
+
             dialog.setVisible(true);
-            
+
             if (dialog.getContract() != null) {
                 contractManager.createContract(dialog.getContract());
                 refreshLists();
@@ -699,21 +703,21 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Start session first!");
         }
     }//GEN-LAST:event_addContractButtonActionPerformed
-    
+
     private void updateContractButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateContractButton1ActionPerformed
         if (contractTable.getSelectedRow() != -1) {
             Contract contr = contracts.get(contractTable.getSelectedRow());
             EditContractDialog dialog = new EditContractDialog(this, true, contr);
-            
+
             dialog.setVisible(true);
-            
+
             if (dialog.getContract() != null) {
                 contractManager.updateContract(dialog.getContract());
                 refreshLists();
             }
         }
     }//GEN-LAST:event_updateContractButton1ActionPerformed
-    
+
     private void removeContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeContractButtonActionPerformed
         if (contractTable.getSelectedRow() != -1) {
             contractManager.removeContract(contracts.get(contractTable.getSelectedRow()));
@@ -721,56 +725,74 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             refreshLists();
         }
     }//GEN-LAST:event_removeContractButtonActionPerformed
-    
+
     private void viewContractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewContractButtonActionPerformed
         if (contractTable.getSelectedRow() != -1) {
             ViewContractDialog dialog = new ViewContractDialog(this, false, contracts.get(contractTable.getSelectedRow()));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_viewContractButtonActionPerformed
-    
+
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
         if (!connected) {
             connectToDataSource();
         }
         refreshLists();
     }//GEN-LAST:event_refreshMenuItemActionPerformed
-    
+
     private void agentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agentTableMouseClicked
         if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if (agentTable.getSelectedColumnCount() != 0) {
-                viewAgentButtonActionPerformed(null);
+                if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 0) {
+                    viewAgentButtonActionPerformed(null);
+                } else {
+                    if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 1) {
+                        updateAgentButtonActionPerformed(null);
+                    }
+                }
             }
         }
     }//GEN-LAST:event_agentTableMouseClicked
-    
+
     private void missionTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_missionTableMouseClicked
         if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if (missionTable.getSelectedColumnCount() != 0) {
-                viewMissionButtonActionPerformed(null);
+                if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 0) {
+                    viewMissionButtonActionPerformed(null);
+                } else {
+                    if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 1) {
+                        updateMissionButtonActionPerformed(null);
+                    }
+                }
             }
         }
     }//GEN-LAST:event_missionTableMouseClicked
-    
+
     private void contractTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contractTableMouseClicked
         if (evt.getClickCount() == 2 && evt.getButton() == MouseEvent.BUTTON1) {
             if (contractTable.getSelectedColumnCount() != 0) {
-                viewContractButtonActionPerformed(null);
+                if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 0) {
+                    viewContractButtonActionPerformed(null);
+                } else {
+                    if (Integer.valueOf(config.getProperty("DOUBLE_CLICK", "0")) == 1) {
+                        updateContractButton1ActionPerformed(null);
+                    }
+                }
             }
         }
     }//GEN-LAST:event_contractTableMouseClicked
-    
+
     private void properitiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_properitiesMenuItemActionPerformed
         PropertiesDialog dialog = new PropertiesDialog(this, true, config);
         dialog.setVisible(true);
-        
+
         connectToDataSource();
         if (connected) {
             refreshLists();
-        }                                                 
+        }
         saveProperities();
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
-    
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         saveProperities();
     }//GEN-LAST:event_formWindowClosing
@@ -847,10 +869,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private static class agentTableModel extends AbstractTableModel {
-        
+
         public agentTableModel() {
         }
-        
+
         @Override
         public String getColumnName(int column) {
             switch (column) {
@@ -868,7 +890,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             switch (columnIndex) {
@@ -886,17 +908,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public int getRowCount() {
             return agents.size();
         }
-        
+
         @Override
         public int getColumnCount() {
             return 5; //without id attribute
         }
-        
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             switch (columnIndex) {
@@ -908,7 +930,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     return agents.get(rowIndex).isActive();
                 case 3:
                     return agents.get(rowIndex).getRank();
-                    //return agents.get(rowIndex).getId();
+                //return agents.get(rowIndex).getId();
                 case 4:
                     return agents.get(rowIndex).getNotes();
                 default:
@@ -916,12 +938,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private static class missionTableModel extends AbstractTableModel {
-        
+
         public missionTableModel() {
         }
-        
+
         @Override
         public String getColumnName(int column) {
             switch (column) {
@@ -937,7 +959,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             switch (columnIndex) {
@@ -953,17 +975,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public int getRowCount() {
             return missions.size();
         }
-        
+
         @Override
         public int getColumnCount() {
             return 4; //without id attribute
         }
-        
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             switch (columnIndex) {
@@ -980,12 +1002,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private static class contractTableModel extends AbstractTableModel {
-        
+
         public contractTableModel() {
         }
-        
+
         @Override
         public String getColumnName(int column) {
             switch (column) {
@@ -1003,7 +1025,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             switch (columnIndex) {
@@ -1021,17 +1043,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     throw new IllegalArgumentException("more column than excepted");
             }
         }
-        
+
         @Override
         public int getRowCount() {
             return contracts.size();
         }
-        
+
         @Override
         public int getColumnCount() {
             return 5;
         }
-        
+
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             switch (columnIndex) {
@@ -1058,29 +1080,29 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private void checkDatabase(MissionManagerImpl msManager, AgentManagerImpl agManager, ContractManagerImpl cnManager)
             throws ServiceFailureException {
-        
+
         Agent ag = new Agent(null, "test", new GregorianCalendar(), true, 150, "test");
         Mission ms = new Mission(null, "test", 150, "test", "test");
         Contract ct = new Contract(ms, ag, 150000000000l, new GregorianCalendar(), new GregorianCalendar());
-        
+
         msManager.createMission(ms);
         agManager.createAgent(ag);
         cnManager.createContract(ct);
-        
+
         msManager.updateMission(ms);
         agManager.updateAgent(ag);
         cnManager.updateContract(ct);
-        
+
         cnManager.removeContract(ct);
         msManager.removeMission(ms);
         agManager.removeAgent(ag);
     }
-    
+
     private class agentRefreshSwingWorker extends SwingWorker<List<Agent>, Void> {
-        
+
         @Override
         protected List<Agent> doInBackground() throws Exception {
             for (Agent agent : agentManager.getAllAgents()) {
@@ -1088,7 +1110,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             return agents;
         }
-        
+
         @Override
         protected void done() {
             synchronized (obj) {
@@ -1098,9 +1120,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             agentTable.repaint();
         }
     }
-    
+
     private class missionRefreshSwingWorker extends SwingWorker<List<Mission>, Void> {
-        
+
         @Override
         protected List<Mission> doInBackground() throws Exception {
             for (Mission mission : missionManager.getAllMissions()) {
@@ -1108,7 +1130,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             return missions;
         }
-        
+
         @Override
         protected void done() {
             synchronized (obj) {
@@ -1118,9 +1140,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             missionTable.repaint();
         }
     }
-    
+
     private class contractRefreshSwingWorker extends SwingWorker<List<Contract>, Void> {
-        
+
         @Override
         protected List<Contract> doInBackground() throws Exception {
             for (Contract contract : contractManager.findAllContracts()) {
@@ -1128,7 +1150,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             return contracts;
         }
-        
+
         @Override
         protected void done() {
             synchronized (obj) {
@@ -1138,14 +1160,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             contractTable.repaint();
         }
     }
-    
+
     private void checkWorkers() {
-        
+
         if (workerDone[0] && workerDone[1] && workerDone[2]) {
             enableAll(true);
         }
     }
-    
+
     private void refreshLists() {
         agents.clear();
         agentTable.repaint();
@@ -1153,20 +1175,20 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         missionTable.repaint();
         contracts.clear();
         contractTable.repaint();
-        
+
         workerDone = new boolean[]{false, false, false};
-        
+
         enableAll(false);
         agentRefreshSwingWorker agentWorker = new agentRefreshSwingWorker();
         agentWorker.execute();
-        
+
         missionRefreshSwingWorker missionWorker = new missionRefreshSwingWorker();
         missionWorker.execute();
-        
+
         contractRefreshSwingWorker contractWorker = new contractRefreshSwingWorker();
         contractWorker.execute();
     }
-    
+
     private void enableAll(boolean enable) {
         addAgentButton.setEnabled(enable);
         addContractButton.setEnabled(enable);
