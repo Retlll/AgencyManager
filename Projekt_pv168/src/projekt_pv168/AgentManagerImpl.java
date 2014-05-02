@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +24,7 @@ import projekt_pv168.common.ServiceFailureException;
 public class AgentManagerImpl implements AgentManager {
 
     private DataSource dataSource;
-    private static final Logger logger = Logger.getLogger(AgentManagerImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(ContractManagerImpl.class.getName());
 
     public AgentManagerImpl(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -58,6 +57,10 @@ public class AgentManagerImpl implements AgentManager {
         }
         if (agent.getRank() < 0) {
             throw new IllegalArgumentException("Negative rank");
+        }
+        
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Creating agent " + agent));
         }
 
         //check database string length
@@ -101,10 +104,9 @@ public class AgentManagerImpl implements AgentManager {
                 } else {
                     throw new IllegalArgumentException("ResultSet contain no rows");
                 }
-
                 connection.commit();
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, "Unable to work with database, agent is not create", ex);
             } finally {
                 try {
                     connection.rollback();
@@ -114,7 +116,7 @@ public class AgentManagerImpl implements AgentManager {
                 }
             }
         } catch (SQLException ex) {
-            String msg = "Error when adding agent to database.";
+            String msg = "Error when working with database.";
             logger.log(Level.SEVERE, msg, ex);
             throw new ServiceFailureException(msg, ex);
         }
@@ -142,7 +144,10 @@ public class AgentManagerImpl implements AgentManager {
         if (agent.getRank() < 0) {
             throw new IllegalArgumentException("Negative rank");
         }
-
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Updating agent " + agent));
+        }
+        
         try (Connection connection = dataSource.getConnection();) {
             connection.setAutoCommit(false);
             try (PreparedStatement st = connection.prepareStatement(
@@ -190,6 +195,10 @@ public class AgentManagerImpl implements AgentManager {
         if (agent.getId() == null) {
             throw new IllegalArgumentException("Agents id is null");
         }
+        
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Deleting agent " + agent));
+        }
 
         try (Connection connection = dataSource.getConnection();) {
             connection.setAutoCommit(false);
@@ -226,6 +235,10 @@ public class AgentManagerImpl implements AgentManager {
     public Agent getAgent(long id) throws SQLException {
         checkDataSource();
 
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Start geting agent with id:" + id));
+        }
+        
         try (Connection connection = dataSource.getConnection();) {
             try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where ID = ?");) {
                 st.setLong(1, id);
@@ -245,6 +258,9 @@ public class AgentManagerImpl implements AgentManager {
                     agent.setBorn(born);
                     if (agents.next()) {
                         throw new ServiceFailureException("There is more then one agent with same id");
+                    }
+                    if(logger.isLoggable(Level.FINE)){
+                        logger.log(Level.FINE, "Successful, agent " + agent);
                     }
                     return agent;
                 } else {
@@ -269,6 +285,9 @@ public class AgentManagerImpl implements AgentManager {
             try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT where RANK >= ?");) {
                 st.setLong(1, minRank);
                 ResultSet agents = st.executeQuery();
+                if(logger.isLoggable(Level.FINE)){
+                    logger.log(Level.FINE, "Get agents with rank " + minRank);
+                }
 
                 return getAgentsFromResultSet(agents);
 
@@ -318,6 +337,10 @@ public class AgentManagerImpl implements AgentManager {
                 st.setLong(2, maxRank);
                 ResultSet agents = st.executeQuery();
                 connection.commit();
+                
+                if(logger.isLoggable(Level.FINE)){
+                    logger.log(Level.FINE, "Get agents with rank " + minRank);
+                }
 
                 return getAgentsFromResultSet(agents);
             } catch (SQLException ex) {
@@ -339,6 +362,10 @@ public class AgentManagerImpl implements AgentManager {
             try (PreparedStatement st = connection.prepareStatement("select ID, NAME, BORN, ACTIVE, RANK, NOTES from AGENT");) {
                 ResultSet agents = st.executeQuery();
 
+                if(logger.isLoggable(Level.FINE)){
+                    logger.log(Level.FINE, "Geting all agents");
+                }
+                
                 return getAgentsFromResultSet(agents);
 
             } catch (SQLException ex) {
