@@ -79,51 +79,50 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int column = agentTable.columnAtPoint(e.getPoint());
                 DefaultTableModel tableModel = null;
-                switch (agentTable.getColumnName(column)) {
-                    case "Name":
-                        if (lastSort[0] != 0) {
-                            Collections.sort(agents, new Comparators.AgentComparatorByName());
-                            lastSort[0] = 0;
-                        } else {
-                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByName()));
-                            lastSort[0] = -1;
-                        }
-                        tableModel = (DefaultTableModel) agentTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Born":
-                        if (lastSort[0] != 1) {
-                            Collections.sort(agents, new Comparators.AgentComparatorByBorn());
-                            lastSort[0] = 1;
-                        } else {
-                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByBorn()));
-                            lastSort[0] = -1;
-                        }
-                        tableModel = (DefaultTableModel) agentTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Active":
-                        if (lastSort[0] != 2) {
-                            Collections.sort(agents, new Comparators.AgentComparatorByActive());
-                            lastSort[0] = 2;
-                        } else {
-                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByActive()));
-                            lastSort[0] = -1;
-                        }
-                        tableModel = (DefaultTableModel) agentTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Rank":
-                        if (lastSort[0] != 3) {
-                            Collections.sort(agents, new Comparators.AgentComparatorByRank());
-                            lastSort[0] = 3;
-                        } else {
-                            Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByRank()));
-                            lastSort[0] = -1;
-                        }
-                        tableModel = (DefaultTableModel) agentTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
+                String columnName = contractTable.getColumnName(column);
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME"))) {
+                    if (lastSort[0] != 0) {
+                        Collections.sort(agents, new Comparators.AgentComparatorByName());
+                        lastSort[0] = 0;
+                    } else {
+                        Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByName()));
+                        lastSort[0] = -1;
+                    }
+                    tableModel = (DefaultTableModel) agentTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("BORN"))) {
+                    if (lastSort[0] != 1) {
+                        Collections.sort(agents, new Comparators.AgentComparatorByBorn());
+                        lastSort[0] = 1;
+                    } else {
+                        Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByBorn()));
+                        lastSort[0] = -1;
+                    }
+                    tableModel = (DefaultTableModel) agentTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("ACTIVE"))) {
+                    if (lastSort[0] != 2) {
+                        Collections.sort(agents, new Comparators.AgentComparatorByActive());
+                        lastSort[0] = 2;
+                    } else {
+                        Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByActive()));
+                        lastSort[0] = -1;
+                    }
+                    tableModel = (DefaultTableModel) agentTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("RANK"))) {
+                    if (lastSort[0] != 3) {
+                        Collections.sort(agents, new Comparators.AgentComparatorByRank());
+                        lastSort[0] = 3;
+                    } else {
+                        Collections.sort(agents, Collections.reverseOrder(new Comparators.AgentComparatorByRank()));
+                        lastSort[0] = -1;
+                    }
+                    tableModel = (DefaultTableModel) agentTable.getModel();
+                    tableModel.fireTableDataChanged();
                 }
             }
         });
@@ -134,40 +133,39 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int column = missionTable.columnAtPoint(e.getPoint());
                 DefaultTableModel tableModel = null;
-                switch (missionTable.getColumnName(column)) {
-                    case "Name":
-                        if (lastSort[1] != 0) {
-                            Collections.sort(missions, new Comparators.MissionComparatorByName());
-                            lastSort[1] = 0;
-                        } else {
-                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByName()));
-                            lastSort[1] = -1;
-                        }
-                        tableModel = (DefaultTableModel) missionTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Difficulty":
-                        if (lastSort[1] != 1) {
-                            Collections.sort(missions, new Comparators.MissionComparatorByDifficulty());
-                            lastSort[1] = 1;
-                        } else {
-                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByDifficulty()));
-                            lastSort[1] = -1;
-                        }
-                        tableModel = (DefaultTableModel) missionTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Location":
-                        if (lastSort[1] != 2) {
-                            Collections.sort(missions, new Comparators.MissionComparatorByLocation());
-                            lastSort[1] = 2;
-                        } else {
-                            Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByLocation()));
-                            lastSort[1] = -1;
-                        }
-                        tableModel = (DefaultTableModel) missionTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
+                String columnName = contractTable.getColumnName(column);
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME"))) {
+                    if (lastSort[1] != 0) {
+                        Collections.sort(missions, new Comparators.MissionComparatorByName());
+                        lastSort[1] = 0;
+                    } else {
+                        Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByName()));
+                        lastSort[1] = -1;
+                    }
+                    tableModel = (DefaultTableModel) missionTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("DIFFICULTY"))) {
+                    if (lastSort[1] != 1) {
+                        Collections.sort(missions, new Comparators.MissionComparatorByDifficulty());
+                        lastSort[1] = 1;
+                    } else {
+                        Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByDifficulty()));
+                        lastSort[1] = -1;
+                    }
+                    tableModel = (DefaultTableModel) missionTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOCATION"))) {
+                    if (lastSort[1] != 2) {
+                        Collections.sort(missions, new Comparators.MissionComparatorByLocation());
+                        lastSort[1] = 2;
+                    } else {
+                        Collections.sort(missions, Collections.reverseOrder(new Comparators.MissionComparatorByLocation()));
+                        lastSort[1] = -1;
+                    }
+                    tableModel = (DefaultTableModel) missionTable.getModel();
+                    tableModel.fireTableDataChanged();
                 }
             }
         });
@@ -178,76 +176,75 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int column = contractTable.columnAtPoint(e.getPoint());
                 DefaultTableModel tableModel = null;
-                switch (contractTable.getColumnName(column)) {
-                    case "Agent":
-                        if (lastSort[2] != 0) {
-                            Collections.sort(contracts, new Comparators.ContractComparatorByAgent());
-                            lastSort[2] = 0;
-                        } else {
-                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByAgent()));
-                            lastSort[2] = -1;
-                        }
-                        tableModel = (DefaultTableModel) contractTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Mission":
-                        if (lastSort[2] != 1) {
-                            Collections.sort(contracts, new Comparators.ContractComparatorByMission());
-                            lastSort[2] = 1;
-                        } else {
-                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByMission()));
-                            lastSort[2] = -1;
-                        }
-                        tableModel = (DefaultTableModel) contractTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Budget":
-                        if (lastSort[2] != 2) {
-                            Collections.sort(contracts, new Comparators.ContractComparatorByBudget());
-                            lastSort[2] = 2;
-                        } else {
-                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByBudget()));
-                            lastSort[2] = -1;
-                        }
-                        tableModel = (DefaultTableModel) contractTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "Start time":
-                        if (lastSort[2] != 3) {
-                            Collections.sort(contracts, new Comparators.ContractComparatorByStartTime());
-                            lastSort[2] = 3;
-                        } else {
-                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByStartTime()));
-                            lastSort[2] = -1;
-                        }
-                        tableModel = (DefaultTableModel) contractTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
-                    case "End time":
-                        if (lastSort[2] != 4) {
-                            Collections.sort(contracts, new Comparators.ContractComparatorByEndTime());
-                            lastSort[2] = 4;
-                        } else {
-                            Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByEndTime()));
-                            lastSort[2] = -1;
-                        }
-                        tableModel = (DefaultTableModel) contractTable.getModel();
-                        tableModel.fireTableDataChanged();
-                        break;
+                String columnName = contractTable.getColumnName(column);
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGENT"))) {
+                    if (lastSort[2] != 0) {
+                        Collections.sort(contracts, new Comparators.ContractComparatorByAgent());
+                        lastSort[2] = 0;
+                    } else {
+                        Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByAgent()));
+                        lastSort[2] = -1;
+                    }
+                    tableModel = (DefaultTableModel) contractTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("MISSION"))) {
+                    if (lastSort[2] != 1) {
+                        Collections.sort(contracts, new Comparators.ContractComparatorByMission());
+                        lastSort[2] = 1;
+                    } else {
+                        Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByMission()));
+                        lastSort[2] = -1;
+                    }
+                    tableModel = (DefaultTableModel) contractTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("BUDGET"))) {
+                    if (lastSort[2] != 2) {
+                        Collections.sort(contracts, new Comparators.ContractComparatorByBudget());
+                        lastSort[2] = 2;
+                    } else {
+                        Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByBudget()));
+                        lastSort[2] = -1;
+                    }
+                    tableModel = (DefaultTableModel) contractTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_TIME"))) {
+                    if (lastSort[2] != 3) {
+                        Collections.sort(contracts, new Comparators.ContractComparatorByStartTime());
+                        lastSort[2] = 3;
+                    } else {
+                        Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByStartTime()));
+                        lastSort[2] = -1;
+                    }
+                    tableModel = (DefaultTableModel) contractTable.getModel();
+                    tableModel.fireTableDataChanged();
+                }
+                if (columnName.equals(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("END_TIME"))) {
+                    if (lastSort[2] != 4) {
+                        Collections.sort(contracts, new Comparators.ContractComparatorByEndTime());
+                        lastSort[2] = 4;
+                    } else {
+                        Collections.sort(contracts, Collections.reverseOrder(new Comparators.ContractComparatorByEndTime()));
+                        lastSort[2] = -1;
+                    }
+                    tableModel = (DefaultTableModel) contractTable.getModel();
+                    tableModel.fireTableDataChanged();
                 }
             }
         });
     }
-    
+
     public void viewDialog(Agent agent) {
         ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, agent);
-            contractWorker.execute();
+        contractWorker.execute();
     }
-    
+
     public void viewDialog(Mission mission) {
         ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission);
-            contractWorker.execute();
-        
+        contractWorker.execute();
+
     }
 
     /**
@@ -319,35 +316,36 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         agentScrollPane.setViewportView(agentTable);
 
-        addAgentButton.setText("Add");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
+        addAgentButton.setText(bundle.getString("ADD")); // NOI18N
         addAgentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addAgentButtonActionPerformed(evt);
             }
         });
 
-        updateAgentButton.setText("Update");
+        updateAgentButton.setText(bundle.getString("UPDATE")); // NOI18N
         updateAgentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateAgentButtonActionPerformed(evt);
             }
         });
 
-        removeAgentButton.setText("Remove");
+        removeAgentButton.setText(bundle.getString("REMOVE")); // NOI18N
         removeAgentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeAgentButtonActionPerformed(evt);
             }
         });
 
-        viewAgentButton.setText("View");
+        viewAgentButton.setText(bundle.getString("VIEW")); // NOI18N
         viewAgentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewAgentButtonActionPerformed(evt);
             }
         });
 
-        contractButton.setText("Contracts");
+        contractButton.setText(bundle.getString("CONTRACTS")); // NOI18N
         contractButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contractButtonActionPerformed(evt);
@@ -390,7 +388,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        agencyTablesTabbedPane.addTab("Agent", agentPanel);
+        agencyTablesTabbedPane.addTab(bundle.getString("AGENT"), agentPanel); // NOI18N
 
         missionPanel.setOpaque(false);
 
@@ -406,35 +404,35 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         missionScrollPane.setViewportView(missionTable);
 
-        addMissionButton.setText("Add");
+        addMissionButton.setText(bundle.getString("ADD")); // NOI18N
         addMissionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addMissionButtonActionPerformed(evt);
             }
         });
 
-        updateMissionButton.setText("Update");
+        updateMissionButton.setText(bundle.getString("UPDATE")); // NOI18N
         updateMissionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateMissionButtonActionPerformed(evt);
             }
         });
 
-        removeMissionButton.setText("Remove");
+        removeMissionButton.setText(bundle.getString("REMOVE")); // NOI18N
         removeMissionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeMissionButtonActionPerformed(evt);
             }
         });
 
-        viewMissionButton.setText("View");
+        viewMissionButton.setText(bundle.getString("VIEW")); // NOI18N
         viewMissionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewMissionButtonActionPerformed(evt);
             }
         });
 
-        contractMissionButton.setText("Contracts");
+        contractMissionButton.setText(bundle.getString("CONTRACTS")); // NOI18N
         contractMissionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contractMissionButtonActionPerformed(evt);
@@ -477,7 +475,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        agencyTablesTabbedPane.addTab("Mission", missionPanel);
+        agencyTablesTabbedPane.addTab(bundle.getString("MISSION"), missionPanel); // NOI18N
 
         contractPanel.setOpaque(false);
 
@@ -493,28 +491,28 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         contractScrollPane.setViewportView(contractTable);
 
-        addContractButton.setText("Add");
+        addContractButton.setText(bundle.getString("ADD")); // NOI18N
         addContractButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addContractButtonActionPerformed(evt);
             }
         });
 
-        removeContractButton.setText("Remove");
+        removeContractButton.setText(bundle.getString("REMOVE")); // NOI18N
         removeContractButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeContractButtonActionPerformed(evt);
             }
         });
 
-        updateContractButton1.setText("Update");
+        updateContractButton1.setText(bundle.getString("UPDATE")); // NOI18N
         updateContractButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateContractButton1ActionPerformed(evt);
             }
         });
 
-        viewContractButton.setText("View");
+        viewContractButton.setText(bundle.getString("VIEW")); // NOI18N
         viewContractButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewContractButtonActionPerformed(evt);
@@ -554,7 +552,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     .addGap(38, 38, 38)))
         );
 
-        agencyTablesTabbedPane.addTab("Contract", contractPanel);
+        agencyTablesTabbedPane.addTab(bundle.getString("CONTRACT"), contractPanel); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -596,9 +594,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        fileMenu.setText("File");
+        fileMenu.setText(bundle.getString("FILE")); // NOI18N
 
-        startSessionMenuItem.setText("Start session");
+        startSessionMenuItem.setText(bundle.getString("START_SESSION")); // NOI18N
         startSessionMenuItem.setToolTipText("");
         startSessionMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -609,7 +607,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         fileMenu.add(menuSeparator1);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
-        exitMenuItem.setText("Exit");
+        exitMenuItem.setText(bundle.getString("EXIT")); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
@@ -619,9 +617,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setText("Edit");
+        editMenu.setText(bundle.getString("EDIT")); // NOI18N
 
-        refreshMenuItem.setText("Refresh");
+        refreshMenuItem.setText(bundle.getString("REFRESH")); // NOI18N
         refreshMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 refreshMenuItemActionPerformed(evt);
@@ -629,7 +627,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         editMenu.add(refreshMenuItem);
 
-        properitiesMenuItem.setText("Properities");
+        properitiesMenuItem.setText(bundle.getString("PROPERTIES")); // NOI18N
         properitiesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 properitiesMenuItemActionPerformed(evt);
@@ -689,7 +687,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             config.put("SERVER_PASSWORD", "");
             config.put("DOUBLE_CLICK", "0");
 
-            System.err.append("config file missing, default settings set");
+            System.err.append(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("CONFIG_MISSING"));
             //Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -735,7 +733,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void contextMenu() {
         final JPopupMenu contextMenu = new JPopupMenu();
-        JMenuItem update = new JMenuItem("Update");
+        JMenuItem update = new JMenuItem(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATE"));
         update.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -752,7 +750,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         contextMenu.add(update);
 
-        JMenuItem view = new JMenuItem("View");
+        JMenuItem view = new JMenuItem(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VIEW"));
         view.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -769,7 +767,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         });
         contextMenu.add(view);
 
-        JMenuItem remove = new JMenuItem("Remove");
+        JMenuItem remove = new JMenuItem(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("REMOVE"));
         remove.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -801,7 +799,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             dialog.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Start session first!");
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
         }
     }//GEN-LAST:event_addAgentButtonActionPerformed
 
@@ -836,7 +834,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
                 agents.remove(agentTable.getSelectedRow());
             } else {
-                int dialogResult = JOptionPane.showConfirmDialog(null, "This agent has assigned contract, would you like to destroy all his contract?", "Warnign", JOptionPane.YES_NO_CANCEL_OPTION);
+                int dialogResult = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGENT_DESTROY_CONTACTS"), java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("WARNING"), JOptionPane.YES_NO_CANCEL_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     contractManager.removeAllContractsForAgent(agents.get(agentTable.getSelectedRow()));
                     agentManager.removeAgent(agents.get(agentTable.getSelectedRow()));
@@ -856,7 +854,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 refreshLists();
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Start session first!");
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
         }
     }//GEN-LAST:event_addMissionButtonActionPerformed
 
@@ -877,7 +875,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
                 missions.remove(missionTable.getSelectedRow());
             } else {
-                int dialogResult = JOptionPane.showConfirmDialog(null, "This mission has assigned contract, would you like to destroy all his contract?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+                int dialogResult = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("MISSION_DESTROY_CONTACTS"), java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("WARNING"), JOptionPane.YES_NO_CANCEL_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     contractManager.removeAllContractsForMission(missions.get(missionTable.getSelectedRow()));
                     missionManager.removeMission(missions.get(missionTable.getSelectedRow()));
@@ -908,7 +906,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission, agent);
             contractWorker.execute();
         } else {
-            JOptionPane.showMessageDialog(this, "Start session first!");
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
         }
     }//GEN-LAST:event_addContractButtonActionPerformed
 
@@ -948,7 +946,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             refreshLists();
         } else {
-            JOptionPane.showMessageDialog(this, "Start session first!");
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
         }
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
@@ -1002,7 +1000,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             connectToDataSource();
             if (!connected) {
                 refreshLists();
-                JOptionPane.showMessageDialog(this, "Unable to connect to database, change properties!");
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
             }
         }
 
@@ -1015,11 +1013,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
     private void startSessionMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSessionMenuItemActionPerformed
         connectToDataSource();
-        if(!connected){
-            JOptionPane.showMessageDialog(this, "Unable to connect to database, change properties!");
+        if (!connected) {
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
             started = false;
         } else {
-        started = true;
+            started = true;
         }
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
@@ -1035,7 +1033,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_contractMissionButtonActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
@@ -1123,15 +1120,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Name";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME");
                 case 1:
-                    return "Born";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("BORN");
                 case 2:
-                    return "Active";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("ACTIVE");
                 case 3:
-                    return "Rank";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("RANK");
                 case 4:
-                    return "Notes";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NOTES");
                 default:
                     throw new IllegalArgumentException("more column than excepted");
             }
@@ -1200,13 +1197,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Name";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("NAME");
                 case 1:
-                    return "Difficulty";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("DIFFICULTY");
                 case 2:
-                    return "Location";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOCATION");
                 case 3:
-                    return "Details";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("DETAILS");
                 default:
                     throw new IllegalArgumentException("more column than excepted");
             }
@@ -1269,15 +1266,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Mission";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("MISSION");
                 case 1:
-                    return "Agent";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGENT");
                 case 2:
-                    return "Budget";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("BUDGET");
                 case 3:
-                    return "Start time";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_TIME");
                 case 4:
-                    return "End time";
+                    return java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("END_TIME");
                 default:
                     throw new IllegalArgumentException("more column than excepted");
             }
@@ -1334,8 +1331,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void checkDatabase(MissionManagerImpl msManager, AgentManagerImpl agManager, ContractManagerImpl cnManager)
             throws ServiceFailureException {
 
-        Agent ag = new Agent(null, "test", new GregorianCalendar(), true, 150, "test");
-        Mission ms = new Mission(null, "test", 150, "test", "test");
+        Agent ag = new Agent(null, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("TEST"), new GregorianCalendar(), true, 150, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("TEST"));
+        Mission ms = new Mission(null, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("TEST"), 150, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("TEST"), java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("TEST"));
         Contract ct = new Contract(ms, ag, 150000000000l, new GregorianCalendar(), new GregorianCalendar());
 
         msManager.createMission(ms);
@@ -1374,16 +1371,16 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         protected void process(List<Integer> chunks) {
             switch (chunks.get(0)) {
                 case 0:
-                    statLabel.setText("Loading");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING"));
                     break;
                 case 1:
-                    statLabel.setText("Loading" + ".");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + ".");
                     break;
                 case 2:
-                    statLabel.setText("Loading" + "..");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + "..");
                     break;
                 case 3:
-                    statLabel.setText("Loading" + "...");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + "...");
                     break;
             }
         }
@@ -1476,16 +1473,16 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         protected void process(List<Integer> chunks) {
             switch (chunks.get(0)) {
                 case 0:
-                    statLabel.setText("Loading");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING"));
                     break;
                 case 1:
-                    statLabel.setText("Loading" + ".");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+".");
                     break;
                 case 2:
-                    statLabel.setText("Loading" + "..");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+"..");
                     break;
                 case 3:
-                    statLabel.setText("Loading" + "...");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+"...");
                     break;
             }
         }
@@ -1506,7 +1503,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         private Mission mission;
         private Agent agent;
         private JFrame frame;
-        
         private int select;
 
         public ContractAddSwingWorker(JFrame parent, Mission mission, Agent agent) {
@@ -1571,22 +1567,22 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     refreshLists();
                 }
             } else if (select == 2) {
-                
+
                 viewContractsDialog dialog = new viewContractsDialog(frame, false, contracts);
                 dialog.setVisible(true);
-                
+
             } else if (select == 3) {
-                
+
                 viewContractsDialog dialog = new viewContractsDialog(frame, false, contracts, mission);
                 dialog.setVisible(true);
-                
+
             } else if (select == 4) {
-                
-                viewContractsDialog dialog = new viewContractsDialog(frame, false,contracts, agent);
+
+                viewContractsDialog dialog = new viewContractsDialog(frame, false, contracts, agent);
                 dialog.setVisible(true);
-                
+
             }
-            
+
         }
     }
 
@@ -1631,7 +1627,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         removeContractButton.setEnabled(enable);
         removeMissionButton.setEnabled(enable);
         if (!enable) {
-            statLabel.setText("Loading...");
+            statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING"));
         } else {
             statLabel.setText(" ");
         }
