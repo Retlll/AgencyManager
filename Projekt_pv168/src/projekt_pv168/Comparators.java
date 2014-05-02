@@ -44,9 +44,9 @@ public class Comparators {
                 return o1.getId().compareTo(o2.getId());
             } else {
                 if (o1.isActive()) {
-                    return 1;
+                    return -1;
                 } else {
-                    return 0;
+                    return 1;
                 }
             }
         }
