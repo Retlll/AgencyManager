@@ -790,9 +790,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         dialog.setVisible(true);
 
         connectToDataSource();
-        if (connected) {
+        refreshLists();
+        /*if (connected) {
             refreshLists();
-        }
+        } else {
+            saveProperities();
+        }*/
         saveProperities();
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
 
@@ -1205,9 +1208,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }
 
     private class ContractAddSwingWorker extends SwingWorker<Void, Void> {
-        
+
         EditContractDialog dialog;
-        
         Mission mission;
         Agent agent;
         JFrame frame;
@@ -1248,17 +1250,19 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         enableAll(false);
 
-        LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
-        loadingWorker.execute();
+        if (connected) {
+            LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
+            loadingWorker.execute();
 
-        AgentRefreshSwingWorker agentWorker = new AgentRefreshSwingWorker();
-        agentWorker.execute();
+            AgentRefreshSwingWorker agentWorker = new AgentRefreshSwingWorker();
+            agentWorker.execute();
 
-        MissionRefreshSwingWorker missionWorker = new MissionRefreshSwingWorker();
-        missionWorker.execute();
+            MissionRefreshSwingWorker missionWorker = new MissionRefreshSwingWorker();
+            missionWorker.execute();
 
-        ContractRefreshSwingWorker contractWorker = new ContractRefreshSwingWorker();
-        contractWorker.execute();
+            ContractRefreshSwingWorker contractWorker = new ContractRefreshSwingWorker();
+            contractWorker.execute();
+        }
     }
 
     private void enableAll(boolean enable) {
