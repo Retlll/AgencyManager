@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Properties;
 import java.util.prefs.Preferences;
+import javax.swing.ButtonGroup;
 
 /**
  *
@@ -33,6 +34,19 @@ public class PropertiesDialog extends javax.swing.JDialog {
         serverUrlTextField.setText(config.getProperty("SERVER_URL"));
         serverNameTextField.setText(config.getProperty("SERVER_NAME"));
         serverPasswordField.setText(config.getProperty("SERVER_PASSWORD"));
+
+        ButtonGroup doubleClickGroup = new ButtonGroup();
+        doubleClickGroup.add(viewRadioButton);
+        doubleClickGroup.add(updateRadioButton);
+        
+        switch (Integer.valueOf(config.getProperty("DOUBLE_CLICK"))) {
+            case 0:
+                viewRadioButton.setSelected(true);
+                break;
+            case 1:
+                updateRadioButton.setSelected(true);
+                break;
+        }
     }
 
     /**
@@ -56,6 +70,10 @@ public class PropertiesDialog extends javax.swing.JDialog {
         missingServerPasswordLabel = new javax.swing.JLabel();
         acceptButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        doubleClickLabel = new javax.swing.JLabel();
+        viewRadioButton = new javax.swing.JRadioButton();
+        updateRadioButton = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
@@ -153,6 +171,38 @@ public class PropertiesDialog extends javax.swing.JDialog {
             }
         });
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        doubleClickLabel.setText("Double click effect:");
+
+        viewRadioButton.setText("View");
+
+        updateRadioButton.setText("Update");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(doubleClickLabel)
+                .addGap(18, 18, 18)
+                .addComponent(viewRadioButton)
+                .addGap(18, 18, 18)
+                .addComponent(updateRadioButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(doubleClickLabel)
+                    .addComponent(viewRadioButton)
+                    .addComponent(updateRadioButton))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,12 +210,13 @@ public class PropertiesDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)
+                        .addGap(43, 43, 43)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -173,11 +224,13 @@ public class PropertiesDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(acceptButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -209,6 +262,10 @@ public class PropertiesDialog extends javax.swing.JDialog {
         config.put("SERVER_URL", serverUrlTextField.getText());
         config.put("SERVER_NAME", serverNameTextField.getText());
         config.put("SERVER_KEY", String.valueOf(serverPasswordField.getPassword()));
+        if(viewRadioButton.isSelected())
+            config.put("DOUBLE_CLICK", "0");
+        if(updateRadioButton.isSelected())
+            config.put("DOUBLE_CLICK", "1");
         this.setVisible(false);
     }//GEN-LAST:event_acceptButtonActionPerformed
 
@@ -264,7 +321,9 @@ public class PropertiesDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton acceptButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel doubleClickLabel;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel missingServerNameLabel;
     private javax.swing.JLabel missingServerPasswordLabel;
     private javax.swing.JLabel missingServerUrlLabel;
@@ -273,6 +332,8 @@ public class PropertiesDialog extends javax.swing.JDialog {
     private javax.swing.JTextField serverNameTextField;
     private javax.swing.JPasswordField serverPasswordField;
     private javax.swing.JTextField serverUrlTextField;
+    private javax.swing.JRadioButton updateRadioButton;
     private javax.swing.JLabel urlLabel;
+    private javax.swing.JRadioButton viewRadioButton;
     // End of variables declaration//GEN-END:variables
 }
