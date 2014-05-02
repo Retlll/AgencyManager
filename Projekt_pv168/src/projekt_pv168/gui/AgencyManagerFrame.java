@@ -75,27 +75,28 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int column = agentTable.columnAtPoint(e.getPoint());
+                DefaultTableModel tableModel = null;
                 switch (agentTable.getColumnName(column)) {
                     case "Name":
                         Collections.sort(agents, new Comparators.AgentComparatorByName());
-                        DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+                        tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
-                    /*case "Born":
-                        Collections.sort(agents, new Comparators.AgentComparatorByName());
-                        DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+                    case "Born":
+                        Collections.sort(agents, new Comparators.AgentComparatorByBorn());
+                        tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Active":
-                        Collections.sort(agents, new Comparators.AgentComparatorByName());
-                        DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+                        Collections.sort(agents, new Comparators.AgentComparatorByActive());
+                        tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
                         break;
                     case "Rank":
-                        Collections.sort(agents, new Comparators.AgentComparatorByName());
-                        DefaultTableModel tableModel = (DefaultTableModel) agentTable.getModel();
+                        Collections.sort(agents, new Comparators.AgentComparatorByRank());
+                        tableModel = (DefaultTableModel) agentTable.getModel();
                         tableModel.fireTableDataChanged();
-                        break;*/
+                        break;
                 }
             }
         });
