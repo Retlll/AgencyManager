@@ -763,10 +763,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private void properitiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_properitiesMenuItemActionPerformed
         PropertiesDialog dialog = new PropertiesDialog(this, true, config);
         dialog.setVisible(true);
+        
         connectToDataSource();
         if (connected) {
             refreshLists();
-        }
+        }                                                 
+        saveProperities();
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -905,8 +907,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 case 2:
                     return agents.get(rowIndex).isActive();
                 case 3:
-                    //return agents.get(rowIndex).getRank();
-                    return agents.get(rowIndex).getId();
+                    return agents.get(rowIndex).getRank();
+                    //return agents.get(rowIndex).getId();
                 case 4:
                     return agents.get(rowIndex).getNotes();
                 default:
