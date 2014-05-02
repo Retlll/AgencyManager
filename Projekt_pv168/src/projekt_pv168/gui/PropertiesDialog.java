@@ -174,11 +174,11 @@ public class PropertiesDialog extends javax.swing.JDialog {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        doubleClickLabel.setText("Double click effect:");
+        doubleClickLabel.setText(bundle.getString("DOUBLE_CLICK")); // NOI18N
 
-        viewRadioButton.setText("View");
+        viewRadioButton.setText(bundle.getString("VIEW")); // NOI18N
 
-        updateRadioButton.setText("Update");
+        updateRadioButton.setText(bundle.getString("UPDATE")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
