@@ -95,9 +95,9 @@ public class PropertiesDialog extends javax.swing.JDialog {
 
         urlLabel.setText(bundle.getString("SERVER_URL")); // NOI18N
 
-        nameLabel.setText(bundle.getString("NAME")); // NOI18N
+        nameLabel.setText(bundle.getString("NAME_F")); // NOI18N
 
-        passLabel.setText(bundle.getString("PASSWORD")); // NOI18N
+        passLabel.setText(bundle.getString("PASSWORD_F")); // NOI18N
 
         missingServerUrlLabel.setForeground(new java.awt.Color(204, 0, 0));
 
@@ -122,13 +122,13 @@ public class PropertiesDialog extends javax.swing.JDialog {
                                 .addComponent(nameLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(missingServerNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(serverNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
+                            .addComponent(serverNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(passLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(missingServerPasswordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                .addComponent(missingServerPasswordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
                                 .addGap(35, 35, 35))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(serverPasswordField)
