@@ -26,6 +26,7 @@ public class PropertiesDialog extends javax.swing.JDialog {
     public PropertiesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        serverChange = false;
     }
     
     public boolean serverChange(){
@@ -274,13 +275,13 @@ public class PropertiesDialog extends javax.swing.JDialog {
             missingServerPasswordLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             return;
         }
-        if(config.getProperty("SERVER_URL") != serverUrlTextField.getText()){
+        if(!config.getProperty("SERVER_URL").equals(serverUrlTextField.getText())){
             serverChange = true;
         }
-        if(config.getProperty("SERVER_NAME") != serverNameTextField.getText()){
+        if(!config.getProperty("SERVER_NAME").equals(serverNameTextField.getText())){
             serverChange = true;
         }
-        if(config.getProperty("SERVER_PASSWORD") != String.valueOf(serverPasswordField.getPassword())){
+        if(!config.getProperty("SERVER_PASSWORD").equals(String.valueOf(serverPasswordField.getPassword()))){
             serverChange = true;
         }
         
