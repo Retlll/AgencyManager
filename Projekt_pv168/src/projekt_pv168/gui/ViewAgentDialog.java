@@ -19,6 +19,7 @@ import java.util.TimeZone;
  */
 public class ViewAgentDialog extends javax.swing.JDialog {
     private static final String PROJEKT_LOCALE = "projekt_pv168/configuration/Default";
+    private Agent agent;
 
     /**
      * Creates new form ViewAgentDialog
@@ -26,6 +27,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
     public ViewAgentDialog(java.awt.Frame parent, boolean modal, Agent agent) {
         super(parent, modal);
         initComponents();
+        this.agent = agent;
         if (agent != null) {
             agentNameTextField.setText(str(agent.getName()));
             agentIDTextField.setText(NumberFormat.getNumberInstance().format(agent.getId()));
@@ -68,6 +70,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
         bornLabel = new javax.swing.JLabel();
         agentBornTextField = new javax.swing.JTextField();
         cancelButton = new javax.swing.JButton();
+        contractButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
@@ -136,7 +139,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
                 .addGroup(agentInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(agentInfoPanelLayout.createSequentialGroup()
                         .addGroup(agentInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rankTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                            .addComponent(rankTextField)
                             .addComponent(rankLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(agentInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,6 +212,14 @@ public class ViewAgentDialog extends javax.swing.JDialog {
             }
         });
 
+        contractButton.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        contractButton.setText("Contracts");
+        contractButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contractButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -220,8 +231,9 @@ public class ViewAgentDialog extends javax.swing.JDialog {
                     .addComponent(bornPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(agentNotesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(contractButton, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -234,7 +246,9 @@ public class ViewAgentDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bornPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(contractButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(17, 17, 17))
         );
 
@@ -244,6 +258,10 @@ public class ViewAgentDialog extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    private void contractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractButtonActionPerformed
+        ((AgencyManagerFrame)this.getParent()).viewDialog(agent);
+    }//GEN-LAST:event_contractButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,6 +340,7 @@ public class ViewAgentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel bornLabel;
     private javax.swing.JPanel bornPanel;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JButton contractButton;
     private javax.swing.JLabel notesLabel;
     private javax.swing.JScrollPane notesScrollPane;
     private javax.swing.JTextPane notesTextPane;
