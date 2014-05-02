@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -44,6 +45,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static List<Agent> agents = new ArrayList<>();
     private static List<Mission> missions = new ArrayList<>();
     private static List<Contract> contracts = new ArrayList<>();
+    private boolean connected;
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
     private ContractManagerImpl contractManager;
@@ -447,37 +449,45 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void saveProperities(){
+
+    private void saveProperities() {
         try {
-                FileOutputStream fileOut = new FileOutputStream("Configuration.properties");
-                config.store(fileOut, null);
-            } catch (FileNotFoundException ex1) {
-                System.out.println("unable to create config file");
-                Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
-            } catch (IOException ex) {
-                System.out.println("unable to edit config file");
+            FileOutputStream fileOut = new FileOutputStream("Configuration.properties");
+            config.store(fileOut, null);
+        } catch (FileNotFoundException ex1) {
+            System.out.println("unable to create config file");
+            Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex1);
+        } catch (IOException ex) {
+            System.out.println("unable to edit config file");
             Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void connectToDataSource(){
+
+    private void connectToDataSource() {
         BasicDataSource ds = new BasicDataSource();
-        
-        ds.setUrl(config.getProperty("SERVER_URL").toString());
-        ds.setUsername(config.getProperty("SERVER_NAME").toString());
-        ds.setPassword(config.getProperty("SERVER_PASSWORD").toString());
-        
-        
+
+        ds.setUrl(config.getProperty("SERVER_URL", "").toString());
+        ds.setUsername(config.getProperty("SERVER_NAME", "").toString());
+        ds.setPassword(config.getProperty("SERVER_PASSWORD", "").toString());
+
+
         //ds.setUrl("jdbc:derby://localhost:1527/AgencyManager;create=true");
         //ds.setUsername("xmalych");
         //ds.setPassword("123456");
         DataSource dataSource = ds;
+        try {
+            ds.getConnection();
+            connected = true;
+        } catch (SQLException ex) {
+            connected = false;
+            Logger.getLogger(AgencyManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
 
         missionManager = new MissionManagerImpl(dataSource);
         agentManager = new AgentManagerImpl(dataSource);
         contractManager = new ContractManagerImpl(dataSource, missionManager, agentManager);
-        
+
         refreshLists();
     }
 
@@ -540,13 +550,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }
 
     private void addAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAgentButtonActionPerformed
-        EditAgentDialog dialog = new EditAgentDialog(this, true);
-        dialog.setVisible(true);
-        if (dialog.getAgent() != null) {
-            agentManager.createAgent(dialog.getAgent());
-            refreshLists();
+        if (connected) {
+            EditAgentDialog dialog = new EditAgentDialog(this, true);
+            dialog.setVisible(true);
+            if (dialog.getAgent() != null) {
+                agentManager.createAgent(dialog.getAgent());
+                refreshLists();
+            }
+            dialog.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Start session first!");
         }
-        dialog.dispose();
     }//GEN-LAST:event_addAgentButtonActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -592,11 +606,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAgentButtonActionPerformed
 
     private void addMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMissionButtonActionPerformed
-        EditMissionDialog dialog = new EditMissionDialog(this, true);
-        dialog.setVisible(true);
-        if (dialog.getMission() != null) {
-            missionManager.createMission(dialog.getMission());
-            refreshLists();
+        if (connected) {
+            EditMissionDialog dialog = new EditMissionDialog(this, true);
+            dialog.setVisible(true);
+            if (dialog.getMission() != null) {
+                missionManager.createMission(dialog.getMission());
+                refreshLists();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Start session first!");
         }
     }//GEN-LAST:event_addMissionButtonActionPerformed
 
@@ -684,6 +702,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_viewContractButtonActionPerformed
 
     private void refreshMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshMenuItemActionPerformed
+        if (!connected) {
+            connectToDataSource();
+        }
         refreshLists();
     }//GEN-LAST:event_refreshMenuItemActionPerformed
 
@@ -715,6 +736,9 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         ProperitiesDialog dialog = new ProperitiesDialog(this, true, config);
         dialog.setVisible(true);
         connectToDataSource();
+        if (connected) {
+            refreshLists();
+        }
     }//GEN-LAST:event_properitiesMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -1010,7 +1034,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         missionTable.repaint();
         contracts.clear();
         contractTable.repaint();
-        
+
         for (Agent agent : agentManager.getAllAgents()) {
             agents.add(agent);
         }
@@ -1021,7 +1045,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
         missionTable.repaint();
 
-        
+
         for (Contract contract : contractManager.findAllContracts()) {
             contracts.add(contract);
         }
