@@ -761,7 +761,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_contractTableMouseClicked
     
     private void properitiesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_properitiesMenuItemActionPerformed
-        ProperitiesDialog dialog = new ProperitiesDialog(this, true, config);
+        PropertiesDialog dialog = new PropertiesDialog(this, true, config);
         dialog.setVisible(true);
         connectToDataSource();
         if (connected) {
@@ -1083,7 +1083,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         protected List<Agent> doInBackground() throws Exception {
             for (Agent agent : agentManager.getAllAgents()) {
                 agents.add(agent);
-                Thread.sleep(5000);
             }
             return agents;
         }
