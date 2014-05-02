@@ -87,8 +87,8 @@ public class EditContractDialog extends javax.swing.JDialog {
                 endTimeCalendar.setEnabled(true);
                 endTimeCalendar.setCalendar(contract.getEndTime());
             }
-            this.setTitle(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATING_CONTRACT"));
-            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("UPDATE"));
+            this.setTitle(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATING_CONTRACT"));
+            addButton.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UPDATE"));
         }
     }
 
@@ -132,7 +132,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         contractExistLabel = new javax.swing.JLabel();
         calenderProblemLabel = new javax.swing.JLabel();
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Locale"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
         setTitle(bundle.getString("ADDING_CONTRACT")); // NOI18N
         setMinimumSize(new java.awt.Dimension(735, 697));
 
@@ -442,7 +442,7 @@ public class EditContractDialog extends javax.swing.JDialog {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         if (missionList.getSelectedIndex() == -1) {
-            missingMissionValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
+            missingMissionValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             missingAgentValueLabel.setText("");
             calenderProblemLabel.setText("");
             contractExistLabel.setText("");
@@ -451,7 +451,7 @@ public class EditContractDialog extends javax.swing.JDialog {
         }
         if (agentList.getSelectedIndex() == -1) {
             missingMissionValueLabel.setText("");
-            missingAgentValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("VALUES_ERROR"));
+            missingAgentValueLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VALUES_ERROR"));
             calenderProblemLabel.setText("");
             contractExistLabel.setText("");
             agentList.requestFocus();
@@ -465,7 +465,7 @@ public class EditContractDialog extends javax.swing.JDialog {
             missingMissionValueLabel.setText("");
             missingAgentValueLabel.setText("");
             calenderProblemLabel.setText("");
-            contractExistLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("CONTRACT_EXIST"));
+            contractExistLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("CONTRACT_EXIST"));
             missionList.requestFocus();
             return;
         }
@@ -477,7 +477,7 @@ public class EditContractDialog extends javax.swing.JDialog {
             if (startTimeCalendar.getCalendar().compareTo(endTimeCalendar.getCalendar()) > 0) {
                 missingMissionValueLabel.setText("");
                 missingAgentValueLabel.setText("");
-                calenderProblemLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Locale").getString("CALENDAR_ERROR"));
+                calenderProblemLabel.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("CALENDAR_ERROR"));
                 contractExistLabel.setText("");
                 startTimeCalendar.requestFocus();
                 return;
