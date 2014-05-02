@@ -72,7 +72,12 @@ public class Contract implements Comparable<Contract> {
 
     @Override
     public String toString() {
-        return "Contract{" + "mission=" + mission + ", agent=" + agent + ", budget=" + budget + ", startTime=" + startTime.getTime() + ", endTime=" + endTime.getTime() + '}';
+        return "Contract{" + "mission=" + mission + ", agent=" + agent + ", budget=" + budget + ", startTime=" + str(startTime) + ", endTime=" + str(endTime) + '}';
+    }
+    
+    private String str(Calendar cal) {
+        if (cal == null) return "null";
+        return cal.getTime().toString();
     }
     
     
