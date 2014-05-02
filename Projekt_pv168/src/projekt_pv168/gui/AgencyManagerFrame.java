@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -36,6 +37,7 @@ import javax.swing.table.JTableHeader;
 import org.apache.commons.dbcp.BasicDataSource;
 import projekt_pv168.Agent;
 import projekt_pv168.AgentManagerImpl;
+import projekt_pv168.Comparators;
 import projekt_pv168.Contract;
 import projekt_pv168.ContractManagerImpl;
 import projekt_pv168.Mission;
@@ -70,13 +72,15 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         //connectToDataSource();
         JTableHeader agentHeader = agentTable.getTableHeader();
         agentHeader.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 int column = agentTable.columnAtPoint(e.getPoint());
-                JOptionPane.showMessageDialog(agentTable, "Column header #" + column + " is clicked");
+                switch (agentTable.getColumnName(column)) {
+                    case "Name":
+                        //Collections.sort(agents, Comparators.AgentComparatorByName());
+                        break;
+                }
             }
-            
         });
     }
 
@@ -1224,7 +1228,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         private List<Mission> missions;
         private List<Agent> agents;
-
         private Mission mission;
         private Agent agent;
         private JFrame frame;
@@ -1238,14 +1241,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected Void doInBackground() throws Exception {
             enableAll(false);
-            
+
             workerDone = new boolean[]{false, false, false};
             LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
             loadingWorker.execute();
-            
+
             agents = agentManager.getAllAgents();
             missions = missionManager.getAllMissions();
-            
+
             workerDone = new boolean[]{true, true, true};
             while (loadingWorker.isDone());
             return null;
