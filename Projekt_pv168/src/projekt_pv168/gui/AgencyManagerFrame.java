@@ -1103,15 +1103,18 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected Void doInBackground() throws Exception {
             int i = 0;
-            while (!(workerDone[0] && workerDone[1] && workerDone[2])) {
+            while (true) {
+                for (long l = 0; l < 100000000l; l++) {
+                    if (workerDone[0] && workerDone[1] && workerDone[2]) {
+                        return null;
+                    }
+                }
                 publish(i);
-                Thread.sleep(150);
                 i++;
                 if (i > 3) {
                     i = 0;
                 }
             }
-            return null;
         }
 
         @Override
@@ -1202,10 +1205,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         workerDone = new boolean[]{false, false, false};
 
         enableAll(false);
-        
+
         LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
         loadingWorker.execute();
-        
+
         AgentRefreshSwingWorker agentWorker = new AgentRefreshSwingWorker();
         agentWorker.execute();
 
