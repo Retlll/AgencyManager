@@ -58,6 +58,10 @@ public class MissionManagerImpl implements MissionManager {
             throw new IllegalArgumentException("Location is empty");
         }
 
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Creating mission " + mission));
+        }
+
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             try (PreparedStatement st = connection.prepareStatement(
@@ -126,6 +130,11 @@ public class MissionManagerImpl implements MissionManager {
         if (mission.getLocation().length() == 0) {
             throw new IllegalArgumentException("Location is empty");
         }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Updating mission " + mission));
+        }
+
         try (Connection connection = dataSource.getConnection();) {
             connection.setAutoCommit(false);
             try (PreparedStatement st = connection.prepareStatement(
@@ -173,6 +182,9 @@ public class MissionManagerImpl implements MissionManager {
         if (mission.getName() == null) {
             throw new IllegalArgumentException("Name is null");
         }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Removing mission " + mission));
+        }
         try (Connection connection = dataSource.getConnection();) {
             connection.setAutoCommit(false);
             try (PreparedStatement st = connection.prepareStatement(
@@ -209,6 +221,10 @@ public class MissionManagerImpl implements MissionManager {
     public Mission getMission(long id) throws SQLException {
         checkDataSource();
 
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Start getting mission with id " + id));
+        }
+        
         try (Connection connection = dataSource.getConnection();) {
             try (PreparedStatement st = connection.prepareStatement(
                     "select ID, NAME, DIFFICULTY, DETAILS, LOCATION from MISSION where ID = ?");) {
@@ -224,6 +240,9 @@ public class MissionManagerImpl implements MissionManager {
                     mission.setLocation(missions.getString("LOCATION"));
                     if (missions.next()) {
                         throw new SQLException("There is more then one agent with same id");
+                    }
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.log(Level.FINE, ("Getting mission " + mission));
                     }
                     return mission;
                 } else {
@@ -244,6 +263,10 @@ public class MissionManagerImpl implements MissionManager {
     public List<Mission> getAllMissions() {
         checkDataSource();
 
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("Getting all missions"));
+        }
+        
         try (Connection connection = dataSource.getConnection();) {
             try (PreparedStatement st = connection.prepareStatement("select ID, NAME, DIFFICULTY, DETAILS, LOCATION from MISSION");) {
                 ResultSet missions = st.executeQuery();
