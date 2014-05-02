@@ -56,6 +56,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private static List<Contract> contracts = new ArrayList<>();
     private boolean connected;
     private static boolean[] workerDone;
+    private static boolean workDone;
     private MissionManagerImpl missionManager;
     private AgentManagerImpl agentManager;
     private ContractManagerImpl contractManager;
@@ -1242,10 +1243,56 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }
 
+    private class LoadingContractSwingWorker extends SwingWorker<Void, Integer> {
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            int i = 0;
+            while (true) {
+                for (long l = 0; l < 100000000l; l++) {
+                    if (workDone) {
+                        return null;
+                    }
+                }
+                publish(i);
+                i++;
+                if (i > 3) {
+                    i = 0;
+                }
+            }
+        }
+
+        @Override
+        protected void process(List<Integer> chunks) {
+            switch (chunks.get(0)) {
+                case 0:
+                    statLabel.setText("Loading");
+                    break;
+                case 1:
+                    statLabel.setText("Loading" + ".");
+                    break;
+                case 2:
+                    statLabel.setText("Loading" + "..");
+                    break;
+                case 3:
+                    statLabel.setText("Loading" + "...");
+                    break;
+            }
+        }
+
+        @Override
+        protected void done() {
+            statLabel.setText(" ");
+            enableAll(true);
+
+        }
+    }
+
     private class ContractAddSwingWorker extends SwingWorker<Void, Void> {
 
         private List<Mission> missions;
         private List<Agent> agents;
+
         private Mission mission;
         private Agent agent;
         private JFrame frame;
@@ -1259,16 +1306,19 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         @Override
         protected Void doInBackground() throws Exception {
             enableAll(false);
-
-            workerDone = new boolean[]{false, false, false};
-            LoadingSwingWorker loadingWorker = new LoadingSwingWorker();
+            
+            workDone = false;
+            LoadingContractSwingWorker loadingWorker = new LoadingContractSwingWorker();
             loadingWorker.execute();
-
+            
             agents = agentManager.getAllAgents();
             missions = missionManager.getAllMissions();
-
-            workerDone = new boolean[]{true, true, true};
-            while (loadingWorker.isDone());
+            
+            Thread.sleep(5000);
+            
+            workDone = true;
+            while (loadingWorker.isDone()) {
+            }
             return null;
         }
 
