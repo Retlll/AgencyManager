@@ -1459,28 +1459,34 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         private Agent agent;
         private Contract contract;
         private JFrame frame;
+        
+        private int select;
 
         public ContractAddSwingWorker(JFrame parent, Mission mission, Agent agent) {
             this.mission = mission;
             this.agent = agent;
             frame = parent;
+            select = 1;
         }
 
         public ContractAddSwingWorker(JFrame parent, Contract contract) {
             this.contract = contract;
             frame = parent;
+            select = 2;
         }
 
         public ContractAddSwingWorker(JFrame parent, Contract contract, Agent agent) {
             this.contract = contract;
             this.agent = agent;
             frame = parent;
+            select = 4;
         }
 
         public ContractAddSwingWorker(JFrame parent, Contract contract, Mission mission) {
             this.contract = contract;
             this.mission = mission;
             frame = parent;
+            select = 3;
         }
 
         @Override
@@ -1489,20 +1495,20 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
             LoadingContractSwingWorker loadingWorker = new LoadingContractSwingWorker();
 
-            if (agent != null && mission != null) {
+            if (select == 1) {
                 loadingWorker.execute();
                 agents = agentManager.getAllAgents();
                 missions = missionManager.getAllMissions();
             }
-            if (contract != null) {
+            if (select == 2) {
                 contracts = contractManager.findAllContracts();
             }
 
-            if (contract != null && mission != null) {
+            if (select == 3) {
                 contracts = contractManager.findAllContracts(mission);
             }
 
-            if (contract != null && agent != null) {
+            if (select == 4) {
                 contracts = contractManager.findAllContracts(mission);
             }
 
@@ -1512,7 +1518,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
 
         @Override
         protected void done() {
-            if (agent != null && mission != null) {
+            if (select == 1) {
                 EditContractDialog dialog = new EditContractDialog(frame, true, missions, agents, contractManager, mission, agent);
                 dialog.setVisible(true);
 
@@ -1520,17 +1526,17 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     contractManager.createContract(dialog.getContract());
                     refreshLists();
                 }
-            } else if (contract != null) {
+            } else if (select == 2) {
                 
                 viewContractsDialog dialog = new viewContractsDialog(frame, false, contracts);
                 dialog.setVisible(true);
                 
-            } else if (contract != null && mission != null) {
+            } else if (select == 3) {
                 
                 viewContractsDialog dialog = new viewContractsDialog(frame, false, contracts, mission);
                 dialog.setVisible(true);
                 
-            } else if (contract != null && agent != null) {
+            } else if (select == 4) {
                 
                 viewContractsDialog dialog = new viewContractsDialog(frame, false,contracts, agent);
                 dialog.setVisible(true);
