@@ -990,6 +990,18 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
+    
+    public void viewDialog(Contract contract, Agent agent) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, contract, agent);
+            contractWorker.execute();
+    }
+    
+    public void viewDialog(Contract contract, Mission mission) {
+        ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, contract,mission);
+            contractWorker.execute();
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
