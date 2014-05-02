@@ -1075,6 +1075,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 default:
                     throw new IllegalArgumentException("undefined collum");
             }
+            
         }
     }
 
