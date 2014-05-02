@@ -96,14 +96,14 @@
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="missingServerNameLabel" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="serverNameTextField" pref="171" max="32767" attributes="0"/>
+                              <Component id="serverNameTextField" pref="183" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="passLabel" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="missingServerPasswordLabel" pref="95" max="32767" attributes="0"/>
+                                  <Component id="missingServerPasswordLabel" pref="106" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
@@ -166,7 +166,7 @@
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="NAME" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="NAME_F" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
@@ -175,7 +175,7 @@
         <Component class="javax.swing.JLabel" name="passLabel">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="PASSWORD" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+              <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="PASSWORD_F" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
         </Component>
