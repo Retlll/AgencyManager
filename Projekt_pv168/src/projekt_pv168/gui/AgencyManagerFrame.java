@@ -1376,8 +1376,6 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             agents = agentManager.getAllAgents();
             missions = missionManager.getAllMissions();
             
-            Thread.sleep(5000);
-            
             workDone = true;
             while (loadingWorker.isDone()) {
             }
