@@ -73,6 +73,9 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+      <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="AGENCY_MANAGER" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+    </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[400, 330]"/>
     </Property>
@@ -177,7 +180,7 @@
                           <EmptySpace pref="163" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Component id="agentScrollPane" alignment="1" pref="520" max="32767" attributes="0"/>
+                          <Component id="agentScrollPane" alignment="1" pref="558" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -196,7 +199,7 @@
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="agentScrollPane" pref="272" max="32767" attributes="0"/>
+                              <Component id="agentScrollPane" pref="276" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -320,7 +323,7 @@
                           <EmptySpace pref="163" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Component id="missionScrollPane" alignment="1" pref="520" max="32767" attributes="0"/>
+                          <Component id="missionScrollPane" alignment="1" pref="558" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -339,7 +342,7 @@
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="missionScrollPane" pref="272" max="32767" attributes="0"/>
+                              <Component id="missionScrollPane" pref="276" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -458,10 +461,10 @@
                           <Component id="removeContractButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="viewContractButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="248" max="32767" attributes="0"/>
+                          <EmptySpace pref="257" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Component id="contractScrollPane" alignment="0" pref="520" max="32767" attributes="0"/>
+                          <Component id="contractScrollPane" alignment="0" pref="558" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -479,7 +482,7 @@
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="contractScrollPane" pref="272" max="32767" attributes="0"/>
+                              <Component id="contractScrollPane" pref="276" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                           </Group>
                       </Group>

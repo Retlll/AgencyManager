@@ -43,6 +43,7 @@ public class viewContractsDialog extends javax.swing.JDialog {
         isMission = true;
         ms = mission;
         if (mission != null) {
+            this.setTitle(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VIEW_CONTRACTS_MISSION"));
             itemNameLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("MISSION"));
             itemIDLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("MISSION_ID"));
             itemNameTextField.setText(mission.getName());
@@ -55,6 +56,7 @@ public class viewContractsDialog extends javax.swing.JDialog {
         isMission = false;
         ag = agent;
         if (agent != null) {
+            this.setTitle(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("VIEW_CONTRACTS_AGENT"));
             itemNameLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGENT"));
             itemIDLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGENT_ID"));
             itemNameTextField.setText(agent.getName());
@@ -84,10 +86,12 @@ public class viewContractsDialog extends javax.swing.JDialog {
         viewitemButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
+        setTitle(bundle.getString("VIEW_CONTRACTS")); // NOI18N
+
         contractPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         contractLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default"); // NOI18N
         contractLabel.setText(bundle.getString("CONTRACTS")); // NOI18N
 
         contractList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
