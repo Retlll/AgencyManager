@@ -265,7 +265,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         updateAgentButton = new javax.swing.JButton();
         removeAgentButton = new javax.swing.JButton();
         viewAgentButton = new javax.swing.JButton();
-        contractButton = new javax.swing.JButton();
+        contractAgentButton = new javax.swing.JButton();
         missionPanel = new javax.swing.JPanel();
         missionScrollPane = new javax.swing.JScrollPane();
         missionTable = new javax.swing.JTable();
@@ -345,10 +345,10 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
         });
 
-        contractButton.setText(bundle.getString("CONTRACTS")); // NOI18N
-        contractButton.addActionListener(new java.awt.event.ActionListener() {
+        contractAgentButton.setText(bundle.getString("CONTRACTS")); // NOI18N
+        contractAgentButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contractButtonActionPerformed(evt);
+                contractAgentButtonActionPerformed(evt);
             }
         });
 
@@ -366,21 +366,21 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewAgentButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contractButton)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addComponent(contractAgentButton)
+                .addContainerGap(163, Short.MAX_VALUE))
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(agentScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE))
         );
         agentPanelLayout.setVerticalGroup(
             agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agentPanelLayout.createSequentialGroup()
-                .addContainerGap(272, Short.MAX_VALUE)
+                .addContainerGap(276, Short.MAX_VALUE)
                 .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addAgentButton)
                     .addComponent(removeAgentButton)
                     .addComponent(updateAgentButton)
                     .addComponent(viewAgentButton)
-                    .addComponent(contractButton))
+                    .addComponent(contractAgentButton))
                 .addContainerGap())
             .addGroup(agentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(agentPanelLayout.createSequentialGroup()
@@ -454,14 +454,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(viewMissionButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contractMissionButton)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(163, Short.MAX_VALUE))
             .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(missionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE))
         );
         missionPanelLayout.setVerticalGroup(
             missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, missionPanelLayout.createSequentialGroup()
-                .addContainerGap(272, Short.MAX_VALUE)
+                .addContainerGap(276, Short.MAX_VALUE)
                 .addGroup(missionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addMissionButton)
                     .addComponent(removeMissionButton)
@@ -532,14 +532,14 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 .addComponent(removeContractButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewContractButton)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addContainerGap(248, Short.MAX_VALUE))
             .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(contractScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE))
         );
         contractPanelLayout.setVerticalGroup(
             contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contractPanelLayout.createSequentialGroup()
-                .addContainerGap(272, Short.MAX_VALUE)
+                .addContainerGap(276, Short.MAX_VALUE)
                 .addGroup(contractPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addContractButton)
                     .addComponent(removeContractButton)
@@ -858,7 +858,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 refreshLists();
             }
         } else {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            if (!started) {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            } else {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
+            }
         }
     }//GEN-LAST:event_addMissionButtonActionPerformed
 
@@ -910,7 +914,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             ContractAddSwingWorker contractWorker = new ContractAddSwingWorker(this, mission, agent);
             contractWorker.execute();
         } else {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            if (!started) {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            } else {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
+            }
         }
     }//GEN-LAST:event_addContractButtonActionPerformed
 
@@ -1030,11 +1038,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_startSessionMenuItemActionPerformed
 
-    private void contractButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractButtonActionPerformed
+    private void contractAgentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractAgentButtonActionPerformed
         if (agentTable.getSelectedRow() != -1) {
             this.viewDialog(agents.get(agentTable.getSelectedRow()));
         }
-    }//GEN-LAST:event_contractButtonActionPerformed
+    }//GEN-LAST:event_contractAgentButtonActionPerformed
 
     private void contractMissionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractMissionButtonActionPerformed
         if (missionTable.getSelectedRow() != -1) {
@@ -1085,7 +1093,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
     private javax.swing.JPanel agentPanel;
     private javax.swing.JScrollPane agentScrollPane;
     private javax.swing.JTable agentTable;
-    private javax.swing.JButton contractButton;
+    private javax.swing.JButton contractAgentButton;
     private javax.swing.JButton contractMissionButton;
     private javax.swing.JPanel contractPanel;
     private javax.swing.JScrollPane contractScrollPane;
@@ -1635,6 +1643,8 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         removeAgentButton.setEnabled(enable);
         removeContractButton.setEnabled(enable);
         removeMissionButton.setEnabled(enable);
+        contractAgentButton.setEnabled(enable);
+        contractMissionButton.setEnabled(enable);
         if (!enable) {
             statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING"));
         } else {

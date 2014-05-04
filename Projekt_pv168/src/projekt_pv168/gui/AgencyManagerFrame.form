@@ -173,7 +173,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="viewAgentButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="contractButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="contractAgentButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="163" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -190,7 +190,7 @@
                               <Component id="removeAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="updateAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="viewAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="contractButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="contractAgentButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -277,14 +277,14 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewAgentButtonActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="contractButton">
+                <Component class="javax.swing.JButton" name="contractAgentButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                       <ResourceString bundle="projekt_pv168/configuration/Default.properties" key="CONTRACTS" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contractButtonActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contractAgentButtonActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
