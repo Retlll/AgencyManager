@@ -799,7 +799,11 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
             }
             dialog.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            if (!started) {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
+            } else {
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
+            }
         }
     }//GEN-LAST:event_addAgentButtonActionPerformed
 
@@ -943,8 +947,12 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         if (started) {
             if (!connected) {
                 connectToDataSource();
+                if(!connected){
+                    JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
+                }
             }
             refreshLists();
+            enableAll(true);
         } else {
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("START_SESSION_FIRST"));
         }
@@ -1002,6 +1010,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                 refreshLists();
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
             }
+            enableAll(true);
         }
 
         saveProperities();
@@ -1015,7 +1024,7 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
         connectToDataSource();
         if (!connected) {
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("UNABLE_CONNECT"));
-            started = false;
+            //started = false;
         } else {
             started = true;
         }
@@ -1476,13 +1485,13 @@ public class AgencyManagerFrame extends javax.swing.JFrame {
                     statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING"));
                     break;
                 case 1:
-                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+".");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + ".");
                     break;
                 case 2:
-                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+"..");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + "..");
                     break;
                 case 3:
-                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING")+"...");
+                    statLabel.setText(java.util.ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("LOADING") + "...");
                     break;
             }
         }
