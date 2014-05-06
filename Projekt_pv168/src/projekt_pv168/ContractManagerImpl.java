@@ -71,6 +71,7 @@ public class ContractManagerImpl implements ContractManager {
             fh = new FileHandler("MyLogFile.log");
         } catch (IOException | SecurityException ex) {
             logger.log(Level.SEVERE, null, ex);
+            return;
         }
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();
@@ -84,6 +85,7 @@ public class ContractManagerImpl implements ContractManager {
             fh = new FileHandler(path);
         } catch (IOException | SecurityException ex) {
             logger.log(Level.SEVERE, null, ex);
+            return;
         }
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();
