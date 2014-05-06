@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import projekt_pv168.Agent;
 import java.util.ResourceBundle;
 import java.text.MessageFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -262,6 +263,11 @@ public class EditAgentDialog extends javax.swing.JDialog {
             missingValueLabel1.setText("");
             agentNameTextField.requestFocus();
             return;
+        }
+        Calendar actualDate = Calendar.getInstance();
+        int age = actualDate.get(Calendar.YEAR) - bornCalendar.getCalendar().get(Calendar.YEAR);
+        if (actualDate.get(Calendar.DAY_OF_YEAR) <= bornCalendar.getCalendar().get(Calendar.DAY_OF_YEAR)) {
+            age--;
         }
         if (new GregorianCalendar().getTimeInMillis() - bornCalendar.getCalendar().getTimeInMillis() <= 18 * 60 * 60 * 100) {
             missingValueLabel1.setText(ResourceBundle.getBundle("projekt_pv168/configuration/Default").getString("AGE_ERROR"));

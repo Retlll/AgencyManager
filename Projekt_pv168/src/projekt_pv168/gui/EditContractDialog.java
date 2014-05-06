@@ -22,12 +22,12 @@ import java.util.ResourceBundle;
 public class EditContractDialog extends javax.swing.JDialog {
 
     private Contract contract;
-    private ContractManager contractManager;
+    private List<Contract> contracts;
 
     /**
      * Creates new form EditContractDialog
      */
-    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, ContractManager contractManager) {
+    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, List<Contract> contracts) {
         super(parent, modal);
 
         if (agents == null) {
@@ -38,8 +38,8 @@ public class EditContractDialog extends javax.swing.JDialog {
             throw new IllegalArgumentException("missions cannot be null");
         }
 
-        if (contractManager == null) {
-            throw new IllegalArgumentException("contractManager cannot be null");
+        if (contracts == null) {
+            throw new IllegalArgumentException("contracts cannot be null");
         }
 
         if (agents.isEmpty() || missions.isEmpty()) {
@@ -49,11 +49,11 @@ public class EditContractDialog extends javax.swing.JDialog {
         initComponents();
         agentList.setModel(new AgentModel((agents)));
         missionList.setModel(new MissionModel((missions)));
-        this.contractManager = contractManager;
+        this.contracts = contracts;
     }
 
-    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, ContractManager contractManager, Mission mission, Agent agent) {
-        this(parent, modal, missions, agents, contractManager);
+    public EditContractDialog(java.awt.Frame parent, boolean modal, List<Mission> missions, List<Agent> agents, List<Contract> contracts, Mission mission, Agent agent) {
+        this(parent, modal, missions, agents, contracts);
         selectInLists(missions, mission, agents, agent);
     }
 
@@ -460,8 +460,9 @@ public class EditContractDialog extends javax.swing.JDialog {
 
         Mission ms = ((MissionModel) missionList.getModel()).getMissionAt(missionList.getSelectedIndex());
         Agent ag = ((AgentModel) agentList.getModel()).getAgentAt(agentList.getSelectedIndex());
+        Contract cn = new Contract(ms, ag, 0, null, null);
 
-        if (contractManager != null && contractManager.getContract(ms, ag) != null) {
+        if (contracts.contains(cn)) {
             missingMissionValueLabel.setText("");
             missingAgentValueLabel.setText("");
             calenderProblemLabel.setText("");
@@ -505,13 +506,13 @@ public class EditContractDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_endTimeBoxStateChanged
 
     private void agentListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agentListFocusLost
-        if (contractManager == null) {
+        if (contracts == null) {
             agentList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_agentListFocusLost
 
     private void missionListFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_missionListFocusLost
-        if (contractManager == null) {
+        if (contracts == null) {
             missionList.setSelectedIndex(0);
         }
     }//GEN-LAST:event_missionListFocusLost
